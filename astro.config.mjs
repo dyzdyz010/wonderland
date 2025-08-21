@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import { typst } from "astro-typst";
 import tailwindcss from "@tailwindcss/vite";
+import icon from "astro-icon";
 
 import sitemap from "@astrojs/sitemap";
 
@@ -9,6 +10,7 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://duyizhuo.com",
   integrations: [
+    icon(),
     typst({
       // Always builds HTML files
       target: "html",

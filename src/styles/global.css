@@ -42,3 +42,7 @@ body main {
 .post {
   @apply border border-gray-200 rounded-md p-4;
 }
+
+footer .social-links .icon:hover {
+  @apply text-white;
+}

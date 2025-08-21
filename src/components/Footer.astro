@@ -1,0 +1,19 @@
+---
+import { Icon } from "astro-icon/components";
+
+const today = new Date();
+---
+
+<footer class="flex flex-col items-center px-4 py-4 text-center mt-10 gap-2">
+  <p>&copy; 2025-{today.getFullYear()} dyzdyz010. All rights reserved.</p>
+  <div class="social-links">
+    <a class="icon" href="https://github.com/dyzdyz010" target="_blank">
+      <span class="sr-only">Go to My GitHub's Profile</span>
+      <Icon name="mdi:github" class="w-8 h-8" />
+    </a>
+    <a class="icon" href={`/rss.xml`} target="_blank">
+      <span class="sr-only">RSS/Atom feeds</span>
+      <Icon name="mdi:rss" class="w-8 h-8" />
+    </a>
+  </div>
+</footer>
