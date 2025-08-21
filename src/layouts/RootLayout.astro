@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import BaseHead from "../components/BaseHead.astro";
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <main class="@container">
+      <Header />
+      <div class="@xl:px-40 @3xs:p-0">
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

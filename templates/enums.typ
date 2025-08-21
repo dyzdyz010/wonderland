@@ -1,0 +1,21 @@
+#let blog-tags = (
+  programming: "Programming",
+  software: "Software",
+  network: "Network",
+  software-engineering: "Software Engineering",
+  tooling: "Tooling",
+  linux: "Linux",
+  dev-ops: "DevOps",
+  compiler: "Compiler",
+  music-theory: "Music Theory",
+  tinymist: "Tinymist",
+  golang: "Golang",
+  typst: "Typst",
+  misc: "Miscellaneous",
+)
+
+#let blog-collections = (
+  blog: "Blog",
+  project: "Project",
+  note: "Note",
+)

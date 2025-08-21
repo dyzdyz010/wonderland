@@ -1,5 +1,31 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import { typst } from "astro-typst";
+import tailwindcss from "@tailwindcss/vite";
+
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  site: "https://duyizhuo.com",
+  integrations: [
+    typst({
+      // Always builds HTML files
+      target: "html",
+    }),
+    sitemap(),
+  ],
+  vite: {
+    plugins: [tailwindcss()],
+    build: {
+      assetsInlineLimit(filePath, content) {
+        const KB = 1024;
+        return content.length < (filePath.endsWith(".css") ? 100 * KB : 4 * KB);
+      },
+    },
+    ssr: {
+      external: ["@myriaddreamin/typst-ts-node-compiler"],
+      noExternal: ["@fontsource-variable/inter"],
+    },
+  },
+});

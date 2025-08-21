@@ -1,0 +1,21 @@
+---
+import { SITE_TITLE } from "../consts";
+import HeaderLink from "./HeaderLink.astro";
+---
+
+<header class="header">
+  <nav>
+    <h2>
+      <a href="/" class="italic font-bold hover:text-white">{SITE_TITLE}</a>
+    </h2>
+    <div class="internal-links">
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/about">About</HeaderLink>
+      <HeaderLink href="/contact">Contact</HeaderLink>
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/dyzdyz010">GitHub</a>
+      <a href="https://twitter.com/dyzdyz010">Twitter</a>
+    </div>
+  </nav>
+</header>

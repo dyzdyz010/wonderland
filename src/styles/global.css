@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@import "./variables.css";
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  @apply bg-[var(--color-bg)];
+  @apply text-[var(--color-default)];
+}
+
+body main {
+  /* @apply max-w-8/12 mx-auto; */
+}
+
+.header {
+  @apply pb-4;
+}
+
+.header nav {
+  @apply flex justify-between items-center p-4 gap-4;
+}
+
+.internal-links {
+  @apply flex gap-4;
+
+  a {
+    @apply decoration-2 text-[var(--color-accent)];
+
+    &:hover {
+      @apply text-[var(--color-accent-hover)];
+    }
+  }
+}
+
+.social-links {
+  @apply flex gap-4;
+}
+
+.posts {
+  @apply grid grid-cols-1 gap-4;
+}
+
+.post {
+  @apply border border-gray-200 rounded-md p-4;
+}
