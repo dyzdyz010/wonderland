@@ -24,9 +24,8 @@
       background-color: if code-extra-colors.bg != none {
         (code-extra-colors.bg, code-extra-colors.bg)
       },
-      inset: (x: 4pt, y: 5pt),
-      // highlight-color: rgb("#3d59a1"),
-      // comment-color: rgb("#394b70"),
+      highlight-color: rgb("#3d59a1"),
+      comment-color: rgb("#394b70"),
       lang-color: rgb("#3d59a1"),
       lang: true,
       numbering: true,
@@ -63,7 +62,6 @@
       zebraw(
         block-width: 100%,
         // line-width: 100%,
-        lang: true,
         wrap: false,
         it,
       )

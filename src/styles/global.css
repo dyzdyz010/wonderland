@@ -1,14 +1,37 @@
 @import "tailwindcss";
-@import "./variables.css";
 @custom-variant dark (&:where(.dark, .dark *));
+@import "./variables.css";
 
-body {
-  @apply bg-[var(--color-bg)];
-  @apply text-[var(--color-default)];
+html.dark .theme-dark {
+  display: none;
+}
+html:not(.dark) .theme-light {
+  display: none;
 }
 
-body main {
-  /* @apply max-w-8/12 mx-auto; */
+.theme-light,
+.theme-dark {
+  @apply cursor-pointer hover:text-[var(--color-accent)];
+  /* @apply transition-colors duration-100; */
+}
+
+body {
+  --vp-font-family-base: "Inter Variable", "Inter", "Noto Sans SC",
+    "PingFang SC", "Microsoft Yahei", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --vp-font-family-mono: ui-monospace, "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
+
+  font-family: var(--vp-font-family-base);
+  margin: 0;
+  padding: 0;
+  text-align: justify;
+  @apply bg-[var(--color-bg)];
+  @apply text-[var(--color-default)];
+  background-size: 100% 600px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.7;
 }
 
 .header {
@@ -19,20 +42,22 @@ body main {
   @apply flex justify-between items-center p-4 gap-4;
 }
 
-.internal-links {
-  @apply flex gap-4;
+.header .internal-links {
+  @apply flex gap-6;
 
   a {
-    @apply decoration-2 text-[var(--color-accent)];
+    @apply text-[var(--color-default)];
+    @apply hover:text-[var(--color-default-hover)];
 
-    &:hover {
-      @apply text-[var(--color-accent-hover)];
+    &.active {
+      @apply text-[var(--color-accent-hover)] decoration-2;
     }
   }
 }
 
-.social-links {
-  @apply flex gap-4;
+.header .social-links,
+footer .social-links {
+  @apply flex gap-4 items-center;
 }
 
 .posts {

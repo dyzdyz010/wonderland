@@ -1,12 +1,17 @@
 ---
 import { SITE_TITLE } from "../consts";
 import HeaderLink from "./HeaderLink.astro";
+import ThemeSwitch from "./ThemeSwitch.astro";
 ---
 
 <header class="header mb-12">
   <nav>
     <h2>
-      <a href="/" class="italic font-bold hover:text-white">{SITE_TITLE}</a>
+      <a
+        href="/"
+        class="italic font-bold hover:text-[var(--color-default-hover)]"
+        >{SITE_TITLE}</a
+      >
     </h2>
     <div class="internal-links">
       <HeaderLink href="/">Home</HeaderLink>
@@ -14,6 +19,7 @@ import HeaderLink from "./HeaderLink.astro";
       <HeaderLink href="/contact">Contact</HeaderLink>
     </div>
     <div class="social-links">
+      <ThemeSwitch />
       <a href="https://github.com/dyzdyz010">GitHub</a>
       <a href="https://twitter.com/dyzdyz010">Twitter</a>
     </div>

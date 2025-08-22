@@ -1,0 +1,22 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<Icon name="mdi:white-balance-sunny" class="w-6 h-6 theme-switch theme-light" />
+<Icon name="mdi:moon-waning-crescent" class="w-6 h-6 theme-switch theme-dark" />
+
+<script>
+  const buttons = document.querySelectorAll(".theme-switch");
+  if (buttons) {
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        //   save theme to local storage
+        localStorage.setItem(
+          "theme",
+          document.documentElement.classList.contains("dark") ? "dark" : "light"
+        );
+      });
+    });
+  }
+</script>

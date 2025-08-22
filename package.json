@@ -14,9 +14,9 @@
     "@myriaddreamin/typst-ts-node-compiler": "^0.6.1-rc2",
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.2",
+    "astro-icon": "^1.1.5",
     "astro-typst": "^0.11.2",
-    "tailwindcss": "^4.1.12",
-    "astro-icon": "^1.1.5"
+    "tailwindcss": "^4.1.12"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3"

@@ -2,19 +2,26 @@
   --color-bg: rgb(250, 252, 252);
 
   --color-default: #000000;
+  --color-default-hover: #d3006a;
 
-  --color-accent: rgb(207, 125, 156);
-  --color-accent-hover: rgba(207, 125, 156, 0.7);
+  --color-accent: #d3006a;
+  --color-accent-hover: #d30069b3;
 
   --color-gray: #6d6d6d;
+
+  --color-border: rgba(176, 205, 234, 0.161);
 }
 
 :root.dark {
   --color-bg: rgb(33, 39, 55);
+
   --color-default: rgb(223, 223, 214);
+  --color-default-hover: rgb(207, 130, 158);
 
   --color-accent: rgb(207, 130, 158);
   --color-accent-hover: rgba(207, 130, 158, 0.7);
 
   --color-gray: #939da3;
+
+  --color-border: rgba(101, 117, 133, 0.161);
 }
