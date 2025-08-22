@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+.theme-icon {
+  cursor: pointer;
+}
+.dark .theme-icon.light {
+  display: block;
+}
+.dark .theme-icon.dark {
+  display: none;
+}
+.theme-icon.light {
+  display: none;
+}
+.theme-icon.dark {
+  display: block;
+}
+.dark .code-image.themed .light {
+  display: none;
+}
+.dark .code-image.themed .dark {
+  display: initial;
+}
+.code-image.themed .light {
+  display: initial;
+}
+.code-image.themed .dark {
+  display: none;
+}
+
+.code-image.themed .zebraw-code-lang {
+  @apply text-xs px-2! py-1! z-1;
+}
+
+.code-image.themed .zebraw-code-line-container > * {
+  @apply px-[0.5em]! py-[0.1em]! text-xs!;
+}
