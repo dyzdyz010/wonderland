@@ -12,7 +12,7 @@
 #let text-fonts = (
   "Libertinus Serif",
   // todo: exclude it if language is not Chinese.
-  "Noto Sans SC",
+  "PingFang SC",
 )
 
 // Sizes
