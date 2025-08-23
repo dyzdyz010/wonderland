@@ -16,10 +16,10 @@
   --color-bg: rgb(33, 39, 55);
 
   --color-default: rgb(223, 223, 214);
-  --color-default-hover: rgb(207, 130, 158);
+  --color-default-hover: #cf829e;
 
-  --color-accent: rgb(207, 130, 158);
-  --color-accent-hover: rgba(207, 130, 158, 0.7);
+  --color-accent: #cf829e;
+  --color-accent-hover: #cf829eb3;
 
   --color-gray: #939da3;
 

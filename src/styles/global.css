@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @import "./variables.css";
+@import "./typography.css";
 
 html.dark .theme-dark {
   display: none;
@@ -42,6 +43,10 @@ body {
   @apply flex justify-between items-center p-4 gap-4;
 }
 
+.header nav h2.logo {
+  @apply italic text-xl font-bold p-0 m-0;
+}
+
 .header .internal-links {
   @apply flex gap-6;
 
@@ -50,7 +55,8 @@ body {
     @apply hover:text-[var(--color-default-hover)];
 
     &.active {
-      @apply text-[var(--color-accent-hover)] decoration-2;
+      @apply text-[var(--color-accent)] decoration-2;
+      @apply hover:text-[var(--color-accent-hover)];
     }
   }
 }
@@ -65,7 +71,7 @@ footer .social-links {
 }
 
 .post {
-  @apply border border-gray-200 rounded-md p-4;
+  @apply border-l-2 border-l-[var(--color-accent)] pl-4;
 }
 
 footer .social-links .icon:hover {

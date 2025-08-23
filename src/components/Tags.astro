@@ -1,0 +1,16 @@
+---
+const { tags } = Astro.props;
+---
+
+<div class="tags flex gap-2">
+  {
+    tags.map((tag: string) => (
+      <a
+        href={`/tag/${tag}`}
+        class="tag no-underline! hover:text-[var(--color-accent-hover)] hover:decoration-auto hover:underline!"
+      >
+        #{tag}
+      </a>
+    ))
+  }
+</div>

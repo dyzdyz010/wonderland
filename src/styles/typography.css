@@ -1,0 +1,231 @@
+.post .heading {
+  @apply flex justify-start gap-4 items-baseline;
+
+  h2 {
+    @apply text-xl font-bold p-0 m-0 text-[var(--color-default)];
+  }
+
+  .date {
+    @apply text-sm text-[var(--color-accent)];
+  }
+}
+
+.post .heading:hover h2,
+.post .heading:hover .date {
+  @apply text-[var(--color-accent-hover)];
+}
+
+.post p {
+  @apply p-0 m-0;
+}
+
+h1 :target,
+h2 :target,
+h3 :target,
+h4 :target,
+h5 :target,
+h6 :target {
+  scroll-margin-top: 1.25em;
+}
+h1 {
+  font-size: 2.75em;
+  margin-block-start: 0em;
+  margin-block-end: 0.8888889em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  line-height: 1.1111111;
+}
+h2 {
+  font-size: 2em;
+  margin-block-start: 1.6em;
+  margin-block-end: 0.6em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  line-height: 1.3333333;
+}
+h3 {
+  font-size: 1.5em;
+  margin-block-start: 1.5em;
+  margin-block-end: 0.6em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  line-height: 1.45;
+}
+h4 {
+  font-size: 1.25em;
+  margin-block-start: 1.5em;
+  margin-block-end: 0.6em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  line-height: 1.6;
+}
+h5 {
+  font-size: 1.1em;
+  margin-block-start: 1.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  line-height: 1.5;
+}
+p {
+  margin-block-end: 0.5em;
+}
+strong,
+b {
+  font-weight: 700;
+}
+a,
+.link {
+  @apply text-[var(--color-accent)] underline cursor-pointer;
+  @apply hover:text-[var(--color-accent-hover)] underline-offset-2;
+  /* color: var(--color-accent);
+  text-decoration: underline;
+  cursor: pointer; */
+}
+/* a,
+.link {
+  transition: color 0.1s, underline 0.1s;
+}
+a:hover,
+.link:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline solid 2px;
+} */
+textarea {
+  width: 100%;
+  font-size: 16px;
+}
+input {
+  font-size: 16px;
+}
+table {
+  width: 100%;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--vp-font-family-mono);
+}
+code {
+  padding: 2px 5px;
+  background-color: var(--raw-bg-color);
+  border-radius: 2px;
+}
+pre {
+  padding: 1.5em;
+  border-radius: 8px;
+}
+pre > code {
+  all: unset;
+}
+blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding: 0 0 0 18px;
+  margin: 0px;
+  font-size: 1.333em;
+}
+hr {
+  border: none;
+  border-top: 1px solid var(--raw-bg-color);
+}
+
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
+  clip: rect(1px 1px 1px 1px);
+  /* maybe deprecated but we need to support legacy browsers */
+  clip: rect(1px, 1px, 1px, 1px);
+  /* modern browsers, clip-path works inwards from each corner */
+  clip-path: inset(50%);
+  /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
+  white-space: nowrap;
+}
+nav a,
+.social-links a {
+  text-decoration: none;
+  color: var(--color-default);
+}
+nav a:hover,
+.social-links a:hover {
+  color: var(--color-default-hover);
+}
+.icon svg {
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+}
+.icon svg path,
+.icon svg circle {
+  fill: currentColor;
+}
+.theme-icon {
+  cursor: pointer;
+}
+.dark .theme-icon.light {
+  display: block;
+}
+.dark .theme-icon.dark {
+  display: none;
+}
+.theme-icon.light {
+  display: none;
+}
+.theme-icon.dark {
+  display: block;
+}
+.dark .code-image.themed .light {
+  display: none;
+}
+.dark .code-image.themed .dark {
+  display: initial;
+}
+.code-image.themed .light {
+  display: initial;
+}
+.code-image.themed .dark {
+  display: none;
+}
+
+figcaption {
+  text-align: center;
+}
+.code-image svg {
+  max-width: 100%;
+  height: fit-content;
+}
+.inline-equation {
+  display: inline-block;
+  width: fit-content;
+  margin: 0 0.15em;
+}
+.block-equation {
+  display: grid;
+  place-items: center;
+  overflow-x: auto;
+}
+.block-list,
+.block-list li {
+  margin: 0;
+  padding: 0;
+}
+.block-list > li {
+  list-style: none;
+  margin-top: 1.5em;
+  padding-left: 1em;
+  border-left: 2.5px solid var(--color-accent);
+}
+.block-list.accent > li {
+  border-left: 2.5px solid var(--color-accent);
+}

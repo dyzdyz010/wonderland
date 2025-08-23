@@ -115,14 +115,6 @@ ul.tags {
   @apply hover:text-[var(--color-accent-hover)] hover:decoration-[var(--color-accent-hover)] hover:decoration-2;
 }
 
-.prose h3 {
-  @apply text-xl font-bold;
-}
-
-.prose h4 {
-  @apply text-lg font-bold;
-}
-
 .prose h1 :target,
 .prose h2 :target,
 .prose h3 :target,

@@ -7,6 +7,8 @@ import { getCollection } from "astro:content";
 
 // @ts-ignore
 import AboutContent from "../../content/about.typ?html&body";
+import FormattedDate from "../components/FormattedDate.astro";
+import Tags from "../components/Tags.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -20,11 +22,17 @@ console.log(posts);
   <div class="posts">
     {
       posts.map((post) => (
-        <div class="post">
-          <a href={`/article/${post.id}`}>
-            <h2>{post.data.title}</h2>
+        <div class="post flex flex-col gap-1">
+          <a href={`/article/${post.id}`} class="heading">
+            <h2>
+              <span>{post.data.title}</span>
+            </h2>
+            <span class="date">
+              <FormattedDate date={post.data.date} />
+            </span>
           </a>
-          <p>{post.data.date}</p>
+          <Tags tags={post.data.tags} />
+          <p>{post.data.description}</p>
         </div>
       ))
     }
