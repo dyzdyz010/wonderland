@@ -8,7 +8,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://duyizhuo.com",
+  site: "https://dyz.io",
   integrations: [
     icon(),
     typst({
