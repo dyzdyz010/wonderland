@@ -1,5 +1,5 @@
-#import "../../templates/blog.typ": *
-#import "../../templates/enums.typ": *
+#import "/templates/blog.typ": *
+#import "/templates/enums.typ": *
 
 #show: main.with(
   title: "New Blog Debut",

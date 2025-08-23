@@ -13,6 +13,8 @@
   typst: "Typst",
   life: "Life",
   misc: "Miscellaneous",
+  ue5: "UE5",
+  protobuf: "Protobuf",
 )
 
 #let blog-collections = (

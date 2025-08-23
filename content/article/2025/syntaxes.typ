@@ -1,5 +1,5 @@
-#import "../../templates/blog.typ": *
-#import "../../templates/enums.typ": *
+#import "/templates/blog.typ": *
+#import "/templates/enums.typ": *
 #import "@preview/kouhu:0.2.0": kouhu
 
 #show: main.with(
