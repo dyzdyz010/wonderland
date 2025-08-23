@@ -24,8 +24,8 @@ ul.tags {
   padding: 1em;
 }
 .prose p {
-  margin-block-start: 0.5em;
-  margin-block-end: 0.5em;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 }
 .title {
   margin-bottom: 1em;
@@ -163,9 +163,6 @@ ul.tags {
   margin-inline-end: 0px;
   line-height: 1.5;
 }
-.prose p {
-  margin-block-end: 0.5em;
-}
 .prose strong,
 b {
   font-weight: 700;
@@ -195,10 +192,14 @@ b {
 .prose table {
   width: 100%;
 }
-.prose img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+.prose figure {
+  @apply flex flex-col items-center;
+}
+.prose figure img {
+  @apply rounded-lg max-w-full h-auto;
+}
+.prose figure figcaption {
+  @apply text-sm text-[var(--color-gray)] mt-2;
 }
 .prose pre,
 .prose code,

@@ -99,7 +99,7 @@
 }
 
 #let visual-rules(body) = {
-  let url-base = ""
+  let url-base = "/"
   // Resolves the path to the image source
   let resolve(path) = (
     path.replace(
