@@ -7,6 +7,7 @@ import interWoff2 from "@fontsource-variable/inter/files/inter-latin-opsz-normal
 import interItalicWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-italic.woff2?url";
 
 import { SITE_TITLE } from "../consts";
+import ThemeInit from "./ThemeInit.astro";
 
 interface Props {
   title: string;
@@ -70,3 +71,5 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
   href={interItalicWoff2}
   crossorigin="anonymous"
 />
+
+<ThemeInit />

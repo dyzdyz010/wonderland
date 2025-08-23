@@ -31,16 +31,3 @@ const { title, description } = Astro.props;
     height: 100%;
   }
 </style>
-
-<script>
-  const theme = localStorage.getItem("theme");
-  if (!theme) {
-    localStorage.setItem("theme", "dark");
-  }
-  
-  if (theme === "dark") {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
-</script>
