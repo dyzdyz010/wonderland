@@ -2,6 +2,7 @@
 import { SITE_TITLE } from "../consts";
 import HeaderLink from "./HeaderLink.astro";
 import ThemeSwitch from "./ThemeSwitch.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <header class="header mb-12">
@@ -15,13 +16,17 @@ import ThemeSwitch from "./ThemeSwitch.astro";
     </h2>
     <div class="internal-links">
       <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/posts">Posts</HeaderLink>
       <HeaderLink href="/about">About</HeaderLink>
-      <HeaderLink href="/contact">Contact</HeaderLink>
     </div>
     <div class="social-links">
       <ThemeSwitch />
-      <a href="https://github.com/dyzdyz010">GitHub</a>
-      <a href="https://twitter.com/dyzdyz010">Twitter</a>
+      <a href="https://github.com/dyzdyz010" target="_blank">
+        <Icon name="mdi:github" class="w-6 h-6" />
+      </a>
+      <a href="https://twitter.com/dyzdyz010" target="_blank">
+        <Icon name="mdi:twitter" class="w-6 h-6" />
+      </a>
     </div>
   </nav>
 </header>

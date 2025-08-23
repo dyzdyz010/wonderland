@@ -1,30 +1,17 @@
 ---
-import RootLayout from "../layouts/RootLayout.astro";
-import { getCollection } from "astro:content";
-import { SITE_TITLE } from "../consts";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
-
-// @ts-ignore
-import AboutContent from "../../content/about.typ?html&body";
 import FormattedDate from "../components/FormattedDate.astro";
 import Tags from "../components/Tags.astro";
+import RootLayout from "../layouts/RootLayout.astro";
+import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
-
-console.log(posts);
 ---
 
-<RootLayout title="Home">
-  <section aria-label="Prelude" class="mb-10">
-    <h1 class="italic font-bold">
-      {SITE_TITLE}
-    </h1>
-    <AboutContent />
-  </section>
+<RootLayout title="Posts">
+  <h1>Posts</h1>
+
   <div class="posts">
     {
       posts.map((post) => (
