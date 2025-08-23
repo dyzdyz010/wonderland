@@ -6,7 +6,7 @@
   }
 
   .date {
-    @apply text-sm text-[var(--color-accent)];
+    @apply text-sm text-[var(--color-accent)] italic;
   }
 }
 

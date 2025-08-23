@@ -228,3 +228,15 @@ b {
   border: none;
   border-top: 1px solid var(--color-border);
 }
+
+.prose ul {
+  @apply ml-10;
+}
+
+.prose ul li {
+  @apply list-disc;
+
+  &::marker {
+    @apply mr-2;
+  }
+}

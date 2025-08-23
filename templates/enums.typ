@@ -11,6 +11,7 @@
   tinymist: "Tinymist",
   golang: "Golang",
   typst: "Typst",
+  life: "Life",
   misc: "Miscellaneous",
 )
 
