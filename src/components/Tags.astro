@@ -2,7 +2,7 @@
 const { tags, class: className, ...props } = Astro.props;
 ---
 
-<div class={`tags flex gap-3 ${className}`} {...props}>
+<div class={`tags flex gap-4 ${className}`} {...props}>
   {
     tags.map((tag: string) => (
       <a

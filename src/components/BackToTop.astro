@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="back-to-top fixed bottom-10 right-10">
+  <button
+    aria-label="Back to Top"
+    class="text-[var(--color-default)]! hover:text-[var(--color-accent)]! transition-all duration-100 cursor-pointer hidden"
+  >
+    <Icon name="mdi:arrow-compass" class="text-4xl" />
+  </button>
+</div>
+
+<script>
+  const backToTop = document.querySelector(".back-to-top button");
+  if (backToTop) {
+    window.addEventListener("scroll", () => {
+      console.log(window.scrollY);
+      if (window.scrollY > 100) {
+        backToTop.classList.remove("hidden");
+      } else {
+        backToTop.classList.add("hidden");
+      }
+    });
+    backToTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
+</script>

@@ -20,8 +20,8 @@ body {
   --vp-font-family-base: "Inter Variable", "Inter", "Noto Sans SC",
     "PingFang SC", "Microsoft Yahei", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --vp-font-family-mono: ui-monospace, "Menlo", "Monaco", "Consolas",
-    "Liberation Mono", "Courier New", monospace;
+  --vp-font-family-mono: "Menlo", "Monaco", "Consolas", "Liberation Mono",
+    "Courier New", ui-monospace, monospace;
 
   font-family: var(--vp-font-family-base);
   margin: 0;

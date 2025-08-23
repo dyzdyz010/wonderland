@@ -4,7 +4,9 @@
 #import "theme.typ": default-theme, theme-frame
 
 #let code-font = (
-  "DejaVu Sans Mono",
+  "Consolas",
+  "Courier New",
+  "monospace",
 )
 
 #let (

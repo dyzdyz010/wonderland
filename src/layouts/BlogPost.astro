@@ -10,6 +10,7 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import RootLayout from "./RootLayout.astro";
 import Tags from "../components/Tags.astro";
+import BackToTop from "../components/BackToTop.astro";
 
 interface IdExt {
   id: string;
@@ -46,6 +47,7 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
       <slot />
       <Tags tags={tags} class="mt-10" />
     </div>
+    <BackToTop />
   </article>
 </RootLayout>
 

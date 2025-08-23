@@ -58,7 +58,7 @@
 
 文件到位之后，还需要修改插件的`.Build.cs`文件，添加头文件包含路径以及库文件查找路径：
 
-```csharp
+```cs
 // 头文件包含路径
 PublicSystemIncludePaths.AddRange(
   new string[]
