@@ -7,7 +7,7 @@ import { Icon } from "astro-icon/components";
 
 <header class="header mb-12">
   <nav>
-    <h2 class="logo">
+    <h2 class="logo @lg:block @3xs:hidden">
       <a
         href="/"
         class="hover:text-[var(--color-default-hover)]"
@@ -16,16 +16,16 @@ import { Icon } from "astro-icon/components";
     </h2>
     <div class="internal-links">
       <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/posts">Posts</HeaderLink>
+      <HeaderLink href="/article">Posts</HeaderLink>
       <HeaderLink href="/about">About</HeaderLink>
     </div>
     <div class="social-links">
       <ThemeSwitch />
       <a href="https://github.com/dyzdyz010" target="_blank">
-        <Icon name="mdi:github" class="w-6 h-6" />
+        <Icon name="mdi:github" class="w-6 h-6 @3xs:hidden @lg:block" />
       </a>
       <a href="https://twitter.com/dyzdyz010" target="_blank">
-        <Icon name="mdi:twitter" class="w-6 h-6" />
+        <Icon name="mdi:twitter" class="w-6 h-6 @3xs:hidden @lg:block" />
       </a>
     </div>
   </nav>

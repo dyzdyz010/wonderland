@@ -1,8 +1,8 @@
 ---
-const { tags } = Astro.props;
+const { tags, class: className, ...props } = Astro.props;
 ---
 
-<div class="tags flex gap-2">
+<div class={`tags flex gap-3 ${className}`} {...props}>
   {
     tags.map((tag: string) => (
       <a

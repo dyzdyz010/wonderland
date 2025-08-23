@@ -2,7 +2,7 @@
 #import templates: *
 #import "mod.typ": static-heading-link
 #import "code/rule.typ": code-block-rules, is-dark-theme, dash-color
-#import "code/theme.typ": sys-is-html-target
+#import "code/theme.typ": sys-is-html-target, theme-frame
 
 #let is-html-target = is-html-target()
 #let is-pdf-target = is-pdf-target()
@@ -24,6 +24,10 @@
 // ,
 #let heading-sizes = (22pt, 18pt, 14pt, 12pt, main-size)
 #let list-indent = 0.5em
+
+#let div-frame(content, attrs: (:), tag: "div") = html.elem(tag, html.frame(content), attrs: attrs)
+#let span-frame = div-frame.with(tag: "span")
+#let p-frame = div-frame.with(tag: "p")
 
 
 #let markup-rules(body, lang: none, region: none) = {
@@ -55,6 +59,66 @@
   body
 }
 
+#let mathyml-equation-rules(body) = {
+  import "../packages/mathyml/src/lib.typ": try-to-mathml
+
+  // math rules
+  show math.equation: set text(weight: 500)
+  // show math.equation: to-mathml
+  show math.equation: try-to-mathml
+
+
+  body
+}
+
+#let equation-rules(body) = {
+  show math.equation: set text(weight: 400)
+  show math.equation.where(block: true): it => context if shiroa-sys-target() == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        set text(fill: theme.main-color)
+        p-frame(attrs: ("class": "block-equation", "role": "math"), it)
+      },
+    )
+  } else {
+    it
+  }
+  show math.equation.where(block: false): it => context if shiroa-sys-target() == "html" {
+    theme-frame(
+      tag: "span",
+      theme => {
+        set text(fill: theme.main-color)
+        span-frame(attrs: (class: "inline-equation"), it)
+      },
+    )
+  } else {
+    it
+  }
+  body
+}
+
+#let visual-rules(body) = {
+  let url-base = ""
+  // Resolves the path to the image source
+  let resolve(path) = (
+    path.replace(
+      // Substitutes the paths with some assumption.
+      // In the astro sites, the assets are store in `public/` directory.
+      regex("^[./]*/public/"),
+      url-base,
+    )
+  )
+
+  show image: it => context if shiroa-sys-target() == "paged" {
+    it
+  } else {
+    html.elem("img", attrs: (src: resolve(it.source)))
+  }
+
+  body
+}
+
 #let shared-template(
   title: "Untitled",
   desc: [This is a blog post.],
@@ -73,7 +137,10 @@
       region: region,
     )
 
+    show: mathyml-equation-rules
+    // show: equation-rules
     show: code-block-rules
+    show: visual-rules
 
     set par(justify: true)
 

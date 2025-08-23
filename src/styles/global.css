@@ -63,7 +63,7 @@ body {
 
 .header .social-links,
 footer .social-links {
-  @apply flex gap-4 items-center;
+  @apply flex gap-4 items-center justify-end;
 }
 
 .posts {
@@ -74,6 +74,6 @@ footer .social-links {
   @apply border-l-2 border-l-[var(--color-accent)] pl-4;
 }
 
-footer .social-links .icon:hover {
+/* footer .social-links .icon:hover {
   @apply text-white;
-}
+} */

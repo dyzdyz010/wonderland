@@ -15,7 +15,7 @@ const { title, description } = Astro.props;
   <body>
     <main class="@container">
       <Header />
-      <div class="@xl:px-40 @3xs:p-0">
+      <div class="@5xl:px-40 @lg:px-10 @3xs:p-4 @3xs:pt-0">
         <slot />
       </div>
     </main>
@@ -31,3 +31,16 @@ const { title, description } = Astro.props;
     height: 100%;
   }
 </style>
+
+<script>
+  const theme = localStorage.getItem("theme");
+  if (!theme) {
+    localStorage.setItem("theme", "dark");
+  }
+  
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+</script>

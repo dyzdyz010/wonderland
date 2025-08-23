@@ -1,0 +1,3 @@
+[submodule "packages/mathyml"]
+	path = packages/mathyml
+	url = https://codeberg.org/akida/mathyml
