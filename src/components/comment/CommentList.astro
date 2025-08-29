@@ -1,0 +1,31 @@
+---
+import { drizzle } from "drizzle-orm/d1";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { eq } from "drizzle-orm";
+import CommentItem from "./CommentItem.astro";
+import { commentsTable } from "../../tables/comment";
+import CommentEdit from "./CommentEdit.astro";
+
+const { postSlug, class: className, ...props } = Astro.props;
+console.log(postSlug);
+
+const db = drizzle(Astro.locals.runtime.env.DB);
+console.log(db);
+
+
+const comments = await db
+  .select()
+  .from(commentsTable)
+  .where(eq(commentsTable.post_slug, postSlug));
+console.log(comments);
+---
+
+<div class={`comments-container ${className}`} {...props}>
+  <h2>Comments({postSlug})</h2>
+
+  <div class="comments-list flex flex-col gap-4">
+    {comments.map((comment) => <CommentItem comment={comment} />)}
+  </div>
+
+  <CommentEdit postSlug={postSlug} />
+</div>

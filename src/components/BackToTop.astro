@@ -15,7 +15,7 @@ import { Icon } from "astro-icon/components";
   const backToTop = document.querySelector(".back-to-top button");
   if (backToTop) {
     window.addEventListener("scroll", () => {
-      console.log(window.scrollY);
+      // console.log(window.scrollY);
       if (window.scrollY > 100) {
         backToTop.classList.remove("hidden");
       } else {

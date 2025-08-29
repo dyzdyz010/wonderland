@@ -1,0 +1,31 @@
+---
+import { drizzle } from "drizzle-orm/d1";
+import { commentsTable } from "../../tables/comment";
+import { eq } from "drizzle-orm";
+
+const db = drizzle(Astro.locals.runtime.env.DB);
+console.log(db);
+
+const { postSlug, class: className, ...props } = Astro.props;
+
+try {
+  const data = await Astro.request.formData();
+  console.log(data);
+} catch (error) {
+  console.error(error);
+}
+---
+
+<div class={`comment-edit ${className}`} {...props}>
+  <h2>CommentEdit</h2>
+  <form>
+    <div class="meta">
+      <input type="text" name="author_name" placeholder="Name" />
+      <input type="text" name="author_email" placeholder="Email" />
+      <input type="text" name="author_url" placeholder="Website" />
+    </div>
+
+    <textarea name="content" placeholder="Comment..."></textarea>
+    <button type="submit" class="link">Submit</button>
+  </form>
+</div>

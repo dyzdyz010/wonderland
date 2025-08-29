@@ -1,0 +1,16 @@
+---
+import FormattedDate from "../FormattedDate.astro";
+
+const { comment } = Astro.props;
+---
+
+<div class="comment-item">
+  <div class="commit-header">
+    <h3>{comment.author_name}</h3>
+    <span>{comment.author_email}</span>
+    <p>
+      <FormattedDate date={new Date(comment.created_at * 1000)} />
+    </p>
+  </div>
+  <p>{comment.content}</p>
+</div>

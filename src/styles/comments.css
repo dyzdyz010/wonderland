@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* Comment组件样式 - 与博客整体风格保持统一 */
+.prose .comments-container {
+  margin-top: 3rem;
+}
+
+.prose .comments-container h2 {
+  @apply text-2xl font-bold mb-6;
+  color: var(--color-default);
+  padding-bottom: 0.5rem;
+}
+
+.prose .comments-list {
+  @apply flex flex-col gap-6;
+}
+
+.prose .comment-item {
+  /* 采用与.post类似的左侧边框设计 */
+  border-left: 2px solid var(--color-accent);
+  padding: 1rem 0 1rem 1rem;
+  @apply pr-0 pl-4 py-2;
+  background: var(--color-bg);
+  /* border-radius: 8px; */
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* 评论头部样式 */
+.prose .comment-item .commit-header {
+  @apply flex gap-3 items-baseline mb-3;
+  flex-wrap: wrap;
+}
+
+.prose .comment-item .commit-header h3 {
+  @apply text-lg font-semibold m-0 p-0;
+  color: var(--color-default);
+  line-height: 1.4;
+}
+
+.prose .comment-item .commit-header span {
+  @apply text-sm;
+  color: var(--color-gray);
+  font-style: italic;
+}
+
+.prose .comment-item .commit-header p {
+  @apply text-sm m-0 p-0;
+  color: var(--color-accent);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* 评论内容样式 */
+.prose .comment-item > p:last-child {
+  @apply m-0 p-0;
+  color: var(--color-default);
+  line-height: 1.6;
+  font-size: 1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 响应式设计 */
+@media (max-width: 640px) {
+  .prose .comment-item {
+    padding: 1rem 0 1rem 1rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+  .prose .comment-item .commit-header {
+    @apply flex-col gap-1 items-start;
+  }
+
+  .prose .comment-item .commit-header h3 {
+    @apply text-base;
+  }
+}
+
+.prose .comment-edit form {
+  @apply flex flex-col gap-2;
+}
+
+.prose .comment-edit .meta {
+  @apply flex flex-row gap-2 justify-stretch items-center;
+}
+
+.prose .comment-edit input,
+.prose .comment-edit textarea {
+  @apply border border-[var(--color-border)] rounded-md px-2 py-1 leading-8 flex-1;
+}
+
+.prose .comment-edit input:active,
+.prose .comment-edit textarea:active,
+.prose .comment-edit input:focus-visible,
+.prose .comment-edit textarea:focus-visible {
+  @apply border-[var(--color-accent)] outline-none;
+}
+
+.prose .comment-edit button {
+  @apply text-right;
+}
