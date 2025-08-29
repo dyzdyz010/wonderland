@@ -3,14 +3,14 @@ import type { CollectionEntry } from "astro:content";
 import "../styles/global.css";
 import "../styles/article.css";
 import "../styles/code.css";
-
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import RootLayout from "./RootLayout.astro";
 import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
+
+import { drizzle } from "drizzle-orm/d1";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { eq } from "drizzle-orm";
 
 interface IdExt {
   id: string;
@@ -20,10 +20,29 @@ type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false });
 
 const { id, title, description, date, updatedDate, tags, author, ...rest } =
   Astro.props;
+
+const db = drizzle(Astro.locals.runtime.env.DB);
+console.log(db);
+
+const comments = sqliteTable("comments", {
+  id: integer("id").primaryKey(),
+  post_slug: text("post_slug").notNull(),
+  author_name: text("author_name").notNull(),
+  author_email: text("author_email").notNull(),
+  author_url: text("author_url").notNull(),
+  content: text("content").notNull(),
+  created_at: integer("created_at").notNull(),
+  status: text("status").notNull(),
+  parent_id: integer("parent_id"),
+  ip_hash: text("ip_hash"),
+});
+
+const all_comments = await db.select().from(comments).all();
+console.log(all_comments);
 ---
 
 <RootLayout>
-  <article>
+  <article id={id || ""}>
     <div class="prose">
       <section class="title" aria-label="Title">
         <div class="annotation">
@@ -50,40 +69,3 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
     <BackToTop />
   </article>
 </RootLayout>
-
-<!-- <html lang="en" class="dark">
-  <head>
-    <BaseHead title={title || ""} description={description || ""} />
-  </head>
-
-  <body>
-    <Header articleId={id || undefined} />
-    <main>
-      <article>
-        <div class="prose">
-          <section class="title" aria-label="Title">
-            <div class="annotation">
-              <div class="date">
-                <FormattedDate date={date} />
-                {
-                  updatedDate && (
-                    <>
-                      <span class="last-updated-on">
-                        , Last updated on{" "}
-                        <FormattedDate date={updatedDate || date} />
-                      </span>
-                    </>
-                  )
-                }
-              </div>
-            </div>
-            <h1>{title}</h1>
-            <hr />
-          </section>
-          <slot />
-        </div>
-      </article>
-    </main>
-    <Footer />
-  </body>
-</html> -->

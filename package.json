@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.6.6",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.5.0",
     "@fontsource-variable/inter": "^5.2.6",
@@ -17,6 +18,7 @@
     "astro": "^5.13.2",
     "astro-icon": "^1.1.5",
     "astro-typst": "^0.11.2",
+    "drizzle-orm": "^0.44.5",
     "tailwindcss": "^4.1.12"
   },
   "devDependencies": {

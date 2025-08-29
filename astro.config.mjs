@@ -6,9 +6,12 @@ import icon from "astro-icon";
 
 import sitemap from "@astrojs/sitemap";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://dyz.io",
+
   integrations: [
     icon(),
     typst({
@@ -17,6 +20,7 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+
   vite: {
     plugins: [tailwindcss()],
     build: {
@@ -30,4 +34,10 @@ export default defineConfig({
       noExternal: ["@fontsource-variable/inter"],
     },
   },
+
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
+  }),
 });
