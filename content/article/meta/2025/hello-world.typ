@@ -10,3 +10,7 @@
     blog-tags.typst,
   ),
 )
+
+= Hello World!
+
+这是一篇测试用文章，用来测试评论功能。
