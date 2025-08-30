@@ -20,7 +20,8 @@
     "astro-icon": "^1.1.5",
     "astro-typst": "^0.11.2",
     "drizzle-orm": "^0.44.5",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "wrangler": "^4.33.1"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.3"
