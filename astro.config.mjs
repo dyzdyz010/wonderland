@@ -31,7 +31,14 @@ export default defineConfig({
       },
     },
     ssr: {
-      external: ["@myriaddreamin/typst-ts-node-compiler"],
+      external: [
+        "@myriaddreamin/typst-ts-node-compiler",
+        "node:fs",
+        "node:fs/promises",
+        "node:path",
+        "node:url",
+        "node:crypto",
+      ],
       noExternal: ["@fontsource-variable/inter"],
     },
   },
