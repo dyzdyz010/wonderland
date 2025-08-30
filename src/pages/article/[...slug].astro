@@ -1,22 +1,44 @@
 ---
 import { render } from "astro:content";
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getEntry } from "astro:content";
+
+import { drizzle } from "drizzle-orm/d1";
+import { commentsTable } from "../../tables/comment";
+import { eq } from "drizzle-orm";
 
 import BlogPost from "../../layouts/BlogPost.astro";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: post,
-  }));
+const slug = Astro.params.slug;
+if (!slug) {
+  return Astro.redirect("/404");
 }
-type Props = CollectionEntry<"blog">;
-
-const post = Astro.props;
+const post = await getEntry("blog", slug);
+// console.log("post", post);
+if (!post) {
+  return Astro.redirect("/404");
+}
 const { Content } = await render(post);
 
 export const prerender = false;
+
+const db = drizzle(Astro.locals.runtime.env.DB);
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const result = await db.insert(commentsTable).values({
+      post_slug: post.id as string,
+      author_name: data.get("author_name") as string,
+      author_email: data.get("author_email") as string,
+      author_url: data.get("author_url") as string,
+      content: data.get("content") as string,
+      created_at: Date.now(),
+    });
+    console.log("insert result", result);
+  } catch (error) {
+    console.error(error);
+  }
+}
 ---
 
 <BlogPost {...{ id: post.id }} {...post.data}>

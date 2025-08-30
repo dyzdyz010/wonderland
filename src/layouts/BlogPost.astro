@@ -9,6 +9,7 @@ import RootLayout from "./RootLayout.astro";
 import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
 import CommentList from "../components/comment/CommentList.astro";
+import CommentEdit from "../components/comment/CommentEdit.astro";
 
 interface IdExt {
   id: string;
@@ -18,6 +19,7 @@ type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false });
 
 const { id, title, description, date, updatedDate, tags, author, ...rest } =
   Astro.props;
+// console.log("post id", Astro.props);
 ---
 
 <RootLayout>
@@ -44,7 +46,7 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
       </section>
       <slot />
       <Tags tags={tags} class="mt-10" />
-      <CommentList postSlug={id} class="mt-10" />
+      <CommentList postSlug={id} class="mt-2" />
     </div>
     <BackToTop />
   </article>

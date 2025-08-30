@@ -7,8 +7,7 @@ const commentsTable = sqliteTable("comments", {
   author_email: text("author_email").notNull(),
   author_url: text("author_url").notNull(),
   content: text("content").notNull(),
-  created_at: integer("created_at").notNull(),
-  status: text("status").notNull(),
+  created_at: integer("created_at"),
   parent_id: integer("parent_id"),
   ip_hash: text("ip_hash"),
 });

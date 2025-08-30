@@ -7,25 +7,25 @@ import { commentsTable } from "../../tables/comment";
 import CommentEdit from "./CommentEdit.astro";
 
 const { postSlug, class: className, ...props } = Astro.props;
-console.log(postSlug);
+// console.log(postSlug);
 
 const db = drizzle(Astro.locals.runtime.env.DB);
-console.log(db);
+// console.log(db);
 
 
 const comments = await db
   .select()
   .from(commentsTable)
   .where(eq(commentsTable.post_slug, postSlug));
-console.log(comments);
+// console.log(comments);
 ---
 
 <div class={`comments-container ${className}`} {...props}>
-  <h2>Comments({postSlug})</h2>
+  <h2>Comments</h2>
+
+  <CommentEdit postSlug={postSlug} />
 
   <div class="comments-list flex flex-col gap-4">
     {comments.map((comment) => <CommentItem comment={comment} />)}
   </div>
-
-  <CommentEdit postSlug={postSlug} />
 </div>

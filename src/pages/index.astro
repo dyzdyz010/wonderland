@@ -15,7 +15,7 @@ const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
-// console.log(posts);
+// console.log(posts.map((post) => post.id));
 ---
 
 <RootLayout title="Home">

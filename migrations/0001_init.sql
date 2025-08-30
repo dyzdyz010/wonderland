@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS comments;
 CREATE TABLE
     IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -7,7 +8,6 @@ CREATE TABLE
         author_url TEXT NOT NULL,
         content TEXT NOT NULL,
         created_at INTEGER NOT NULL DEFAULT (unixepoch ()),
-        status TEXT NOT NULL DEFAULT 'approved', -- 也可做人工审核
         parent_id INTEGER,
         ip_hash TEXT
     );
