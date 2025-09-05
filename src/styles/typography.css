@@ -198,6 +198,10 @@ nav a:hover,
   display: none;
 }
 
+.code-image.themed code {
+  @apply bg-[var(--color-gray-light)];
+}
+
 figcaption {
   text-align: center;
 }

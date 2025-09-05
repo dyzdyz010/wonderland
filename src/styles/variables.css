@@ -8,6 +8,7 @@
   --color-accent-hover: #d30069b3;
 
   --color-gray: #6d6d6d;
+  --color-gray-light: #eff1f3;
 
   --color-border: rgba(176, 205, 234, 0.161);
 }
@@ -22,6 +23,7 @@
   --color-accent-hover: #cf829eb3;
 
   --color-gray: #939da3;
+  --color-gray-light: #1a1b26;
 
   --color-border: rgba(101, 117, 133, 0.161);
 }
