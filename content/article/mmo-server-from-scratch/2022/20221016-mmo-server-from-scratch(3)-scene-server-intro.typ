@@ -1,7 +1,7 @@
 #import "/templates/blog.typ": *
 #import "/templates/enums.typ": *
 #import "/templates/mod.typ": code-image
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 #show: main.with(
   title: "MMO Server From Scratch(3) - Scene Server(0) - 概要",
@@ -65,7 +65,7 @@
 2. NIF
 3. Port Driver
 4. Port
-   
+
 每种方法都有不同的特点和适用环境。在这个项目里，我们需要的是巨大的计算量和相对较低的延迟，而在以上四种方法中，`NIF` 的消息传递延迟是最低的，而且有一个非常棒的 `NIF` 库使得 `NIF` 的开发过程更加高效，程序更加健壮—— `Rustler`。该库使用 `Rust` 作为 `NIF` 函数的开发语言，兼具了内存安全和高效，可谓完美之选。
 
 因此，将重度计算的内容扔给 `Rust` 来做，如 `AOI` 数据管理、各种计算验证等；并发消息传递的工作由 `Elixir` 来完成，如玩家之间的交互、消息广播等。
@@ -81,12 +81,11 @@
 
 监督树形态大概如下：
 
-#let edge-box(body) = box(fill: rgb("#10aec2"), inset: 4pt, text(white, body))
-
 #figure(
   code-image.with(class: "center")(theme => [
-    #set text(font: ("DejaVu Sans Mono"), size: 12pt)
+    #set text(font: "DejaVu Sans Mono", size: 12pt)
     #let nodebox = (position, text, fill) => node(position, text, fill: fill, inset: 8pt)
+    #let edge-box(body) = box(fill: rgb("#10aec2"), inset: 4pt, text(white, body))
     // #set page(width: auto, height: auto, margin: 5mm, fill: white)
     #let node-text = text.with(white)
     #let colors = (green.darken(20%), eastern, blue.lighten(20%))
