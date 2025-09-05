@@ -1,10 +1,11 @@
 ---
-import { render } from "astro:content";
-import { getEntry } from "astro:content";
+import { render, getEntry, getCollection } from "astro:content";
+// import { getEntry } from "astro:content";
 
 import { drizzle } from "drizzle-orm/d1";
 import { commentsTable } from "../../tables/comment";
 import { eq } from "drizzle-orm";
+// import { getCollection } from "astro:content";
 
 import BlogPost from "../../layouts/BlogPost.astro";
 
@@ -19,25 +20,11 @@ if (!post) {
 }
 const { Content } = await render(post);
 
-export const prerender = false;
+export const prerender = true;
 
-const db = drizzle(Astro.locals.runtime.env.DB);
-
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-    const result = await db.insert(commentsTable).values({
-      post_slug: post.id as string,
-      author_name: data.get("author_name") as string,
-      author_email: data.get("author_email") as string,
-      author_url: data.get("author_url") as string,
-      content: data.get("content") as string,
-      created_at: Date.now(),
-    });
-    console.log("insert result", result);
-  } catch (error) {
-    console.error(error);
-  }
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
 }
 ---
 

@@ -8,8 +8,7 @@ import FormattedDate from "../components/FormattedDate.astro";
 import RootLayout from "./RootLayout.astro";
 import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
-import CommentList from "../components/comment/CommentList.astro";
-import CommentEdit from "../components/comment/CommentEdit.astro";
+import Comments from "../components/comment/Comments.astro";
 
 interface IdExt {
   id: string;
@@ -46,7 +45,7 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
       </section>
       <slot />
       <Tags tags={tags} class="mt-10" />
-      <CommentList postSlug={id} class="mt-2" />
+      <Comments server:defer postSlug={id} class="mt-2" />
     </div>
     <BackToTop />
   </article>

@@ -1,9 +1,38 @@
 ---
-const { class: className, ...props } = Astro.props;
+import { getEntry } from "astro:content";
+import { drizzle } from "drizzle-orm/d1";
+import { commentsTable } from "../../tables/comment";
+
+const { postSlug, class: className, ...props } = Astro.props;
+
+const db = drizzle(Astro.locals.runtime.env.DB);
+
+const post = await getEntry("blog", postSlug);
+if (!post) {
+  return Astro.redirect("/404");
+}
+// const db = drizzle(Astro.locals.runtime.env.DB);
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const result = await db.insert(commentsTable).values({
+      post_slug: post.id as string,
+      author_name: data.get("author_name") as string,
+      author_email: data.get("author_email") as string,
+      author_url: data.get("author_url") as string,
+      content: data.get("content") as string,
+      created_at: Date.now(),
+    });
+    console.log("insert result", result);
+  } catch (error) {
+    console.error(error);
+  }
+}
 ---
 
 <div class={`comment-edit @container ${className}`} {...props}>
-  <form id="comment-edit-form" method="post">
+  <form id="comment-edit-form" method="post" action={`/api/comments/${postSlug}`}>
     <div class="meta">
       <input type="text" required name="author_name" placeholder="Name" />
       <input type="email" required name="author_email" placeholder="Email" />

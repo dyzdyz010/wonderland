@@ -1,0 +1,16 @@
+---
+import CommentEdit from "./CommentEdit.astro";
+import CommentList from "./CommentList.astro";
+
+const { postSlug, class: className, ...props } = Astro.props;
+
+export const prerender = false;
+---
+
+<div id="comments" class={`comments-container ${className}`} {...props}>
+  <h2>Comments</h2>
+
+  <CommentEdit postSlug={postSlug} />
+
+  <CommentList postSlug={postSlug} />
+</div>
