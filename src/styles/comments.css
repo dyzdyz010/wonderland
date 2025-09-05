@@ -83,12 +83,12 @@
 }
 
 .prose .comment-edit .meta {
-  @apply flex flex-row gap-2 justify-stretch items-center;
+  @apply flex flex-row @max-lg:flex-col gap-2 justify-stretch items-center;
 }
 
 .prose .comment-edit input,
 .prose .comment-edit textarea {
-  @apply border border-[var(--color-border)] rounded-md px-2 py-1 leading-8 flex-1;
+  @apply border border-[var(--color-border)] rounded-md px-2 py-1 leading-8 flex-1 w-full;
 }
 
 .prose .comment-edit input:active,

@@ -1,7 +1,7 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
 import { getCollection } from "astro:content";
-import { SITE_TITLE } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -18,7 +18,7 @@ const posts = (await getCollection("blog")).sort(
 // console.log(posts.map((post) => post.id));
 ---
 
-<RootLayout title="Home">
+<RootLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
   <section aria-label="Prelude" class="mb-10">
     <h1 class="italic font-bold">
       {SITE_TITLE}

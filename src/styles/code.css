@@ -34,5 +34,5 @@
 }
 
 .code-image.themed .zebraw-code-line-container > * {
-  @apply px-[0.5em]! py-[0.1em]! text-xs!;
+  @apply px-[0.5em]! py-[0.1em]! text-sm!;
 }

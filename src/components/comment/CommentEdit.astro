@@ -2,7 +2,7 @@
 const { class: className, ...props } = Astro.props;
 ---
 
-<div class={`comment-edit ${className}`} {...props}>
+<div class={`comment-edit @container ${className}`} {...props}>
   <form id="comment-edit-form" method="post">
     <div class="meta">
       <input type="text" required name="author_name" placeholder="Name" />

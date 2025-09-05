@@ -8,9 +8,7 @@ import { Icon } from "astro-icon/components";
 <header class="header mb-12">
   <nav>
     <h2 class="logo @lg:block @3xs:hidden">
-      <a
-        href="/"
-        class="hover:text-[var(--color-default-hover)]"
+      <a href="/" class="hover:text-[var(--color-default-hover)]"
         >{SITE_TITLE}</a
       >
     </h2>
@@ -21,11 +19,21 @@ import { Icon } from "astro-icon/components";
     </div>
     <div class="social-links">
       <ThemeSwitch />
-      <a href="https://github.com/dyzdyz010" target="_blank">
-        <Icon name="mdi:github" class="w-6 h-6 @3xs:hidden @lg:block" />
+      <a
+        href="https://github.com/dyzdyz010"
+        target="_blank"
+        title="GitHub"
+        class="@3xs:hidden @lg:block"
+      >
+        <Icon name="mdi:github" aria-label="GitHub" class="w-6 h-6" />
       </a>
-      <a href="https://twitter.com/dyzdyz010" target="_blank">
-        <Icon name="mdi:twitter" class="w-6 h-6 @3xs:hidden @lg:block" />
+      <a
+        href="https://twitter.com/dyzdyz010"
+        target="_blank"
+        title="Twitter"
+        class="@3xs:hidden @lg:block"
+      >
+        <Icon name="mdi:twitter" aria-label="Twitter" class="w-6 h-6" />
       </a>
     </div>
   </nav>

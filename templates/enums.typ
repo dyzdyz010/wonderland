@@ -15,6 +15,12 @@
   misc: "Miscellaneous",
   ue5: "UE5",
   protobuf: "Protobuf",
+  cloudflare: "Cloudflare",
+  astro: "Astro",
+  blog: "Blog",
+  theme: "Theme",
+  vue: "Vue",
+  vitepress: "Vitepress",
 )
 
 #let blog-collections = (

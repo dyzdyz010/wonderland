@@ -38,13 +38,13 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
 
 <!-- Primary Meta Tags -->
 <title>{title} | {SITE_TITLE}</title>
-<meta name="title" content={title} />
+<meta name="title" content={`${title} | ${SITE_TITLE}`} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={`${title} | ${SITE_TITLE}`} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
 <meta property="og:image:alt" content="Kamiya's Character Design" />
