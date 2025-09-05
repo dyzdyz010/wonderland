@@ -1,0 +1,19 @@
+---
+import FormattedDate from "../FormattedDate.astro";
+import Tags from "../Tags.astro";
+
+const { post } = Astro.props;
+---
+
+<div class="post flex flex-col gap-1">
+  <a href={`/article/${post.id}`} class="heading">
+    <h2>
+      <span>{post.data.title}</span>
+    </h2>
+    <span class="date">
+      <FormattedDate date={post.data.date} />
+    </span>
+  </a>
+  <Tags tags={post.data.tags} />
+  <p>{post.data.description}</p>
+</div>

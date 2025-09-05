@@ -77,3 +77,10 @@ footer .social-links {
 /* footer .social-links .icon:hover {
   @apply text-white;
 } */
+
+hr {
+  /* margin-bottom: 0.5em; */
+  @apply mb-2!;
+  /* border-top-color: var(--color-border); */
+  @apply border-1 border-l-0 border-r-0 border-b-0 border-t-[var(--color-border)]!;
+}

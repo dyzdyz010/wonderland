@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+import Post from "./Post.astro";
+
+type BlogEntry = CollectionEntry<"blog">;
+
+// 组件 props 的类型
+interface Props extends HTMLAttributes<'div'> {
+  posts: BlogEntry[];   // ← 明确标注
+  class?: string;       // （可选）允许传 class
+}
+
+const { posts, class: className, ...props }: Props = Astro.props;
+---
+
+<div class:list={["posts", className]} {...props}>
+  {posts.map((post) => <Post post={post} />)}
+</div>

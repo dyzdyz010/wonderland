@@ -21,6 +21,11 @@
   theme: "Theme",
   vue: "Vue",
   vitepress: "Vitepress",
+  mmo: "MMO",
+  server: "Server",
+  rust: "Rust",
+  game: "Game",
+  elixir: "Elixir",
 )
 
 #let blog-collections = (
