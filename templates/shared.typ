@@ -2,12 +2,12 @@
 #import templates: *
 #import "mod.typ": static-heading-link
 #import "code/rule.typ": code-block-rules, is-dark-theme, dash-color
-#import "code/theme.typ": sys-is-html-target, theme-frame
+#import "code/theme.typ": theme-frame
+#import "target.typ": sys-is-html-target
 
 #let is-html-target = is-html-target()
 #let is-pdf-target = is-pdf-target()
 #let is-web-target = is-web-target() or sys-is-html-target
-#let sys-is-html-target = ("target" in dictionary(std))
 
 #let text-fonts = (
   "Libertinus Serif",

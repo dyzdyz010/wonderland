@@ -199,7 +199,7 @@ b {
   @apply rounded-lg max-w-full h-auto;
 }
 .prose figure figcaption {
-  @apply text-sm text-[var(--color-gray)] mt-2;
+  @apply text-sm text-[var(--color-gray)] mt-4;
 }
 .prose pre,
 .prose code,
@@ -249,4 +249,18 @@ b {
   &::marker {
     @apply mr-2;
   }
+}
+
+.prose table th,
+.prose table td {
+  @apply border-1 border-solid border-[var(--color-gray)] px-2 py-1 text-center;
+}
+
+/* .prose table th,
+.prose table td {
+  @apply border-1 border-solid border-[var(--color-gray)] px-2 py-1;
+} */
+
+.prose table th {
+  @apply text-[var(--color-accent)];
 }
