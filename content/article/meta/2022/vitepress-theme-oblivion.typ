@@ -13,7 +13,7 @@
   ),
 )
 
-上一个主题 #link("https://github.com/vuepress-reco/vuepress-theme-reco-1.x")[reco] 已经用了不短的时间了，最近关注 **Vitepress**，感觉很不错，于是萌生了自己再做一个主题的想法。
+上一个主题 #link("https://github.com/vuepress-reco/vuepress-theme-reco-1.x")[reco] 已经用了不短的时间了，最近关注 *Vitepress*，感觉很不错，于是萌生了自己再做一个主题的想法。
 
 = 目前的功能
 

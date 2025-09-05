@@ -174,6 +174,7 @@
         static-heading-link(it.element, body: [#sym.section#context outline-counter.display("1.") #it.element.body])
       },
     )
+
     html.elem(
       "div",
       attrs: (
@@ -181,6 +182,7 @@
       ),
       outline(title: none),
     )
+    
     html.elem("hr")
   }
 
