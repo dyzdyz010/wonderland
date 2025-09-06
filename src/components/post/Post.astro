@@ -6,7 +6,10 @@ const { post } = Astro.props;
 ---
 
 <div class="post flex flex-col gap-1">
-  <a href={`/article/${post.id}`} class="heading">
+  <a
+    href={`/article/${post.id}`}
+    class="heading flex @3xs:flex-col @3xs:gap-1 @lg:flex-row @lg:gap-4"
+  >
     <h2>
       <span>{post.data.title}</span>
     </h2>

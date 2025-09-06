@@ -1,5 +1,5 @@
 .post .heading {
-  @apply flex justify-start gap-4 items-baseline;
+  @apply flex justify-start items-baseline;
 
   h2 {
     @apply text-2xl font-bold p-0 m-0 text-[var(--color-default)];
