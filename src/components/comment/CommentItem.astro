@@ -9,7 +9,7 @@ const { comment } = Astro.props;
     <h3>{comment.author_name}</h3>
     <span>{comment.author_email}</span>
     <p>
-      <FormattedDate date={new Date(comment.created_at * 1000)} />
+      <FormattedDate date={new Date(comment.created_at)} />
     </p>
   </div>
   <p>{comment.content}</p>
