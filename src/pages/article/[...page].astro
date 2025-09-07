@@ -9,7 +9,7 @@ import type { Page } from "astro";
 type BlogEntry = CollectionEntry<"blog">;
 
 const { page }: { page: Page<BlogEntry> } = Astro.props;
-console.log("page", page);
+// console.log("page", page);
 
 export async function getStaticPaths({ paginate }: { paginate: any }) {
   const posts = (await getCollection("blog")).sort(

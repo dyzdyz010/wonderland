@@ -15,6 +15,13 @@
   (it, ..attrs) => if type(it) == function { it(default-theme) } else { it }
 }
 
+#let typ_frame = (class, content) => {
+  // let class = str[typ-frame #class]
+  html.elem("div", attrs: (class: "typ-frame" + class))[
+    #html.frame(content)
+  ]
+}
+
 #let static-heading-link(elem, body: "#") = context {
   let id = {
     let title = plain-text(elem).trim()

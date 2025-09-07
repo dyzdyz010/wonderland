@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { drizzle } from "drizzle-orm/d1";
 import { commentsTable } from "../../../tables/comment";
+import { getClientIP } from "../../../utils/comment";
 
 export const prerender = false; // 确保端点是实时的（hybrid/static 模式下必写）
 
