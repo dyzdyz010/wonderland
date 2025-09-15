@@ -7,7 +7,7 @@
   date: "2025-09-14",
   tags: (
     blog-tags.programming,
-    blog-tags.blog,
+    blog-tags.clang,
   ),
 )
 

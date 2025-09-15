@@ -26,6 +26,7 @@
   rust: "Rust",
   game: "Game",
   elixir: "Elixir",
+  clang: "Clang",
 )
 
 #let blog-collections = (
