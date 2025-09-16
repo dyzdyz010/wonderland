@@ -1,16 +1,146 @@
 ---
-const { tags, class: className, ...props } = Astro.props;
+import type { HTMLAttributes } from "astro/types";
+import type { TagInput, TagWithCount } from "../utils/tags";
+import { normalizeTags } from "../utils/tags";
+
+interface Props extends HTMLAttributes<"div"> {
+  tags: TagInput[];
+  activeTag?: string | null;
+  showAll?: boolean;
+  allLabel?: string;
+  allCount?: number;
+  basePath?: string;
+}
+
+const {
+  tags: tagInputs,
+  class: className,
+  activeTag = undefined,
+  showAll = false,
+  allLabel = "All",
+  allCount,
+  basePath = "/tag",
+  ...props
+}: Props = Astro.props;
+
+const normalizedBasePath = basePath.replace(/\/+$/, "");
+const resolvedBasePath = normalizedBasePath.startsWith("/")
+  ? normalizedBasePath
+  : normalizedBasePath
+    ? `/${normalizedBasePath}`
+    : "";
+const allIsActive = activeTag == null;
+const allHref = resolvedBasePath || "/";
+const hasAllCount = typeof allCount === "number";
+const tags = normalizeTags(tagInputs);
+// console.log(tags);
 ---
 
-<div class={`tags flex gap-4 ${className}`} {...props}>
+<div
+  class:list={["tags flex flex-wrap gap-4", className, { "all-tags": showAll }]}
+  {...props}
+>
   {
-    tags.map((tag: string) => (
+    showAll && (
       <a
-        href={`/tag/${tag}`}
-        class="tag no-underline! hover:text-[var(--color-accent-hover)] hover:decoration-auto hover:underline!"
+        href={allHref}
+        class:list={[
+          "tag no-underline! hover:text-[var(--color-accent-hover)] hover:decoration-auto hover:underline!",
+          { active: allIsActive, "has-count": hasAllCount },
+        ]}
+        aria-current={allIsActive ? "page" : undefined}
       >
-        #{tag}
+        <span class:list={["tag-label"]}>{allLabel}</span>
+        {hasAllCount && (
+          <sup
+            class="tag-count"
+            aria-label={`${allCount} 篇文章`}
+            title={`${allCount} 篇文章`}
+          >
+            {allCount}
+          </sup>
+        )}
       </a>
-    ))
+    )
+  }
+  {
+    tags.map((tag: TagWithCount) => {
+      const isActive = activeTag === tag.id;
+      const encodedTag = encodeURIComponent(tag.id);
+      const href = `${resolvedBasePath ? `${resolvedBasePath}/` : "/"}${encodedTag}`;
+      const hasCount = typeof tag.count === "number";
+
+      return (
+        <a
+          href={href}
+          class:list={[
+            "tag no-underline! hover:text-[var(--color-accent-hover)] hover:decoration-auto hover:underline!",
+            { active: isActive, "has-count": hasCount },
+          ]}
+          aria-current={isActive ? "page" : undefined}
+        >
+          <span class:list={["tag-label"]}>#{tag.label}</span>
+          {hasCount && (
+            <sup
+              class="tag-count"
+              aria-label={`${tag.count} 篇文章`}
+              title={`${tag.count} 篇文章`}
+            >
+              {tag.count}
+            </sup>
+          )}
+        </a>
+      );
+    })
   }
 </div>
+
+<style>
+  .tag.active {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    transition: color 0.15s ease;
+  }
+
+  .all-tags .tag {
+    display: inline-block;
+    color: var(--color-default);
+  }
+
+  .all-tags .tag:hover {
+    color: var(--color-accent);
+  }
+
+  .all-tags .tag.active {
+    color: var(--color-accent);
+  }
+
+  .all-tags .tag.active:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .tag.has-count .tag-count {
+    min-width: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .tag.active.has-count .tag-count {
+    background: var(--color-accent-hover);
+  }
+</style>

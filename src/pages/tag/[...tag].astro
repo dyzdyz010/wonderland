@@ -1,0 +1,92 @@
+---
+import RootLayout from "../../layouts/RootLayout.astro";
+import { SITE_TITLE } from "../../consts";
+import { getCollection } from "astro:content";
+import Posts from "../../components/post/Posts.astro";
+import Tags from "../../components/Tags.astro";
+import {
+  buildTagSummaries,
+  getTagDefinitionById,
+  postHasTag,
+} from "../../utils/tags";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const tags = buildTagSummaries(posts);
+
+  return [
+    { params: { tag: undefined } },
+    ...tags.map(({ id }) => ({ params: { tag: id } })),
+  ];
+}
+
+const allPosts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const rawParam = Astro.params.tag;
+const activeTagId = Array.isArray(rawParam)
+  ? (rawParam[0] ?? null)
+  : (rawParam ?? null);
+
+const tagSummaries = buildTagSummaries(allPosts);
+
+const filteredPosts = activeTagId
+  ? allPosts.filter((post) => postHasTag(post, activeTagId))
+  : allPosts;
+
+const tagSummary = activeTagId
+  ? tagSummaries.find((entry) => entry.id === activeTagId)
+  : undefined;
+const tagDefinition = activeTagId
+  ? getTagDefinitionById(activeTagId)
+  : undefined;
+const tagLabel = activeTagId
+  ? (tagSummary?.label ?? tagDefinition?.label ?? activeTagId)
+  : "All";
+const tagCount = activeTagId
+  ? (tagSummary?.count ?? filteredPosts.length)
+  : filteredPosts.length;
+
+const pageTitle = activeTagId
+  ? `#${tagLabel} · ${SITE_TITLE}`
+  : `Tags · ${SITE_TITLE}`;
+const pageDescription = activeTagId
+  ? `Articles that mention the “${tagLabel}” tag.`
+  : "Browse all tags and the latest posts for each tag.";
+const heading = activeTagId ? `${tagLabel}` : "Tags";
+const subtitle = activeTagId
+  ? `${tagCount} article(s) tagged with #${tagLabel}.`
+  : "Pick a tag to see every article that matches.";
+---
+
+<RootLayout title={pageTitle} description={pageDescription}>
+  <section class="flex flex-col gap-6">
+    <header class="flex flex-col gap-2">
+      <h1 class="text-3xl font-bold">
+        <span class="pr-1 text-[var(--color-accent)] underline">#</span>
+        {heading}
+      </h1>
+      <p class="text-[var(--color-gray)]">{subtitle}</p>
+    </header>
+
+    <Tags
+      tags={tagSummaries}
+      showAll
+      activeTag={activeTagId}
+      allCount={allPosts.length}
+    />
+
+    {
+      filteredPosts.length ? (
+        <Posts posts={filteredPosts} />
+      ) : (
+        <p class="italic text-[var(--color-gray)]">
+          No articles have been published with this tag yet.
+        </p>
+      )
+    }
+  </section>
+</RootLayout>
