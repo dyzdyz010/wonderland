@@ -16,6 +16,7 @@ const posts = (await getCollection("blog"))
   .slice(0, 10);
 
 // console.log(posts.map((post) => post.id));
+export const prerender = true;
 ---
 
 <RootLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
