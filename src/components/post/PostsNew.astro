@@ -40,13 +40,13 @@ const uniqueYears = [...new Set(years)];
                     {postsInYear.map((post) => (
                         <a
                             href={`/article/${post.id}`}
-                            class="flex items-center gap-3 py-3 min-h-10"
+                            class="group flex items-center gap-3 py-3 min-h-10"
                         >
                             <span class="text-secondary w-[44px] shrink-0 text-sm font-medium">
                                 01-06
                             </span>
                             <div class="relative flex h-2 w-2 items-center justify-center">
-                                <div class="bg-[#7b888e] group-hover:bg-[#de4331] h-[5px] w-[5px] rounded-full transition-all group-hover:h-4" />
+                                <div class="bg-[#7b888e] group-hover:bg-[#de4331] h-[5px] w-[5px] rounded-full transition-all duration-300 group-hover:h-4" />
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="16"
