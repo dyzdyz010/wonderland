@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Background from "../components/Background.astro";
+import Bubble from "../components/Bubble.astro";
 
 const { title, description } = Astro.props;
 ---
@@ -14,7 +15,8 @@ const { title, description } = Astro.props;
     <BaseHead title={title} description={description} />
   </head>
   <body>
-    <Background />
+    <!-- <Background /> -->
+    <Bubble />
     <main class="@container">
       <Header />
       <div class="@5xl:px-40 @lg:px-10 @3xs:p-2 @3xs:pt-0">

@@ -9,6 +9,7 @@ import RootLayout from "./RootLayout.astro";
 import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
 import Comments from "../components/comment/Comments.astro";
+import Card from "../components/Card.astro";
 
 interface IdExt {
   id: string;
@@ -22,31 +23,37 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
 ---
 
 <RootLayout>
-  <article id={id || ""}>
-    <div class="prose">
-      <section class="title" aria-label="Title">
-        <div class="annotation">
-          <div class="date">
-            <FormattedDate date={date} />
-            {
-              updatedDate && (
-                <>
-                  <span class="last-updated-on">
-                    , Last updated on{" "}
-                    <FormattedDate date={updatedDate || date} />
-                  </span>
-                </>
-              )
-            }
-          </div>
+  <div class="flex flex-col items-stretch gap-8">
+    <Card>
+      <article id={id || ""}>
+        <div class="prose">
+          <section class="title" aria-label="Title">
+            <div class="annotation">
+              <div class="date">
+                <FormattedDate date={date} />
+                {
+                  updatedDate && (
+                    <>
+                      <span class="last-updated-on">
+                        , Last updated on{" "}
+                        <FormattedDate date={updatedDate || date} />
+                      </span>
+                    </>
+                  )
+                }
+              </div>
+            </div>
+            <h1>{title}</h1>
+            <hr />
+          </section>
+          <slot />
+          <Tags tags={tags ?? []} class="mt-10" />
         </div>
-        <h1>{title}</h1>
-        <hr />
-      </section>
-      <slot />
-      <Tags tags={tags} class="mt-10" />
+      </article>
+    </Card>
+    <Card>
       <Comments server:defer postSlug={id} class="mt-2" />
-    </div>
-    <BackToTop />
-  </article>
+    </Card>
+  </div>
+  <BackToTop />
 </RootLayout>

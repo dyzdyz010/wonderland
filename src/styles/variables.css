@@ -1,29 +1,33 @@
 :root {
   --color-bg: #eeeeee;
 
-  --color-default: #000000;
-  --color-default-hover: #d3006a;
+  --color-default: #4E3F42;
+  --color-default-hover: #4E3F42b3;
 
-  --color-accent: #d3006a;
-  --color-accent-hover: #d30069b3;
+  --color-accent: #de4331;
+  --color-accent-hover: #de4331b3;
 
   --color-gray: #6d6d6d;
   --color-gray-light: #eff1f3;
 
-  --color-border: rgba(176, 205, 234, 0.161);
+  --color-border: #ffffff;
+
+  --color-glass: #ffffff66;
 }
 
 :root.dark {
-  --color-bg: #222222;
+  --color-bg: #333333;
 
-  --color-default: rgb(223, 223, 214);
-  --color-default-hover: #cf829e;
+  --color-default: #ffffff;
+  --color-default-hover: #ffffffb3;
 
-  --color-accent: #cf829e;
-  --color-accent-hover: #cf829eb3;
+  --color-accent: #de4331;
+  --color-accent-hover: #de4331b3;
 
-  --color-gray: #939da3;
+  --color-gray: #6d6d6d;
   --color-gray-light: #1a1b26;
 
-  --color-border: rgba(101, 117, 133, 0.161);
+  --color-border: #ffffff;
+
+  --color-glass: #33333366;
 }

@@ -1,0 +1,432 @@
+---
+/**
+ * Blurred Floating Circles Background
+ * - Circles spawn with blue-noise-ish spacing
+ * - Movement = Perlin/Simplex flow field + soft separation
+ * - Coverage control: low-occupancy attraction prevents big empty holes
+ * - Constrained to bottom band (e.g. 55%–100% height)
+ */
+interface Props {
+    count?: number;
+    colors?: string[];
+    minRadius?: number;
+    maxRadius?: number;
+    bottomBandStart?: number;
+    speed?: number;
+    noiseScale?: number;
+    noiseTimeScale?: number;
+    targetFps?: number;
+    debugFps?: boolean;
+    startDelayMs?: number;
+}
+
+const {
+    count = 6,
+    colors = ["#FCC841", "#DFEFFC", "#DEDE92", "#DE4331", "#FE9750", "#FCC841"],
+    minRadius = 250,
+    maxRadius = 400,
+    bottomBandStart = 0.8,
+    speed = 0.12,
+    noiseScale = 0.0008,
+    noiseTimeScale = 0.00015,
+    targetFps = 6,
+    debugFps = false,
+    startDelayMs = 1500,
+} = Astro.props;
+---
+
+<div class="bubble-container">
+    <canvas id="bubble-canvas"></canvas>
+</div>
+
+<style>
+    .bubble-container {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        filter: blur(50px);
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    #bubble-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+</style>
+
+<script
+    define:vars={{
+        count,
+        colors,
+        minRadius,
+        maxRadius,
+        bottomBandStart,
+        speed,
+        noiseScale,
+        noiseTimeScale,
+        targetFps,
+        debugFps,
+        startDelayMs,
+    }}
+>
+    // ============== Noise2D Implementation (Simplex-like) ==============
+    function makeNoise2D(seed = Math.random() * 10000) {
+        // Simple permutation table
+        const perm = new Uint8Array(512);
+        const grad = [
+            [1, 1],
+            [-1, 1],
+            [1, -1],
+            [-1, -1],
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+        ];
+
+        // Initialize permutation with seed
+        const random = () => {
+            seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+            return seed / 0x7fffffff;
+        };
+
+        for (let i = 0; i < 256; i++) perm[i] = i;
+        for (let i = 255; i > 0; i--) {
+            const j = Math.floor(random() * (i + 1));
+            [perm[i], perm[j]] = [perm[j], perm[i]];
+        }
+        for (let i = 0; i < 256; i++) perm[i + 256] = perm[i];
+
+        return function noise2D(x, y) {
+            const X = Math.floor(x) & 255;
+            const Y = Math.floor(y) & 255;
+            x -= Math.floor(x);
+            y -= Math.floor(y);
+
+            const fade = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+            const lerp = (a, b, t) => a + t * (b - a);
+            const dot = (g, x, y) => g[0] * x + g[1] * y;
+
+            const u = fade(x);
+            const v = fade(y);
+
+            const aa = perm[perm[X] + Y] % 8;
+            const ab = perm[perm[X] + Y + 1] % 8;
+            const ba = perm[perm[X + 1] + Y] % 8;
+            const bb = perm[perm[X + 1] + Y + 1] % 8;
+
+            return lerp(
+                lerp(dot(grad[aa], x, y), dot(grad[ba], x - 1, y), u),
+                lerp(dot(grad[ab], x, y - 1), dot(grad[bb], x - 1, y - 1), u),
+                v,
+            );
+        };
+    }
+
+    function rand(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    // ============== Main Animation Logic ==============
+    const canvas = document.getElementById("bubble-canvas");
+    if (!canvas) throw new Error("Canvas not found");
+
+    const ctx = canvas.getContext("2d");
+    let width = canvas.clientWidth;
+    let height = canvas.clientHeight;
+    const noise = makeNoise2D();
+    let animRef = 0;
+
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.floor(width * DPR);
+    canvas.height = Math.floor(height * DPR);
+    ctx.scale(DPR, DPR);
+
+    const effectiveFps = Math.max(1, targetFps);
+
+    // 1s debounce for resize observer
+    let resizeTimer = null;
+    function handleResize() {
+        if (!canvas || !ctx) return;
+        const nextWidth = canvas.clientWidth;
+        const nextHeight = canvas.clientHeight;
+        if (nextWidth === width && nextHeight === height) return;
+        width = nextWidth;
+        height = nextHeight;
+        canvas.width = Math.floor(width * DPR);
+        canvas.height = Math.floor(height * DPR);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(DPR, DPR);
+        allocateGrid();
+        draw();
+    }
+
+    const ro = new ResizeObserver(() => {
+        if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+            handleResize();
+            resizeTimer = null;
+        }, 1000);
+    });
+    ro.observe(canvas);
+
+    // --- Occupancy grid (for coverage guidance) ---
+    const gridCell = 80;
+    let gridCols = 0;
+    let gridRows = 0;
+    let grid;
+
+    function allocateGrid() {
+        gridCols = Math.max(1, Math.ceil(width / gridCell));
+        gridRows = Math.max(1, Math.ceil(height / gridCell));
+        grid = new Float32Array(gridCols * gridRows);
+    }
+
+    function stampOccupancy(x, y, r) {
+        const c0 = Math.floor((x - r) / gridCell);
+        const c1 = Math.floor((x + r) / gridCell);
+        const r0 = Math.floor((y - r) / gridCell);
+        const r1 = Math.floor((y + r) / gridCell);
+        for (let cy = r0; cy <= r1; cy++) {
+            for (let cx = c0; cx <= c1; cx++) {
+                if (cx < 0 || cy < 0 || cx >= gridCols || cy >= gridRows)
+                    continue;
+                const idx = cy * gridCols + cx;
+                grid[idx] += 0.5;
+            }
+        }
+    }
+
+    function lowestOccupancyTarget() {
+        const startRow = Math.floor(gridRows * bottomBandStart);
+        let bestIdx = startRow * gridCols;
+        let bestVal = Infinity;
+        for (let cy = startRow; cy < gridRows; cy++) {
+            for (let cx = 0; cx < gridCols; cx++) {
+                const idx = cy * gridCols + cx;
+                const v = grid[idx];
+                if (v < bestVal) {
+                    bestVal = v;
+                    bestIdx = idx;
+                }
+            }
+        }
+        const ty = (Math.floor(bestIdx / gridCols) + 0.5) * gridCell;
+        const tx = ((bestIdx % gridCols) + 0.5) * gridCell;
+        return { tx, ty };
+    }
+
+    allocateGrid();
+
+    // Poisson-ish initial placement to avoid clusters
+    const bubbles = [];
+    const minDist = Math.max(minRadius * 0.2, 80);
+    const maxTries = 5000;
+    let tries = 0;
+
+    while (bubbles.length < count && tries < maxTries) {
+        tries++;
+        const r = rand(minRadius, maxRadius);
+        const x = rand(-r / 2, width + r / 2);
+        const y = rand(height * bottomBandStart, height * 1.2);
+        let ok = true;
+        for (const b of bubbles) {
+            const dx = b.x - x;
+            const dy = b.y - y;
+            if (
+                Math.hypot(dx, dy) < (b.r + r) * 0.6 ||
+                Math.hypot(dx, dy) < minDist
+            ) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            bubbles.push({
+                x,
+                y,
+                r,
+                color: colors[bubbles.length % colors.length],
+                vx: rand(-0.2, 0.2),
+                vy: rand(-0.2, 0.2),
+                jitter: rand(0.6, 1.2),
+                blur: rand(200, 400),
+            });
+        }
+    }
+
+    // --- Animation loop ---
+    const FRAME_INTERVAL = 1000 / effectiveFps;
+    let lastTime = 0;
+    let accumulatedTime = 0;
+    let fpsCounter = 0;
+    let fpsStart = 0;
+
+    function updatePhysics(t) {
+        const { tx, ty } = lowestOccupancyTarget();
+
+        for (let i = 0; i < bubbles.length; i++) {
+            const b = bubbles[i];
+
+            // 1) Flow field (smooth wandering)
+            const n = noise(
+                b.x * noiseScale,
+                b.y * noiseScale + t * noiseTimeScale,
+            );
+            const angle = n * Math.PI * 2;
+            const fx = Math.cos(angle) * speed * b.jitter;
+            const fy = Math.sin(angle) * speed * b.jitter;
+
+            // 2) Separation (avoid clumping)
+            let sx = 0;
+            let sy = 0;
+            for (let j = 0; j < bubbles.length; j++) {
+                if (j !== i) {
+                    const o = bubbles[j];
+                    const dx = b.x - o.x;
+                    const dy = b.y - o.y;
+                    const d2 = dx * dx + dy * dy;
+                    const minD = (b.r + o.r) * 0.4;
+                    if (d2 < minD * minD && d2 > 0.001) {
+                        const d = Math.sqrt(d2);
+                        const push = (minD - d) / minD;
+                        sx += (dx / d) * push * 0.8;
+                        sy += (dy / d) * push * 0.8;
+                    }
+                }
+            }
+
+            // 3) Coverage bias (drift toward emptier cells)
+            const dxT = tx - b.x;
+            const dyT = ty - b.y;
+            const dT = Math.hypot(dxT, dyT) + 1e-3;
+            const cx = (dxT / dT) * 0.05;
+            const cy = (dyT / dT) * 0.05;
+
+            // 4) Vertical band constraint
+            const bandMin = height * bottomBandStart;
+            const bandMax = height * 1.5;
+            let bx = 0;
+            let by = 0;
+            if (b.y < bandMin) by += (bandMin - b.y) * 0.01;
+            if (b.y > bandMax) by -= (b.y - bandMax) * 0.01;
+
+            // Combine forces
+            b.vx += fx + sx + cx + bx;
+            b.vy += fy + sy + cy + by;
+
+            // Apply damping
+            const damping = 0.95;
+            b.vx *= damping;
+            b.vy *= damping;
+
+            // Velocity limits
+            const maxVel = 2;
+            const vel = Math.hypot(b.vx, b.vy);
+            if (vel > maxVel) {
+                b.vx = (b.vx / vel) * maxVel;
+                b.vy = (b.vy / vel) * maxVel;
+            }
+
+            // Integrate
+            b.x += b.vx;
+            b.y += b.vy;
+
+            // Soft wrap horizontally
+            if (b.x < -b.r - b.blur / 3) b.x = width + b.r + b.blur / 3;
+            if (b.x > width + b.r + b.blur / 3) b.x = -b.r - b.blur / 3;
+
+            // Keep padding from edge vertically
+            b.y = Math.min(
+                Math.max(b.y, bandMin - b.r * 0.25),
+                bandMax + b.r * 0.25,
+            );
+
+            // Occupancy stamp
+            stampOccupancy(b.x, b.y, b.r * 0.6);
+        }
+    }
+
+    function draw() {
+        for (const b of bubbles) {
+            ctx.save();
+            ctx.filter = `blur(${b.blur}px)`;
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.fillStyle = b.color;
+            ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function frame(t) {
+        if (!ctx) return;
+
+        // Rate limiting
+        if (document.hidden) {
+            animRef = requestAnimationFrame(frame);
+            return;
+        }
+
+        const deltaTime = lastTime ? t - lastTime : 0;
+        lastTime = t;
+        accumulatedTime += deltaTime;
+
+        if (accumulatedTime < FRAME_INTERVAL) {
+            animRef = requestAnimationFrame(frame);
+            return;
+        }
+
+        accumulatedTime = 0;
+
+        ctx.clearRect(0, 0, width, height);
+        updatePhysics(t);
+        draw();
+
+        // FPS measurement (optional)
+        if (debugFps) {
+            if (fpsStart === 0) fpsStart = t;
+            fpsCounter++;
+            if (t - fpsStart >= 1000) {
+                console.log(
+                    "[blurred-bubbles] fps=",
+                    fpsCounter,
+                    "target=",
+                    effectiveFps,
+                );
+                fpsCounter = 0;
+                fpsStart = t;
+            }
+        }
+
+        animRef = requestAnimationFrame(frame);
+    }
+
+    // Start animation
+    if (window.innerWidth < 640) {
+        setTimeout(() => {
+            animRef = requestAnimationFrame(frame);
+        }, startDelayMs);
+    } else {
+        animRef = requestAnimationFrame(frame);
+    }
+
+    draw();
+
+    // Cleanup on page navigation (for SPA)
+    document.addEventListener("astro:before-swap", () => {
+        cancelAnimationFrame(animRef);
+        ro.disconnect();
+        if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+    });
+</script>
