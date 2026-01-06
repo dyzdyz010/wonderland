@@ -1,5 +1,5 @@
 :root {
-  --color-bg: rgb(250, 252, 252);
+  --color-bg: #eeeeee;
 
   --color-default: #000000;
   --color-default-hover: #d3006a;
@@ -14,7 +14,7 @@
 }
 
 :root.dark {
-  --color-bg: rgb(33, 39, 55);
+  --color-bg: #222222;
 
   --color-default: rgb(223, 223, 214);
   --color-default-hover: #cf829e;

@@ -1,0 +1,22 @@
+---
+import "../styles/card.css";
+---
+
+<div class="card">
+  <slot />
+</div>
+
+<style>
+  .card {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #ffffff66;
+    box-shadow:
+      0 40px 50px -32px #0000000d,
+      inset 0 0 20px #ffffff40;
+    backdrop-filter: blur(4px);
+  }
+</style>

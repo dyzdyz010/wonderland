@@ -1,0 +1,153 @@
+---
+// 彩色泡泡背景组件
+// 两个带高斯模糊的泡泡在屏幕内缓慢移动并反弹
+---
+
+<div class="bubble-background" aria-hidden="true">
+  <div class="bubble bubble-1"></div>
+  <div class="bubble bubble-2"></div>
+</div>
+
+<style>
+  .bubble-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    will-change: transform;
+  }
+
+  .bubble-1 {
+    width: 800px;
+    height: 800px;
+    background: linear-gradient(135deg, #ffffff00 0%, #de4331 100%);
+  }
+
+  .bubble-2 {
+    width: 800px;
+    height: 800px;
+    background: linear-gradient(135deg, #ffffff00 0%, #FCC841 100%);
+  }
+
+  @media (max-width: 768px) {
+    .bubble-1 {
+      width: 250px;
+      height: 250px;
+    }
+    .bubble-2 {
+      width: 200px;
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  interface BubbleState {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    element: HTMLElement;
+    size: number;
+  }
+
+  function initBubbles() {
+    const bubble1 = document.querySelector('.bubble-1') as HTMLElement;
+    const bubble2 = document.querySelector('.bubble-2') as HTMLElement;
+
+    if (!bubble1 || !bubble2) return;
+
+    const getSize = (el: HTMLElement) => el.offsetWidth;
+
+    const bubbles: BubbleState[] = [
+      {
+        x: Math.random() * (window.innerWidth - getSize(bubble1)),
+        y: Math.random() * (window.innerHeight - getSize(bubble1)),
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        element: bubble1,
+        size: getSize(bubble1),
+      },
+      {
+        x: Math.random() * (window.innerWidth - getSize(bubble2)),
+        y: Math.random() * (window.innerHeight - getSize(bubble2)),
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        element: bubble2,
+        size: getSize(bubble2),
+      },
+    ];
+
+    // 设置初始位置
+    bubbles.forEach((bubble) => {
+      bubble.element.style.transform = `translate(${bubble.x}px, ${bubble.y}px)`;
+    });
+
+    function animate() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      bubbles.forEach((bubble) => {
+        // 更新位置
+        bubble.x += bubble.vx;
+        bubble.y += bubble.vy;
+
+        // 边界检测和反弹
+        if (bubble.x <= 0) {
+          bubble.x = 0;
+          bubble.vx = Math.abs(bubble.vx);
+        } else if (bubble.x + bubble.size >= width) {
+          bubble.x = width - bubble.size;
+          bubble.vx = -Math.abs(bubble.vx);
+        }
+
+        if (bubble.y <= 0) {
+          bubble.y = 0;
+          bubble.vy = Math.abs(bubble.vy);
+        } else if (bubble.y + bubble.size >= height) {
+          bubble.y = height - bubble.size;
+          bubble.vy = -Math.abs(bubble.vy);
+        }
+
+        // 应用变换
+        bubble.element.style.transform = `translate(${bubble.x}px, ${bubble.y}px)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // 窗口大小变化时更新泡泡尺寸
+    window.addEventListener('resize', () => {
+      bubbles.forEach((bubble) => {
+        bubble.size = bubble.element.offsetWidth;
+        // 确保泡泡在新的窗口范围内
+        bubble.x = Math.min(bubble.x, window.innerWidth - bubble.size);
+        bubble.y = Math.min(bubble.y, window.innerHeight - bubble.size);
+      });
+    });
+
+    animate();
+  }
+
+  // 页面加载后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBubbles);
+  } else {
+    initBubbles();
+  }
+
+  // 支持 Astro View Transitions
+  document.addEventListener('astro:page-load', initBubbles);
+</script>
+

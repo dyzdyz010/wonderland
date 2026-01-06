@@ -10,6 +10,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import AboutContent from "../../content/about.typ?html&body";
 import Posts from "../components/post/Posts.astro";
 import { Icon } from "astro-icon/components";
+import Card from "../components/Card.astro";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -24,6 +25,9 @@ export const prerender = true;
     <h1 class="italic font-bold">
       {SITE_TITLE}
     </h1>
+    <Card>
+      <AboutContent />
+    </Card>
     <AboutContent />
   </section>
 
