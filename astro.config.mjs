@@ -24,6 +24,14 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        // 在 WSL2 环境下使用轮询模式，确保能检测到文件变化
+        usePolling: true,
+        interval: 1000,
+        ignored: ['!**/templates/**'],
+      },
+    },
     build: {
       assetsInlineLimit(filePath, content) {
         const KB = 1024;

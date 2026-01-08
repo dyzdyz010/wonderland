@@ -7,7 +7,7 @@ const { postSlug, class: className, ...props } = Astro.props;
 export const prerender = false;
 ---
 
-<div id="comments" class={`comments-container ${className}`} {...props}>
+<div id="comments" class={`comments-container flex flex-col gap-4 ${className}`} {...props}>
   <h2>Comments</h2>
 
   <CommentEdit postSlug={postSlug} />

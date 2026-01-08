@@ -22,6 +22,15 @@ ul.tags {
 }
 .prose {
   padding: 1em;
+  position: relative;
+  
+  /*
+   * 响应式旁注布局：
+   * 在 xl 屏幕 (≥1280px) 上，为右侧旁注腾出空间
+   * - mr-[240px]: 右侧留出 240px 边距给旁注
+   * - ml-auto: 左侧自动边距，保持内容居中偏左
+   */
+  @apply xl:mr-[240px] xl:ml-auto;
 }
 .prose p {
   margin-block-start: 1em;
@@ -263,4 +272,165 @@ b {
 
 .prose table th {
   @apply text-[var(--color-accent)];
+}
+
+/* =============================================================================
+ * 旁注 (Sidenote) & 脚注 (Footnote) 响应式系统
+ * =============================================================================
+ *
+ * 实现 Tufte CSS 风格的响应式脚注/旁注：
+ *
+ * 响应式策略：
+ * ┌─────────────────┬─────────────────┬─────────────────┐
+ * │  屏幕尺寸        │  旁注 (右侧边距)  │  脚注 (底部)     │
+ * ├─────────────────┼─────────────────┼─────────────────┤
+ * │  < 1280px       │  隐藏 (hidden)   │  显示           │
+ * │  ≥ 1280px (xl)  │  显示           │  隐藏 (hidden)   │
+ * └─────────────────┴─────────────────┴─────────────────┘
+ *
+ * HTML 结构（由 Typst 生成）：
+ *
+ * 正文中：
+ * <span class="sidenote-wrapper">
+ *   <a class="footnote-ref"><sup>1</sup></a>  <!-- 脚注引用 -->
+ *   <span class="sidenote">...</span>          <!-- 旁注内容 -->
+ * </span>
+ *
+ * 文档末尾：
+ * <hr class="footnotes-divider">
+ * <section class="footnotes">
+ *   <ol class="footnotes-list">
+ *     <li class="footnote-item">...</li>
+ *   </ol>
+ * </section>
+ * ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+ * 脚注引用包装器
+ * -------------------------------------------------------------------------- */
+.sidenote-wrapper {
+  /* 保持内联，不影响文本流 */
+}
+
+/* -----------------------------------------------------------------------------
+ * 脚注引用（上标数字链接）
+ * 所有屏幕尺寸都显示，点击可跳转到底部脚注
+ * -------------------------------------------------------------------------- */
+.footnote-ref {
+  @apply text-[var(--color-accent)] no-underline;
+  @apply hover:text-[var(--color-accent-hover)];
+}
+
+.footnote-ref sup {
+  @apply font-medium;
+}
+
+/* -----------------------------------------------------------------------------
+ * 旁注 (Sidenote) - Tufte 风格边距注释
+ * --------------------------------------------------------------------------
+ *
+ * 使用 float + 负边距技术将内容推到右侧边距区域：
+ *
+ *   ┌──────────────────────────────────────┬────────────────┐
+ *   │           正文内容区域                │   旁注区域     │
+ *   │   这是一段示例文本，包含一个脚注¹     │  ¹ 这是旁注    │
+ *   │   引用...                            │    内容...     │
+ *   └──────────────────────────────────────┴────────────────┘
+ *
+ * 实现原理：
+ * 1. float-right: 使元素浮动到右侧
+ * 2. clear-right: 确保旁注垂直堆叠不重叠
+ * 3. mr-[-240px]: 负边距将元素拉出内容区域到右侧边距
+ * 4. w-[200px]: 固定宽度确保一致的显示
+ * -------------------------------------------------------------------------- */
+.sidenote {
+  /* 默认隐藏（小屏幕） */
+  @apply hidden;
+  
+  /* xl 屏幕 (≥1280px) 显示 */
+  @apply xl:block;
+  
+  /* 定位：浮动到右侧边距 */
+  @apply xl:float-right xl:clear-right;
+  @apply xl:w-[200px];
+  @apply xl:mr-[-240px];  /* 拉入右侧边距区域 */
+  @apply xl:pr-4;
+  
+  /* 视觉样式 */
+  @apply text-sm text-[var(--color-gray)] leading-relaxed;
+  @apply border-l-2 border-l-[var(--color-border)] pl-3;
+  @apply mb-3;
+}
+
+/* 旁注编号 */
+.sidenote-number {
+  @apply font-bold text-[var(--color-accent)] mr-1;
+}
+
+.sidenote-number::after {
+  content: ".";
+}
+
+/* 旁注内容 */
+.sidenote-content {
+  @apply text-left;
+}
+
+/* -----------------------------------------------------------------------------
+ * 底部脚注区域
+ * --------------------------------------------------------------------------
+ * 传统脚注显示在文档末尾，仅在小屏幕（旁注不可见时）显示
+ * 大屏幕时隐藏，因为旁注已经提供了相同信息
+ * -------------------------------------------------------------------------- */
+
+/* 脚注分隔线 */
+.footnotes-divider {
+  @apply xl:hidden;  /* 大屏幕隐藏 */
+}
+
+/* 脚注容器 */
+.footnotes {
+  @apply xl:hidden;  /* 大屏幕隐藏 */
+  @apply mt-8;
+}
+
+/* 脚注标题 */
+.footnotes-title {
+  @apply text-lg font-bold mb-4;
+}
+
+/* 脚注列表 */
+.footnotes-list {
+  @apply list-decimal pl-6;
+}
+
+/* 单个脚注项 */
+.footnote-item {
+  @apply mb-2;
+}
+
+/* 脚注项被锚点定位时的高亮效果 */
+.footnote-item:target {
+  @apply bg-[var(--color-bg)] rounded px-2 py-1;
+  animation: highlight-fade 2s ease-out;
+}
+
+/* 高亮渐隐动画 */
+@keyframes highlight-fade {
+  0% {
+    background-color: color-mix(in oklab, var(--color-accent) 20%, transparent);
+  }
+  100% {
+    background-color: var(--color-bg);
+  }
+}
+
+/* 返回引用位置的链接 */
+.footnote-backref {
+  @apply text-[var(--color-gray)] hover:text-[var(--color-accent)];
+  @apply w-6 h-6;
+}
+
+.footnote-backref svg {
+  @apply w-4 h-4;
 }

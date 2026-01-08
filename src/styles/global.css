@@ -35,6 +35,11 @@ body {
   line-height: 1.7;
 }
 
+input, textarea {
+  @apply border border-[var(--color-glass-border)] focus:outline-none;
+  @apply rounded-xl;
+}
+
 .header {
   @apply pb-4;
 }
@@ -83,4 +88,8 @@ hr {
   @apply mb-2!;
   /* border-top-color: var(--color-border); */
   @apply border-1 border-l-0 border-r-0 border-b-0 border-t-[var(--color-border)]!;
+}
+
+.bg-secondary {
+  background-color: color-mix(in oklab, #7b888e 10%, transparent);
 }

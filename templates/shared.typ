@@ -1,9 +1,10 @@
-#import "@preview/shiroa:0.2.3": book-sys, is-html-target, is-pdf-target, is-web-target, plain-text, templates
+#import "@preview/shiroa:0.3.1": book-sys, is-html-target, is-pdf-target, is-web-target, plain-text, templates
 #import templates: *
 #import "mod.typ": static-heading-link
-#import "code/rule.typ": code-block-rules, is-dark-theme, dash-color
+#import "code/rule.typ": code-block-rules, dash-color, is-dark-theme
 #import "code/theme.typ": theme-frame
 #import "target.typ": sys-is-html-target
+#import "footnote.typ": web-footnote, render-footnotes
 
 #let is-html-target = is-html-target()
 #let is-pdf-target = is-pdf-target()
@@ -55,7 +56,7 @@
       },
     )
   }
-  
+
   body
 }
 
@@ -182,9 +183,21 @@
       ),
       outline(title: none),
     )
-    
+
     html.elem("hr")
   }
 
+  show footnote: it => context if sys-is-html-target {
+    // Extract the footnote body and use our custom handler
+    web-footnote(it.body)
+  } else {
+    it
+  }
+
   body
+
+  // Render footnotes at the end for web target
+  if sys-is-html-target {
+    render-footnotes()
+  }
 }

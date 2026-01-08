@@ -36,14 +36,41 @@ const { postSlug, class: className, ...props } = Astro.props;
 ---
 
 <div class={`comment-edit @container ${className}`} {...props}>
-  <form id="comment-edit-form" method="post" action={`/api/comments/${postSlug}`}>
-    <div class="meta">
-      <input type="text" required name="author_name" placeholder="Name" />
-      <input type="email" required name="author_email" placeholder="Email" />
-      <input type="url" name="author_url" placeholder="Website" />
+  <form
+    id="comment-edit-form"
+    method="post"
+    class="flex flex-col gap-4"
+    action={`/api/comments/${postSlug}`}
+  >
+    <div
+      class="meta flex flex-col md:flex-row justify-stretch items-stretch gap-4"
+    >
+      <input
+        type="text"
+        required
+        name="author_name"
+        placeholder="Name"
+        class="flex-1 px-2 py-1 bg-secondary w-full"
+      />
+      <input
+        type="email"
+        required
+        name="author_email"
+        placeholder="Email"
+        class="flex-1 px-2 py-1 bg-secondary w-full"
+      />
+      <input
+        type="url"
+        name="author_url"
+        placeholder="Website"
+        class="flex-1 px-2 py-1 bg-secondary w-full"
+      />
     </div>
 
-    <textarea name="content" placeholder="Comment..."></textarea>
+    <textarea
+      name="content"
+      placeholder="Comment..."
+      class="px-2 py-1 leading-8 bg-secondary"></textarea>
     <div class="flex justify-end">
       <button type="submit" class="link">Submit</button>
     </div>
