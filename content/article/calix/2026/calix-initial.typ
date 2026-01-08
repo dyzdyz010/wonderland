@@ -4,7 +4,7 @@
 #show: main.with(
   title: "可话停运后，我做了「卮言」—— 一个让心事有处栖身的地方",
   desc: [项目功能，技术栈分享],
-  date: "2026-01-08",
+  date: "2026-01-07",
   tags: (
     blog-tags.programming,
     blog-tags.software,
