@@ -18,6 +18,8 @@
   --color-glow: #ffffff40;
 
   -card-shadow: 0 40px 50px -32px var(--color-shadow), inset 0 0 20px var(--color-glow);
+
+  --font-mono: "Consolas";
 }
 
 :root.dark {

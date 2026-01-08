@@ -8,8 +8,8 @@ type BlogEntry = CollectionEntry<"blog">;
 
 // 组件 props 的类型
 interface Props extends HTMLAttributes<"div"> {
-    posts: BlogEntry[]; // ← 明确标注
-    class?: string; // （可选）允许传 class
+  posts: BlogEntry[]; // ← 明确标注
+  class?: string; // （可选）允许传 class
 }
 
 const { posts, class: className, ...props }: Props = Astro.props;
@@ -19,55 +19,64 @@ const uniqueYears = [...new Set(years)];
 ---
 
 <div class="flex flex-col items-stretch gap-8">
-    {
-        uniqueYears.map((year) => {
-            const postsInYear = posts.filter(
-                (post) => post.data.date.getFullYear() === year,
-            );
+  {
+    uniqueYears.map((year) => {
+      const postsInYear = posts.filter(
+        (post) => post.data.date.getFullYear() === year
+      );
+      return (
+        <Card class={className} {...props} key={year}>
+          <div class="meta mb-3 flex items-center justify-between gap-3 text-base">
+            <div class="flex items-center gap-3">
+              <div class="text-[16px] text-[#4E3F42]">{year}年</div>
+              <div class="w-2 h-2 bg-[#D9D9D9] rounded-full" />
+              <div class="text-sm text-[#7b888e]">
+                {postsInYear.length}篇文章
+              </div>
+            </div>
+          </div>
+          {postsInYear.map((post) => {
+            const month =
+              post.data.date.getMonth() + 1 < 10
+                ? `0${post.data.date.getMonth() + 1}`
+                : post.data.date.getMonth() + 1;
+            const day =
+              post.data.date.getDate() < 10
+                ? `0${post.data.date.getDate()}`
+                : post.data.date.getDate();
+            const date = `${month}-${day}`;
             return (
-                <Card class={className} {...props} key={year}>
-                    <div class="meta mb-3 flex items-center justify-between gap-3 text-base">
-                        <div class="flex items-center gap-3">
-                            <div class="text-[16px] text-[#4E3F42]">
-                                {year}年
-                            </div>
-                            <div class="w-2 h-2 bg-[#D9D9D9] rounded-full" />
-                            <div class="text-sm text-[#7b888e]">
-                                {postsInYear.length}篇文章
-                            </div>
-                        </div>
-                    </div>
-                    {postsInYear.map((post) => (
-                        <a
-                            href={`/article/${post.id}`}
-                            class="group flex items-center gap-3 py-3 min-h-10"
-                        >
-                            <span class="text-secondary w-[44px] shrink-0 text-sm font-medium">
-                                01-06
-                            </span>
-                            <div class="relative flex h-2 w-2 items-center justify-center">
-                                <div class="bg-[#7b888e] group-hover:bg-[#de4331] h-[5px] w-[5px] rounded-full transition-all duration-300 group-hover:h-4" />
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="none"
-                                    class="absolute bottom-4"
-                                >
-                                    <path
-                                        stroke="#AFAFAF"
-                                        stroke-linecap="round"
-                                        d="M8 .5v3M8 6.5v3M8 12.5v3"
-                                    />
-                                </svg>
-                            </div>
-                            <div class="flex-1 truncate text-sm font-medium transition-all group-hover:text-brand group-hover:translate-x-2">
-                                {post.data.title}
-                            </div>
-                        </a>
-                    ))}
-                </Card>
+              <a
+                href={`/article/${post.id}`}
+                class="group flex items-center gap-3 py-3 min-h-10"
+              >
+                <span class="text-secondary w-[44px] shrink-0 text-sm font-medium text-right font-mono">
+                  {date}
+                </span>
+                <div class="relative flex h-2 w-2 items-center justify-center">
+                  <div class="bg-[#7b888e] group-hover:bg-[#de4331] h-[5px] w-[5px] rounded-full transition-all duration-300 group-hover:h-4" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    class="absolute bottom-4"
+                  >
+                    <path
+                      stroke="#AFAFAF"
+                      stroke-linecap="round"
+                      d="M8 .5v3M8 6.5v3M8 12.5v3"
+                    />
+                  </svg>
+                </div>
+                <div class="flex-1 truncate text-sm font-medium transition-all group-hover:text-brand group-hover:translate-x-2">
+                  {post.data.title}
+                </div>
+              </a>
             );
-        })
-    }
+          })}
+        </Card>
+      );
+    })
+  }
 </div>
