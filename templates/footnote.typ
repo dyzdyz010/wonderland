@@ -66,14 +66,18 @@
       {
         // ===== 脚注引用 (所有屏幕尺寸都渲染) =====
         // 渲染上标数字，链接到底部脚注
+        // 使用 sup 套 a 的结构，使下划线更贴近文字
         html.elem(
-          "a",
-          attrs: (
-            href: "#footnote-" + str(idx),      // 链接到底部脚注
-            id: "footnote-ref-" + str(idx),     // 用于从底部脚注返回
-            class: "footnote-ref",
+          "sup",
+          attrs: (class: "footnote-ref"),
+          html.elem(
+            "a",
+            attrs: (
+              href: "#footnote-" + str(idx),      // 链接到底部脚注
+              id: "footnote-ref-" + str(idx),     // 用于从底部脚注返回
+            ),
+            str(idx),
           ),
-          html.elem("sup", str(idx)),
         )
         
         // ===== 旁注 (仅大屏幕显示，通过 CSS 控制) =====

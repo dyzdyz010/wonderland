@@ -346,14 +346,15 @@ b {
 /* -----------------------------------------------------------------------------
  * 脚注引用（上标数字链接）
  * 所有屏幕尺寸都显示，点击可跳转到底部脚注
+ * 结构: <sup class="footnote-ref"><a>1</a></sup>
  * -------------------------------------------------------------------------- */
 .footnote-ref {
-  @apply text-[var(--color-accent)] no-underline;
-  @apply hover:text-[var(--color-accent-hover)];
+  @apply font-medium;
 }
 
-.footnote-ref sup {
-  @apply font-medium;
+.footnote-ref a {
+  @apply text-[var(--color-accent)];
+  @apply hover:text-[var(--color-accent-hover)];
 }
 
 /* -----------------------------------------------------------------------------
