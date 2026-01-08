@@ -25,12 +25,43 @@ ul.tags {
   position: relative;
   
   /*
-   * 响应式旁注布局：
-   * 在 xl 屏幕 (≥1280px) 上，为右侧旁注腾出空间
-   * - mr-[240px]: 右侧留出 240px 边距给旁注
-   * - ml-auto: 左侧自动边距，保持内容居中偏左
+   * 响应式旁注布局（内容 + 旁注整体居中）：
+   * 
+   * ┌─────────────────────────────────────────────────────────────────┐
+   * │  配置变量（修改这里来调整旁注宽度）：                              │
+   * │  --sidenote-max-width: 旁注区域的最大宽度（默认 16rem ≈ 256px）    │
+   * └─────────────────────────────────────────────────────────────────┘
+   * 
+   * 小屏幕 (<1280px)：
+   *   - max-width = 56rem，正常居中显示
+   *   - 旁注隐藏，底部脚注显示
+   *
+   * 大屏幕 (≥1280px)：
+   *   - 整体 max-width = 56rem + 旁注宽度
+   *   - padding-right 使用 clamp()：按 22% 比例缩放，最大为 --sidenote-max-width
+   *   - 内容和旁注都能按比例缩放
+   *
+   *   容器较窄时：按比例缩放
+   *   ┌───────────────────────────────────────┐
+   *   │  空白  │  内容 (~78%)  │ 旁注 (~22%) │  空白  │
+   *   └───────────────────────────────────────┘
+   *
+   *   容器达到最大宽度时：固定尺寸
+   *   ┌─────────────────────────────────────────────────────────────────┐
+   *   │  空白  │   内容区域 (56rem)   │  旁注 (--sidenote-max-width)  │  空白  │
+   *   └─────────────────────────────────────────────────────────────────┘
    */
-  @apply xl:mr-[240px] xl:ml-auto;
+  
+  /* ⬇️ 调整这个变量来改变旁注最大宽度 ⬇️ */
+  --sidenote-max-width: 16rem;
+  
+  /* 自动计算的值（基于上面的变量） */
+  --sidenote-ratio: 22%;                                          /* 旁注占容器的比例 */
+  --sidenote-content-width: calc(var(--sidenote-max-width) - 2rem); /* 旁注内容宽度（留出间距） */
+  --content-max-width: 56rem;                                      /* 内容区域最大宽度 */
+  
+  @apply xl:max-w-[calc(var(--content-max-width)+var(--sidenote-max-width))];
+  @apply xl:pr-[clamp(8rem,var(--sidenote-ratio),var(--sidenote-max-width))];
 }
 .prose p {
   margin-block-start: 1em;
@@ -329,19 +360,20 @@ b {
  * 旁注 (Sidenote) - Tufte 风格边距注释
  * --------------------------------------------------------------------------
  *
- * 使用 float + 负边距技术将内容推到右侧边距区域：
+ * 使用 float + 负边距将旁注放置在右侧 padding 区域：
  *
  *   ┌──────────────────────────────────────┬────────────────┐
  *   │           正文内容区域                │   旁注区域     │
  *   │   这是一段示例文本，包含一个脚注¹     │  ¹ 这是旁注    │
  *   │   引用...                            │    内容...     │
  *   └──────────────────────────────────────┴────────────────┘
+ *             (56rem, 居中)                   (240px padding)
  *
  * 实现原理：
- * 1. float-right: 使元素浮动到右侧
- * 2. clear-right: 确保旁注垂直堆叠不重叠
- * 3. mr-[-240px]: 负边距将元素拉出内容区域到右侧边距
- * 4. w-[200px]: 固定宽度确保一致的显示
+ * 1. .prose 使用 padding-right: 240px 为旁注腾出空间
+ * 2. .prose 的 max-width 扩展为 56rem + 240px，使整体居中
+ * 3. .sidenote 使用 float-right，并通过 margin-right: -220px 拉入 padding 区域
+ * 4. clear-right 确保多个旁注垂直堆叠不重叠
  * -------------------------------------------------------------------------- */
 .sidenote {
   /* 默认隐藏（小屏幕） */
@@ -350,11 +382,16 @@ b {
   /* xl 屏幕 (≥1280px) 显示 */
   @apply xl:block;
   
-  /* 定位：浮动到右侧边距 */
+  /* 
+   * 定位：浮动到右侧 padding 区域
+   * 
+   * 使用 .prose 中定义的 CSS 变量：
+   * - width: clamp(最小值, 20%, --sidenote-content-width)
+   * - margin-right: -21% 拉入 padding 区域
+   */
   @apply xl:float-right xl:clear-right;
-  @apply xl:w-[200px];
-  @apply xl:mr-[-240px];  /* 拉入右侧边距区域 */
-  @apply xl:pr-4;
+  width: clamp(6rem, 20%, var(--sidenote-content-width, 14rem));
+  @apply xl:mr-[-21%];      /* 使用百分比，随容器缩放 */
   
   /* 视觉样式 */
   @apply text-sm text-[var(--color-gray)] leading-relaxed;
