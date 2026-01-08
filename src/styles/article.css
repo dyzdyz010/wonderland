@@ -53,7 +53,7 @@ ul.tags {
    */
   
   /* ⬇️ 调整这个变量来改变旁注最大宽度 ⬇️ */
-  --sidenote-max-width: 16rem;
+  --sidenote-max-width: 30rem;
   
   /* 自动计算的值（基于上面的变量） */
   --sidenote-ratio: 22%;                                          /* 旁注占容器的比例 */
@@ -391,8 +391,8 @@ b {
    * - margin-right: -21% 拉入 padding 区域
    */
   @apply xl:float-right xl:clear-right;
-  width: clamp(6rem, 20%, var(--sidenote-content-width, 14rem));
-  @apply xl:mr-[-21%];      /* 使用百分比，随容器缩放 */
+  width: clamp(6rem, 26%, var(--sidenote-content-width, 114rem));
+  @apply xl:mr-[-28%];      /* 使用百分比，随容器缩放 */
   
   /* 视觉样式 */
   @apply text-sm text-[var(--color-gray)] leading-relaxed;
