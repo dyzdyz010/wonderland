@@ -23,7 +23,7 @@ interface Props {
 const {
     count = 6,
     colors = ["#FCC841", "#DFEFFC", "#DEDE92", "#DE4331", "#FE9750", "#FCC841"],
-    darkColors = ["#5C3D08", "#0D2540", "#3A3A1A", "#5C1A12", "#5C3010", "#5C3D08"],
+    darkColors = ["#8A6218", "#1E4A7A", "#525228", "#8A2E1E", "#8A4E1E", "#8A6218"],
     minRadius = 250,
     maxRadius = 400,
     bottomBandStart = 0.8,
@@ -361,7 +361,7 @@ const {
     function draw() {
         const isDark = document.documentElement.classList.contains("dark");
         const palette = isDark ? darkColors : colors;
-        const alpha = isDark ? 0.35 : 0.8;
+        const alpha = isDark ? 0.5 : 0.8;
         for (const b of bubbles) {
             ctx.save();
             ctx.filter = `blur(${b.blur}px)`;
