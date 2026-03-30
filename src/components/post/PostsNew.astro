@@ -28,9 +28,9 @@ const uniqueYears = [...new Set(years)];
         <Card class={className} {...props} key={year}>
           <div class="meta mb-3 flex items-center justify-between gap-3 text-base">
             <div class="flex items-center gap-3">
-              <div class="text-[16px] text-[#4E3F42]">{year}年</div>
-              <div class="w-2 h-2 bg-[#D9D9D9] rounded-full" />
-              <div class="text-sm text-[#7b888e]">
+              <div class="text-[16px] text-[var(--color-default)]">{year}年</div>
+              <div class="w-2 h-2 bg-[var(--color-border)] rounded-full" />
+              <div class="text-sm text-[var(--color-gray)]">
                 {postsInYear.length}篇文章
               </div>
             </div>
@@ -54,7 +54,7 @@ const uniqueYears = [...new Set(years)];
                   {date}
                 </span>
                 <div class="relative flex h-2 w-2 items-center justify-center">
-                  <div class="bg-[#7b888e] group-hover:bg-[#de4331] h-[5px] w-[5px] rounded-full transition-all duration-300 group-hover:h-4" />
+                  <div class="bg-[var(--color-gray)] group-hover:bg-[var(--color-accent)] h-[5px] w-[5px] rounded-full transition-all duration-300 group-hover:h-4" />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -63,7 +63,7 @@ const uniqueYears = [...new Set(years)];
                     class="absolute bottom-4"
                   >
                     <path
-                      stroke="#AFAFAF"
+                      stroke="currentColor" class="text-[var(--color-gray)]"
                       stroke-linecap="round"
                       d="M8 .5v3M8 6.5v3M8 12.5v3"
                     />

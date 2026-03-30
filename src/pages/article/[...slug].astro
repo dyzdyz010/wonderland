@@ -1,24 +1,6 @@
 ---
-import { render, getEntry, getCollection } from "astro:content";
-// import { getEntry } from "astro:content";
-
-import { drizzle } from "drizzle-orm/d1";
-import { commentsTable } from "../../tables/comment";
-import { eq } from "drizzle-orm";
-// import { getCollection } from "astro:content";
-
+import { render, getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
-
-const slug = Astro.params.slug;
-if (!slug) {
-  return Astro.redirect("/404");
-}
-const post = await getEntry("blog", slug);
-// console.log("post", post);
-if (!post) {
-  return Astro.redirect("/404");
-}
-const { Content } = await render(post);
 
 export const prerender = true;
 
@@ -26,6 +8,9 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
 }
+
+const { post } = Astro.props;
+const { Content } = await render(post);
 ---
 
 <BlogPost {...{ id: post.id }} {...post.data}>

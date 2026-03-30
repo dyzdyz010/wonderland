@@ -3,19 +3,17 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
-import Background from "../components/Background.astro";
 import Bubble from "../components/Bubble.astro";
 
 const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <BaseHead title={title} description={description} />
   </head>
   <body>
-    <!-- <Background /> -->
     <Bubble />
     <main class="@container">
       <Header />

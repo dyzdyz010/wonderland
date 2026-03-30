@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@reference "tailwindcss";
 
 :root {
   --heading-hash-offset-1: 1.75rem;

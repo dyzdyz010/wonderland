@@ -26,7 +26,7 @@ export async function GET(context: APIContext) {
   ]);
   return rss({
     title: "Wonderland",
-    description: "Yizhuo's PersonalBlog",
+    description: "Yizhuo's Personal Blog",
     site: context.site,
     items: items.flat(),
   });

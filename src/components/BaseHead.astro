@@ -28,7 +28,7 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
 <link
   rel="alternate"
   type="application/rss+xml"
-  title="title"
+  title={SITE_TITLE}
   href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />

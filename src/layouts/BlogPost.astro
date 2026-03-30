@@ -22,7 +22,7 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
 // console.log("post id", Astro.props);
 ---
 
-<RootLayout>
+<RootLayout title={title} description={description}>
   <div class="flex flex-col items-stretch gap-8">
     <Card>
       <article id={id || ""}>

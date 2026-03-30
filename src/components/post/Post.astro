@@ -18,5 +18,5 @@ const { post } = Astro.props;
     </span>
   </a>
   <Tags tags={post.data.tags} />
-  <p>{post.data.description}</p>
+  {post.data.description && <p>{post.data.description}</p>}
 </div>
