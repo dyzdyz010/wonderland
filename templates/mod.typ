@@ -1,7 +1,7 @@
 #import "@preview/shiroa:0.2.3": plain-text, templates
 #import templates: get-label-disambiguator, label-disambiguator, make-unique-label
 #import "target.typ": sys-is-html-target
-#import "code/theme.typ": theme-frame
+#import "code/theme.typ": theme-frame, default-theme
 
 #let code-image = if sys-is-html-target {
   (it, ..attrs) => {
@@ -15,11 +15,14 @@
   (it, ..attrs) => if type(it) == function { it(default-theme) } else { it }
 }
 
-#let typ_frame = (class, content) => {
-  // let class = str[typ-frame #class]
-  html.elem("div", attrs: (class: "typ-frame" + class))[
-    #html.frame(content)
-  ]
+#let typ_frame = if sys-is-html-target {
+  (class, content) => {
+    html.elem("div", attrs: (class: "typ-frame" + class))[
+      #html.frame(content)
+    ]
+  }
+} else {
+  (class, content) => content
 }
 
 #let static-heading-link(elem, body: "#") = context {

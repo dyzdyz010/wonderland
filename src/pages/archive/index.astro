@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import RootLayout from "../../layouts/RootLayout.astro";
+import Card from "../../components/Card.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { Icon } from "astro-icon/components";
+
+export const prerender = true;
+
+const archives = (await getCollection("archive")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<RootLayout title="归档" description="文章归档 — 按年度整理的 PDF 合集">
+  <h1>归档</h1>
+  <p class="text-[var(--color-gray)] mb-8">
+    每年文章汇总，可下载为 PDF 离线阅读。
+  </p>
+  <div class="flex flex-col items-stretch gap-4">
+    {
+      archives.map((archive) => (
+        <Card>
+          <a
+            href={`/archive/${archive.id}.pdf`}
+            class="group flex items-center justify-between gap-4 py-2"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="flex items-center gap-4 min-w-0">
+              <Icon
+                name="mdi:file-pdf-box"
+                class="w-8 h-8 shrink-0 text-[var(--color-accent)] group-hover:text-[var(--color-accent-hover)] transition-colors"
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <div class="font-semibold text-[var(--color-default)] group-hover:text-[var(--color-accent)] transition-colors truncate">
+                  {archive.data.title}
+                </div>
+                {archive.data.description && (
+                  <div class="text-sm text-[var(--color-gray)] truncate mt-0.5">
+                    {archive.data.description}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="shrink-0 text-sm text-[var(--color-gray)] font-mono">
+              <FormattedDate date={archive.data.date} />
+            </div>
+          </a>
+        </Card>
+      ))
+    }
+  </div>
+</RootLayout>

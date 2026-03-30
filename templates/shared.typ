@@ -41,7 +41,7 @@
   show link: set text(fill: dash-color)
 
   show heading: it => {
-    set text(size: heading-sizes.at(it.level))
+    set text(size: heading-sizes.at(calc.min(it.level, heading-sizes.len() - 1)))
 
     block(
       spacing: 0.7em * 1.5 * 1.2,
@@ -158,7 +158,7 @@
     region: region,
   )) <frontmatter>]
 
-  context if show-outline {
+  context if show-outline and sys-is-html-target {
     if query(heading).len() == 0 {
       return
     }
