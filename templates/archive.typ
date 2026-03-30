@@ -10,7 +10,7 @@
   body,
 ) = {
   let description = if type(desc) == content { plain-text(desc) } else { desc }
-  [#metadata((title: title, description: description, date: date, tags: tags)) <frontmatter>]
+  [#metadata((title: title, description: description, date: date, tags: tags, count: articles.len())) <frontmatter>]
 
   if not sys-is-html-target {
     set document(title: title, date: none)

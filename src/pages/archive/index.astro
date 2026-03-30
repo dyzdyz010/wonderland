@@ -40,6 +40,9 @@ const archives = (await getCollection("archive")).sort(
                 {archive.data.description && (
                   <div class="text-sm text-[var(--color-gray)] truncate mt-0.5">
                     {archive.data.description}
+                    {archive.data.count && (
+                      <span class="ml-2">({archive.data.count} 篇)</span>
+                    )}
                   </div>
                 )}
               </div>
