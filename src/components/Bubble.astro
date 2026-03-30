@@ -23,6 +23,7 @@ interface Props {
 const {
     count = 6,
     colors = ["#FCC841", "#DFEFFC", "#DEDE92", "#DE4331", "#FE9750", "#FCC841"],
+    darkColors = ["#5C3D08", "#0D2540", "#3A3A1A", "#5C1A12", "#5C3010", "#5C3D08"],
     minRadius = 250,
     maxRadius = 400,
     bottomBandStart = 0.8,
@@ -67,6 +68,7 @@ const {
     define:vars={{
         count,
         colors,
+        darkColors,
         minRadius,
         maxRadius,
         bottomBandStart,
@@ -255,7 +257,7 @@ const {
                 x,
                 y,
                 r,
-                color: colors[bubbles.length % colors.length],
+                colorIndex: bubbles.length % colors.length,
                 vx: rand(-0.2, 0.2),
                 vy: rand(-0.2, 0.2),
                 jitter: rand(0.6, 1.2),
@@ -357,12 +359,15 @@ const {
     }
 
     function draw() {
+        const isDark = document.documentElement.classList.contains("dark");
+        const palette = isDark ? darkColors : colors;
+        const alpha = isDark ? 0.35 : 0.8;
         for (const b of bubbles) {
             ctx.save();
             ctx.filter = `blur(${b.blur}px)`;
-            ctx.globalAlpha = 0.8;
+            ctx.globalAlpha = alpha;
             ctx.beginPath();
-            ctx.fillStyle = b.color;
+            ctx.fillStyle = palette[b.colorIndex % palette.length];
             ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
