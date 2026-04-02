@@ -219,6 +219,20 @@ figcaption {
   place-items: center;
   overflow-x: auto;
 }
+/* Multi-line equations (mtable) - increase row spacing */
+.prose mtable mtd {
+  padding: 0.3em 0.2em;
+}
+/* Block math equations - add vertical breathing room */
+.prose > div > math[display="block"] {
+  margin: 0.3em 0;
+}
+/* Inline math - prevent tall sub/superscripts from overlapping adjacent lines */
+.prose math:not([display]) {
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
 .block-list,
 .block-list li {
   margin: 0;

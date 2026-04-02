@@ -27,6 +27,18 @@
   game: "Game",
   elixir: "Elixir",
   clang: "Clang",
+  ml: "Machine Learning",
+  python: "Python",
+  tensorflow: "TensorFlow",
+  algorithm: "Algorithm",
+  apple: "Apple",
+  ghost: "Ghost",
+  windows: "Windows",
+  wsl: "WSL",
+  git: "Git",
+  notion: "Notion",
+  emacs: "Emacs",
+  haskell: "Haskell",
 )
 
 #let blog-collections = (
