@@ -4,7 +4,7 @@
 #show: main.with(
   title: "MMO Server From Scratch(1) - Beacon Server",
   desc: [MMO Server From Scratch(1) - Beacon Server],
-  date: "2022-06-10",
+  date: "2022-10-15",
   tags: (
     blog-tags.programming,
     blog-tags.mmo,

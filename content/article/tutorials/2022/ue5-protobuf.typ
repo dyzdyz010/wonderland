@@ -4,7 +4,7 @@
 #show: main.with(
   title: "向UE5项目中集成Protobuf",
   desc: [向UE5项目中集成Protobuf],
-  date: "2022-10-12",
+  date: "2022-10-13",
   tags: (
     blog-tags.programming,
     blog-tags.ue5,

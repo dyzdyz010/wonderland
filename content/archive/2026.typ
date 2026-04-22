@@ -6,7 +6,7 @@
   date: "2026-01-08",
   tags: ("Archive",),
   articles: (
-    (title: "可话停运后，我做了「卮言」", date: "2026-01-07", path: "/content/article/calix/2026/calix-initial.typ"),
+    (title: "可话停运后，我做了「卮言」—— 一个让心事有处栖身的地方", date: "2026-01-07", path: "/content/article/calix/2026/calix-initial.typ"),
     (title: "博客更新", date: "2026-01-08", path: "/content/article/meta/2026/blog-update.typ"),
   ),
 )

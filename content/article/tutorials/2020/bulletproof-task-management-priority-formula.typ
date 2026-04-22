@@ -4,7 +4,7 @@
 #show: main.with(
   title: "重建 Bulletproof Task Management in Notion 中的 Priority Formula",
   desc: [重建 Bulletproof Task Management in Notion 中的 Priority Formula],
-  date: "2020-12-05",
+  date: "2022-10-14",
   tags: (
     blog-tags.notion,
     blog-tags.tooling,

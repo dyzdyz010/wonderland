@@ -4,7 +4,7 @@
 #show: main.with(
   title: "MMO Server From Scratch(2) - Gate Server",
   desc: [MMO Server From Scratch(2) - Gate Server],
-  date: "2022-10-16",
+  date: "2022-10-17",
   tags: (
     blog-tags.programming,
     blog-tags.mmo,

@@ -4,7 +4,7 @@
 #show: main.with(
   title: "快速排序算法理解",
   desc: [从 Haskell 的角度理解快速排序算法的工作原理。],
-  date: "2018-05-18",
+  date: "2022-10-20",
   tags: (
     blog-tags.algorithm,
     blog-tags.programming,
