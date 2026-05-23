@@ -61,6 +61,14 @@ The intended source-of-truth rule is:
 
 Current caveat: yearly archive Typst files still repeat article `title`, `date`, and `path` manually. This is accepted for now but should eventually be generated or checked by a script.
 
+Run this after adding or editing articles:
+
+```bash
+bun run content:check
+```
+
+The checker verifies that article metadata is present, article tags are declared in the tag registry, and yearly archive entries match the corresponding article `title`, `date`, and path.
+
 ## Tag model
 
 Tags are currently declared in `templates/enums.typ` as Typst values and parsed by `src/utils/tags.ts` for Astro pages.
