@@ -80,9 +80,23 @@ The generator preserves existing archive file headers and existing same-day entr
 
 ## Tag model
 
-Tags are currently declared in `templates/enums.typ` as Typst values and parsed by `src/utils/tags.ts` for Astro pages.
+Tags are intentionally managed from one central source:
 
-This keeps authoring convenient inside `.typ` articles, but it means `templates/enums.typ` is also acting as site configuration. If tag usage grows, prefer moving tags to a neutral data file and generating both the Typst enum and TypeScript registry from that source.
+```text
+templates/enums.typ
+```
+
+Articles should reference tags through `blog-tags.<id>` from that file. Astro tag pages parse the same file through `src/utils/tags.ts`, so the Typst authoring layer and Astro UI share the same registry.
+
+Run this after adding, renaming, or removing tags:
+
+```bash
+bun run tags:check
+```
+
+The checker verifies that tag IDs are valid, labels are unique, article tags reference the central registry, and inline string tags do not bypass `templates/enums.typ`.
+
+This keeps authoring convenient inside `.typ` articles while preserving a single management point for tags. If tag usage grows enough to justify a neutral data file later, it should still remain one canonical registry that generates the Typst enum and TypeScript view, not two independently edited tag lists.
 
 ## Typst template model
 

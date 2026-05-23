@@ -10,6 +10,7 @@
     "archive:check": "node scripts/generate-archives.mjs --check",
     "archive:generate": "node scripts/generate-archives.mjs --write",
     "content:check": "node scripts/check-content.mjs",
+    "tags:check": "node scripts/check-tags.mjs",
     "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
   },
   "dependencies": {
