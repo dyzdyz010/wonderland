@@ -1,22 +1,11 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
-import { getCollection } from "astro:content";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 
 // @ts-ignore
 import AboutContent from "../../content/about.typ?html&body";
-import Posts from "../components/post/Posts.astro";
-import { Icon } from "astro-icon/components";
 import Card from "../components/Card.astro";
 
-const posts = (await getCollection("blog"))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 10);
-
-// console.log(posts.map((post) => post.id));
 export const prerender = true;
 ---
 
@@ -28,13 +17,5 @@ export const prerender = true;
     <Card>
       <AboutContent />
     </Card>
-    <!-- <AboutContent /> -->
   </section>
-
-  <!-- <Posts class="mt-10" posts={posts} />
-
-  <a href="/article" class="link mt-6 flex items-center gap-1">
-    View All
-    <Icon name="mdi:arrow-right" class="w-6 h-6" />
-  </a> -->
 </RootLayout>

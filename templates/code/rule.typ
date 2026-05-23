@@ -1,5 +1,5 @@
 #import "@preview/zebraw:0.5.5": zebraw, zebraw-init
-#import "@preview/shiroa:0.2.3": book-sys, shiroa-sys-target, templates
+#import "@preview/shiroa:0.3.1": book-sys, shiroa-sys-target, templates
 #import templates: *
 #import "theme.typ": default-theme, theme-frame
 

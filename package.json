@@ -7,8 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql",
-    "db:reset:remote": "node scripts/d1-execute-sql.mjs wonderland --remote ./migrations/0001_init.sql"
+    "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.6",

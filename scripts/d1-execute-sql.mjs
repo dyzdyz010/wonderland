@@ -52,6 +52,26 @@ if (!sql) {
   process.exit(1);
 }
 
+const isDestructive = /\b(drop|delete|truncate|alter)\b/i.test(sql);
+
+if (mode === "--remote" && isDestructive) {
+  const message = [
+    "Refusing to run a destructive SQL file against remote D1.",
+    `Database: ${database}`,
+    `SQL file: ${sqlPath}`,
+    "This helper is meant for local development resets. Split schema migrations",
+    "from seed/reset SQL before running remote migrations.",
+    "To override intentionally, set ALLOW_DESTRUCTIVE_REMOTE_D1=1.",
+  ].join("\n");
+
+  if (process.env.ALLOW_DESTRUCTIVE_REMOTE_D1 !== "1") {
+    console.error(message);
+    process.exit(1);
+  }
+
+  console.warn(`ALLOW_DESTRUCTIVE_REMOTE_D1=1 set. ${message}`);
+}
+
 console.log(`Executing ${sqlFile} on D1 database "${database}" (${mode})...`);
 
 // Use --command instead of --file. With wrangler 4.33.1 on this machine,

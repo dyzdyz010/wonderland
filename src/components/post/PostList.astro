@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import type { HTMLAttributes } from "astro/types";
-import Post from "./Post.astro";
+import PostListItem from "./PostListItem.astro";
 
 type BlogEntry = CollectionEntry<"blog">;
 
@@ -15,5 +15,5 @@ const { posts, class: className, ...props }: Props = Astro.props;
 ---
 
 <div class:list={["posts", className]} {...props}>
-  {posts.map((post) => <Post post={post} />)}
+  {posts.map((post) => <PostListItem post={post} />)}
 </div>

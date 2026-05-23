@@ -1,4 +1,4 @@
-#import "@preview/shiroa:0.2.3": plain-text, templates
+#import "@preview/shiroa:0.3.1": plain-text, templates
 #import templates: get-label-disambiguator, label-disambiguator, make-unique-label
 #import "target.typ": sys-is-html-target
 #import "code/theme.typ": theme-frame, default-theme
@@ -28,11 +28,12 @@
 #let static-heading-link(elem, body: "#") = context {
   let id = {
     let title = plain-text(elem).trim()
+    let label-title = if title == "" { "section" } else { title }
     "label-"
     str(
       make-unique-label(
-        title,
-        disambiguator: label-disambiguator.at(elem.location()).at(title, default: 0) + 1,
+        label-title,
+        disambiguator: label-disambiguator.at(elem.location()).at(label-title, default: 0) + 1,
       ),
     )
   }

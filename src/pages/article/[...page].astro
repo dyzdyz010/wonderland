@@ -1,8 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
-import PostsNew from "../../components/post/PostsNew.astro";
+import PostListByYear from "../../components/post/PostListByYear.astro";
 import RootLayout from "../../layouts/RootLayout.astro";
-import { Icon } from "astro-icon/components";
 import type { Page } from "astro";
 // All paginated data is passed on the "page" prop
 
@@ -21,43 +20,7 @@ export async function getStaticPaths({ paginate }: { paginate: any }) {
 export const prerender = true;
 ---
 
-<RootLayout title="Posts">
+<RootLayout title="Posts" description="All blog posts.">
   <h1>Posts</h1>
-  <!-- Display the current page number. `Astro.params.page` can also be used! -->
-  <PostsNew posts={page.data} />
-
-  <!-- <div class="pagination mt-10 flex justify-center gap-4 items-center">
-    <a class="link prev" href={page.url.first} title="First Page">
-      <Icon name="mdi:chevron-double-left" class="w-8 h-8" />
-    </a>
-
-    {
-      page.url.prev ? (
-        <a class="link prev" href={page.url.prev} title="Previous Page">
-          <Icon name="mdi:chevron-left" class="w-8 h-8" />
-        </a>
-      ) : (
-        <Icon
-          name="mdi:chevron-left"
-          class="w-8 h-8 text-[var(--color-gray)]"
-        />
-      )
-    }
-    <span class="page-number">Page {page.currentPage} / {page.lastPage}</span>
-    {
-      page.url.next ? (
-        <a class="link next" href={page.url.next} title="Next Page">
-          <Icon name="mdi:chevron-right" class="w-8 h-8" />
-        </a>
-      ) : (
-        <Icon
-          name="mdi:chevron-right"
-          class="w-8 h-8 text-[var(--color-gray)]"
-        />
-      )
-    }
-    <a class="link next" href={page.url.last} title="Last Page">
-      <Icon name="mdi:chevron-double-right" class="w-8 h-8" />
-    </a>
-  </div> -->
+  <PostListByYear posts={page.data} />
 </RootLayout>

@@ -2,7 +2,7 @@
 import RootLayout from "../../layouts/RootLayout.astro";
 import { SITE_TITLE } from "../../consts";
 import { getCollection } from "astro:content";
-import Posts from "../../components/post/Posts.astro";
+import PostList from "../../components/post/PostList.astro";
 import Tags from "../../components/Tags.astro";
 import {
   buildTagSummaries,
@@ -81,7 +81,7 @@ const subtitle = activeTagId
 
     {
       filteredPosts.length ? (
-        <Posts posts={filteredPosts} />
+        <PostList posts={filteredPosts} />
       ) : (
         <p class="italic text-[var(--color-gray)]">
           No articles have been published with this tag yet.
