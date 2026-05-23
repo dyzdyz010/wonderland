@@ -69,6 +69,15 @@ bun run content:check
 
 The checker verifies that article metadata is present, article tags are declared in the tag registry, and yearly archive entries match the corresponding article `title`, `date`, and path.
 
+Yearly archive entries can be regenerated from article metadata:
+
+```bash
+bun run archive:check      # verify generated archive entries match the files
+bun run archive:generate   # rewrite content/archive/YYYY.typ article lists
+```
+
+The generator preserves existing archive file headers and existing same-day entry order where possible, then fills the `articles: (...)` block from article metadata. This keeps archive files as editable Typst documents while making the duplicated entry list derivable.
+
 ## Tag model
 
 Tags are currently declared in `templates/enums.typ` as Typst values and parsed by `src/utils/tags.ts` for Astro pages.
