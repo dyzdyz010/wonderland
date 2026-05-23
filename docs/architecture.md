@@ -29,7 +29,7 @@ These routes should be safe to prerender:
 These capabilities rely on local Node/native tooling and should not become Worker runtime dependencies:
 
 - Typst-to-HTML article rendering
-- Typst yearly archive PDF generation
+- Typst yearly archive and single-article PDF generation
 - mathyml conversion
 - shiroa template expansion
 
@@ -59,7 +59,7 @@ The intended source-of-truth rule is:
 
 > Article metadata is the canonical source for title, description, date, tags, and collection membership. Tag pages, RSS, article lists, and yearly archives should be derived from article metadata whenever practical.
 
-Yearly archive pages and PDFs now follow the same rule: they are derived from article metadata at build time, not from hand-maintained archive entry lists.
+Yearly archive pages and PDFs now follow the same rule: they are derived from article metadata at build time, not from hand-maintained archive entry lists. Single-article PDFs are also prerendered from the same article sources and metadata, rather than compiled dynamically in the Cloudflare Worker runtime.
 
 Run this after adding or editing articles:
 
@@ -70,6 +70,8 @@ bun run content:check
 The checker verifies that article metadata is present and article tags are declared in the tag registry.
 
 Yearly archive pages and PDFs are derived from article metadata during build. There is no hand-maintained `content/archive/YYYY.typ` article list: `/archive/` groups `getCollection("blog")` by year, and `/archive/YYYY.pdf` renders those same derived groups through `templates/archive.typ`.
+
+Single-article PDFs use the same build-time boundary: `/article/<slug>.pdf` is prerendered from `content/article/**/*.typ` through `templates/article-pdf.typ`. The template includes the article's author, source URL, publication dates, tags, and copyright notice on the cover page and page footer.
 
 ## Tag model
 
@@ -100,6 +102,7 @@ Important files:
 - `templates/blog.typ` — article entry template
 - `templates/shared.typ` — common article metadata and render rules
 - `templates/archive.typ` — yearly PDF archive template
+- `templates/article-pdf.typ` — single-article PDF export template with source/copyright metadata
 - `templates/mod.typ` — custom heading-link helper
 - `templates/footnote.typ` — responsive sidenote/footnote renderer
 - `templates/code/*` — code block theme integration

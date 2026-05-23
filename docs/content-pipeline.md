@@ -26,9 +26,22 @@ Instead:
 - `/archive/` groups `getCollection("blog")` by article year;
 - `/archive/YYYY.pdf` uses the same grouped article metadata;
 - the PDF route writes a temporary Typst source file under `.astro/generated-archives/` during prerender;
-- `templates/archive.typ` remains the PDF layout/template, not a source of archive entries.
+- `templates/archive.typ` remains the yearly PDF layout/template, not a source of archive entries.
 
-This removes the need for `archive:check` and `archive:generate`. There is no archive list left to sync: if an article exists in `content/article/**/*.typ` with valid metadata, it participates in the archive pipeline automatically.
+## Single-article PDF pipeline
+
+Each article also gets a prerendered PDF route at `/article/<slug>.pdf`.
+
+The route:
+
+- reads the same `blog` content collection entry as the HTML article page;
+- writes a temporary Typst wrapper under `.astro/generated-article-pdfs/` during prerender;
+- renders the original article source through `templates/article-pdf.typ`;
+- preserves author, source URL, publication dates, tags, and a visible copyright notice in the PDF.
+
+This intentionally stays build-time/static. Cloudflare Workers serve the generated PDF files; they do not compile Typst dynamically at request time.
+
+This removes the need for `archive:check` and `archive:generate`. There is no archive list left to sync: if an article exists in `content/article/**/*.typ` with valid metadata, it participates in the archive and single-article PDF pipelines automatically.
 
 ## Why some scripts remain
 

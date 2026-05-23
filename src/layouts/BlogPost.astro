@@ -10,6 +10,7 @@ import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
 import Comments from "../components/comment/Comments.astro";
 import Card from "../components/Card.astro";
+import { Icon } from "astro-icon/components";
 
 interface IdExt {
   id: string;
@@ -19,6 +20,7 @@ type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false });
 
 const { id, title, description, date, updatedDate, tags, author, ...rest } =
   Astro.props;
+const pdfHref = id ? `/article/${id}.pdf` : undefined;
 // console.log("post id", Astro.props);
 ---
 
@@ -42,6 +44,19 @@ const { id, title, description, date, updatedDate, tags, author, ...rest } =
                   )
                 }
               </div>
+              {
+                pdfHref && (
+                  <a
+                    href={pdfHref}
+                    class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-medium text-[var(--color-gray)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <Icon name="mdi:file-pdf-box" class="h-4 w-4" aria-hidden="true" />
+                    <span>Download PDF</span>
+                  </a>
+                )
+              }
             </div>
             <h1>{title}</h1>
             <hr />

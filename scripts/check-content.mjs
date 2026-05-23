@@ -130,4 +130,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("\nContent check passed. Archive PDFs are derived from article metadata at build time.");
+console.log("\nContent check passed. Archive and article PDFs are derived from article metadata at build time.");
