@@ -1,6 +1,6 @@
 # Content Pipeline Notes
 
-This note records the current content-maintenance pipeline and the architectural reasoning behind the helper scripts added during the Phase 2 cleanup.
+This note records the current content-maintenance pipeline and the architectural reasoning behind recent source-of-truth cleanup.
 
 ## Current commands
 
@@ -8,54 +8,46 @@ The project currently exposes these content/data maintenance commands:
 
 ```bash
 bun run tags:check       # validate the central tag registry and article tag usage
-bun run content:check    # validate article metadata and archive consistency
-bun run archive:check    # verify archive entries can be derived from article metadata
-bun run archive:generate # rewrite archive article lists from article metadata
+bun run content:check    # validate article metadata and declared tags
 ```
 
 These commands support the source-of-truth rule documented in `docs/architecture.md`:
 
 - article metadata is the canonical source for title/date/tag data;
-- yearly archive entries are derived from article metadata;
+- yearly archive pages and PDFs are derived from article metadata at build time;
 - tags are managed from one central source, `templates/enums.typ`.
 
-## Why these are scripts
+## Archive pipeline
 
-The scripts are repo-local maintenance tools, not runtime features. They run in Node during development or CI and do not become Cloudflare Worker code.
+Archive article lists are no longer hand-maintained under `content/archive/YYYY.typ`.
 
-They are intentionally separate from Astro rendering because they check or generate project-specific invariants that cut across several layers:
+Instead:
 
-- Typst article metadata;
-- yearly archive Typst files;
-- the Typst tag registry;
-- Astro's TypeScript tag consumer.
+- `/archive/` groups `getCollection("blog")` by article year;
+- `/archive/YYYY.pdf` uses the same grouped article metadata;
+- the PDF route writes a temporary Typst source file under `.astro/generated-archives/` during prerender;
+- `templates/archive.typ` remains the PDF layout/template, not a source of archive entries.
 
-Keeping this logic in `scripts/` makes the checks explicit, easy to run, and independent from the Astro page-rendering lifecycle.
+This removes the need for `archive:check` and `archive:generate`. There is no archive list left to sync: if an article exists in `content/article/**/*.typ` with valid metadata, it participates in the archive pipeline automatically.
 
-## What should and should not be integrated
+## Why some scripts remain
 
-Checks are safe to integrate into a higher-level validation command or a CI/build preflight:
+The remaining check scripts are repo-local maintenance tools, not runtime features. They run in Node during development or CI and do not become Cloudflare Worker code.
 
-```bash
-bun run tags:check
-bun run content:check
-bun run archive:check
-```
+They are intentionally separate from Astro rendering because they check project governance rules that are easier to express outside the renderer:
 
-Generation should stay explicit:
+- articles should have required metadata;
+- article tags should come from the central registry;
+- `templates/enums.typ` should remain the single tag management point.
 
-```bash
-bun run archive:generate
-```
-
-Reason: a build should generally be deterministic and should not silently rewrite source files. If archive entries drift, a build or CI check can fail and tell the author to run `archive:generate`, but `astro build` should not mutate `content/archive/*.typ` by surprise.
+These checks can later be integrated into a higher-level validation command or into the default build once the project policy is settled.
 
 ## Recommended future integration
 
 If the command surface starts to feel too fragmented, add one aggregate command such as:
 
 ```json
-"validate": "bun run tags:check && bun run content:check && bun run archive:check"
+"validate": "bun run tags:check && bun run content:check"
 ```
 
 Then CI or a stricter build command can run:
@@ -69,7 +61,7 @@ A possible stricter package layout is:
 
 ```json
 "build": "astro build",
-"validate": "bun run tags:check && bun run content:check && bun run archive:check",
+"validate": "bun run tags:check && bun run content:check",
 "build:strict": "bun run validate && astro build"
 ```
 
@@ -79,25 +71,25 @@ Alternatively, `build` itself can become:
 "build": "bun run validate && astro build"
 ```
 
-That is more integrated, but it also means every local build and every deployment build pays the validation cost and inherits validation failures. This is usually acceptable once the checks are stable, but it is a policy choice rather than a requirement.
+That is more integrated, but it also means every local build and every deployment build pays the validation cost and inherits validation failures. This is a policy choice rather than a requirement.
 
 ## Why not an Astro integration/plugin yet
 
-These checks could technically be wrapped inside an Astro integration or Vite plugin. That would make them feel less like external scripts, but it would also couple content-maintenance logic to the Astro build lifecycle.
+These checks could technically be wrapped inside an Astro integration or Vite plugin. That would make them feel less like external scripts, but it would also couple content-governance logic to the Astro build lifecycle.
 
 For now, plain Node scripts are preferable because they are:
 
-- simpler to debug;
+- simple to debug;
 - callable independently;
 - safe to run in CI without rendering the site;
-- explicit about whether they only check or also write files.
+- explicit about what is governance validation versus page generation.
 
 If the pipeline grows more complex later, the scripts can be refactored into shared library modules and exposed through both CLI commands and an Astro integration. That should come after the invariants stabilize, not before.
 
 ## Current decision
 
 - Keep `templates/enums.typ` as the single tag registry.
-- Keep validation/generation logic in `scripts/` for now.
+- Derive yearly archive pages and PDFs from article metadata during build.
+- Keep validation logic in `scripts/` for now.
 - Treat check commands as candidates for a future aggregate `validate` command.
-- Keep source-generating commands explicit and non-automatic.
 - Do not proceed to the comments/D1 Phase 3 until requested.

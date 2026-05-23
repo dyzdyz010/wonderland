@@ -1,40 +1,87 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
 import { NodeCompiler } from "@myriaddreamin/typst-ts-node-compiler";
+import { mkdirSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
+import { buildArchiveSummaries, type ArchiveSummary } from "../../utils/archives";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const archives = await getCollection("archive");
-  return archives.map((post) => ({
-    params: { slug: post.id },
-    props: post,
+  const archives = buildArchiveSummaries(await getCollection("blog"));
+
+  return archives.map((archive) => ({
+    params: { slug: archive.year },
+    props: { archive },
   }));
 }
 
-export async function GET({ params }: APIContext) {
+function escapeTypstString(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function renderArchiveSource(archive: ArchiveSummary): string {
+  const articles = archive.articles
+    .map(
+      (article) =>
+        `    (title: "${escapeTypstString(article.title)}", date: "${article.date}", path: "${article.path}"),`,
+    )
+    .join("\n");
+
+  return `#import "/templates/archive.typ": *
+
+#show: main.with(
+  title: "${escapeTypstString(archive.title)}",
+  desc: [${archive.description}],
+  date: "${archive.dateString}",
+  tags: ("Archive",),
+  articles: (
+${articles}
+  ),
+)
+`;
+}
+
+function writeGeneratedArchiveSource(projectRoot: string, archive: ArchiveSummary): string {
+  const generatedDir = path.join(projectRoot, ".astro", "generated-archives");
+  mkdirSync(generatedDir, { recursive: true });
+
+  const mainFilePath = path.join(generatedDir, `${archive.year}.typ`);
+  writeFileSync(mainFilePath, renderArchiveSource(archive));
+
+  return mainFilePath;
+}
+
+function toArrayBuffer(buffer: Buffer): ArrayBuffer {
+  return buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength,
+  ) as ArrayBuffer;
+}
+
+export async function GET({ props, params }: APIContext<{ archive: ArchiveSummary }>) {
   const projectRoot = process.cwd();
+  const archive = props.archive;
+
+  if (!archive) {
+    throw new Error(`[archive] Missing archive props for ${params.slug}`);
+  }
+
   const compiler = NodeCompiler.create({ workspace: projectRoot });
-  const mainFilePath = path.join(
-    projectRoot,
-    "content",
-    "archive",
-    `${params.slug}.typ`
-  );
+  const mainFilePath = writeGeneratedArchiveSource(projectRoot, archive);
 
   let pdfBuffer: Buffer;
   try {
     pdfBuffer = compiler.pdf({ mainFilePath });
   } catch (e: any) {
-    console.error(`[archive] Failed to compile ${params.slug}: ${e?.code ?? e?.message ?? String(e)}`);
+    console.error(`[archive] Failed to compile ${archive.year}: ${e?.code ?? e?.message ?? String(e)}`);
     throw e;
   }
 
-  return new Response(pdfBuffer, {
+  return new Response(toArrayBuffer(pdfBuffer), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="${params.slug}.pdf"`,
+      "Content-Disposition": `inline; filename="${archive.year}.pdf"`,
     },
   });
 }

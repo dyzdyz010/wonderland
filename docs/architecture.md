@@ -59,7 +59,7 @@ The intended source-of-truth rule is:
 
 > Article metadata is the canonical source for title, description, date, tags, and collection membership. Tag pages, RSS, article lists, and yearly archives should be derived from article metadata whenever practical.
 
-Current caveat: yearly archive Typst files still repeat article `title`, `date`, and `path` manually. This is accepted for now but should eventually be generated or checked by a script.
+Yearly archive pages and PDFs now follow the same rule: they are derived from article metadata at build time, not from hand-maintained archive entry lists.
 
 Run this after adding or editing articles:
 
@@ -67,16 +67,9 @@ Run this after adding or editing articles:
 bun run content:check
 ```
 
-The checker verifies that article metadata is present, article tags are declared in the tag registry, and yearly archive entries match the corresponding article `title`, `date`, and path.
+The checker verifies that article metadata is present and article tags are declared in the tag registry.
 
-Yearly archive entries can be regenerated from article metadata:
-
-```bash
-bun run archive:check      # verify generated archive entries match the files
-bun run archive:generate   # rewrite content/archive/YYYY.typ article lists
-```
-
-The generator preserves existing archive file headers and existing same-day entry order where possible, then fills the `articles: (...)` block from article metadata. This keeps archive files as editable Typst documents while making the duplicated entry list derivable.
+Yearly archive pages and PDFs are derived from article metadata during build. There is no hand-maintained `content/archive/YYYY.typ` article list: `/archive/` groups `getCollection("blog")` by year, and `/archive/YYYY.pdf` renders those same derived groups through `templates/archive.typ`.
 
 ## Tag model
 
@@ -154,4 +147,4 @@ Priority order:
 2. Keep D1 destructive reset local-only.
 3. Keep shiroa versions aligned across all Typst templates.
 4. Rename post-list components by responsibility rather than age, e.g. `PostList`, `PostListByYear`, `PostListItem`.
-5. Add content validation before automating archive generation.
+5. Derive archive pages/PDFs from article metadata rather than maintaining archive entry lists.

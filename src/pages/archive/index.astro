@@ -4,12 +4,11 @@ import RootLayout from "../../layouts/RootLayout.astro";
 import Card from "../../components/Card.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 import { Icon } from "astro-icon/components";
+import { buildArchiveSummaries } from "../../utils/archives";
 
 export const prerender = true;
 
-const archives = (await getCollection("archive")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const archives = buildArchiveSummaries(await getCollection("blog"));
 ---
 
 <RootLayout title="归档" description="文章归档 — 按年度整理的 PDF 合集">
@@ -22,7 +21,7 @@ const archives = (await getCollection("archive")).sort(
       archives.map((archive) => (
         <Card>
           <a
-            href={`/archive/${archive.id}.pdf`}
+            href={`/archive/${archive.year}.pdf`}
             class="group flex items-center justify-between gap-4 py-2"
             target="_blank"
             rel="noopener"
@@ -35,20 +34,16 @@ const archives = (await getCollection("archive")).sort(
               />
               <div class="min-w-0">
                 <div class="font-semibold text-[var(--color-default)] group-hover:text-[var(--color-accent)] transition-colors truncate">
-                  {archive.data.title}
+                  {archive.title}
                 </div>
-                {archive.data.description && (
-                  <div class="text-sm text-[var(--color-gray)] truncate mt-0.5">
-                    {archive.data.description}
-                    {archive.data.count && (
-                      <span class="ml-2">({archive.data.count} 篇)</span>
-                    )}
-                  </div>
-                )}
+                <div class="text-sm text-[var(--color-gray)] truncate mt-0.5">
+                  {archive.description}
+                  <span class="ml-2">({archive.count} 篇)</span>
+                </div>
               </div>
             </div>
             <div class="shrink-0 text-sm text-[var(--color-gray)] font-mono">
-              <FormattedDate date={archive.data.date} />
+              <FormattedDate date={archive.date} />
             </div>
           </a>
         </Card>

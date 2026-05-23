@@ -5,7 +5,6 @@ import { join, relative, resolve } from "node:path";
 
 const root = process.cwd();
 const articleRoot = resolve(root, "content/article");
-const archiveRoot = resolve(root, "content/archive");
 const tagsFile = resolve(root, "templates/enums.typ");
 
 const errors = [];
@@ -70,30 +69,10 @@ function parseArticle(path) {
   return {
     path,
     rel: rel(path),
-    typstPath: `/${rel(path)}`,
     title,
     date,
     desc,
     tags,
-  };
-}
-
-function parseArchive(path) {
-  const raw = read(path);
-  const entries = [];
-  const entryRegex =
-    /\(title:\s*"([^"]+)",\s*date:\s*"(\d{4}-\d{2}-\d{2})",\s*path:\s*"([^"]+)"\)/g;
-
-  for (const entry of raw.matchAll(entryRegex)) {
-    const [, title, date, articlePath] = entry;
-    entries.push({ title, date, path: articlePath });
-  }
-
-  return {
-    path,
-    rel: rel(path),
-    year: path.match(/(\d{4})\.typ$/)?.[1],
-    entries,
   };
 }
 
@@ -120,79 +99,20 @@ function addArticleChecks(articles, tagRegistry) {
   }
 }
 
-function addArchiveChecks(articles, archives) {
-  const articleByPath = new Map(articles.map((article) => [article.typstPath, article]));
-  const archiveByYear = new Map(archives.map((archive) => [archive.year, archive]));
-  const archivedPaths = new Set();
-
-  for (const archive of archives) {
-    if (!archive.year) {
-      errors.push(`${archive.rel}: archive filename should be YYYY.typ`);
-      continue;
-    }
-
-    const seen = new Set();
-    for (const entry of archive.entries) {
-      if (seen.has(entry.path)) {
-        errors.push(`${archive.rel}: duplicate archive entry ${entry.path}`);
-      }
-      seen.add(entry.path);
-      archivedPaths.add(entry.path);
-
-      const article = articleByPath.get(entry.path);
-      if (!article) {
-        errors.push(`${archive.rel}: references missing article ${entry.path}`);
-        continue;
-      }
-
-      if (!entry.date.startsWith(`${archive.year}-`)) {
-        errors.push(
-          `${archive.rel}: entry ${entry.path} has date ${entry.date}, outside archive year ${archive.year}`,
-        );
-      }
-      if (article.title && entry.title !== article.title) {
-        errors.push(
-          `${archive.rel}: title mismatch for ${entry.path}\n  archive: ${entry.title}\n  article: ${article.title}`,
-        );
-      }
-      if (article.date && entry.date !== article.date) {
-        errors.push(
-          `${archive.rel}: date mismatch for ${entry.path}\n  archive: ${entry.date}\n  article: ${article.date}`,
-        );
-      }
-    }
-  }
-
-  const yearsWithArticles = new Set(
-    articles.filter((article) => article.date).map((article) => article.date.slice(0, 4)),
-  );
-
-  for (const year of yearsWithArticles) {
-    if (!archiveByYear.has(year)) {
-      errors.push(`content/archive/${year}.typ: missing archive for articles dated ${year}`);
-    }
-  }
-
-  for (const article of articles) {
-    if (!article.date) continue;
-    if (!archivedPaths.has(article.typstPath)) {
-      errors.push(`${article.rel}: missing from content/archive/${article.date.slice(0, 4)}.typ`);
-    }
-  }
-}
-
 const tagRegistry = parseTagRegistry();
 const articles = walkFiles(articleRoot, ".typ").map(parseArticle);
-const archives = walkFiles(archiveRoot, ".typ").map(parseArchive);
 
 addArticleChecks(articles, tagRegistry);
-addArchiveChecks(articles, archives);
+
+const years = new Set(
+  articles.filter((article) => article.date).map((article) => article.date.slice(0, 4)),
+);
 
 console.log(
   [
     "Content check summary:",
     `- Articles: ${articles.length}`,
-    `- Archives: ${archives.length}`,
+    `- Article years: ${years.size}`,
     `- Tags in registry: ${tagRegistry.size}`,
     `- Warnings: ${warnings.length}`,
     `- Errors: ${errors.length}`,
@@ -210,4 +130,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log("\nContent check passed.");
+console.log("\nContent check passed. Archive PDFs are derived from article metadata at build time.");

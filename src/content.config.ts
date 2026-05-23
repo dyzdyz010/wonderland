@@ -17,15 +17,4 @@ const blog = defineCollection({
 	})
 });
 
-const archive = defineCollection({
-	loader: glob({ base: './content/archive', pattern: '**/*.typ' }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string().optional(),
-		date: z.coerce.date(),
-		tags: z.array(z.string()).optional(),
-		count: z.number().optional(),
-	})
-});
-
-export const collections = { blog, archive };
+export const collections = { blog };
