@@ -1,4 +1,5 @@
 #import "@preview/shiroa:0.3.1": plain-text
+#import "pdf/typography.typ": *
 
 #let accent = rgb("1f4f82")
 #let accent-soft = rgb("eef5fb")
@@ -13,8 +14,8 @@
   columns: (3.1cm, 1fr),
   column-gutter: 1em,
   row-gutter: 0.4em,
-  text(8.5pt, fill: muted, weight: "semibold")[#label],
-  text(9pt, fill: ink)[#value],
+  pdf-ui-text(size: 8.5pt, weight: "semibold", fill: muted)[#label],
+  pdf-body-text(size: 9pt, fill: ink)[#value],
 )
 
 #let render-tags(tags) = {
@@ -28,7 +29,7 @@
         fill: accent-soft,
         stroke: 0.45pt + rule,
       )[
-        #text(8pt, fill: accent, weight: "medium")[#tag]
+        #pdf-ui-text(size: 8pt, weight: "medium", fill: accent)[#tag]
       ]
       h(0.35em)
     }
@@ -65,7 +66,7 @@
   )) <frontmatter>]
 
   set document(title: title, author: author, date: none)
-  set text(font: ("Libertinus Serif", "PingFang SC"), size: 10.5pt, fill: ink)
+  set text(font: pdf-body-fonts, size: 10.5pt, fill: ink)
   set par(justify: true, leading: 0.62em)
   set page(
     paper: "a4",
@@ -80,10 +81,10 @@
     #v(1.2cm)
     #rect(width: 3.2cm, height: 2.2pt, fill: accent)
     #v(1.15cm)
-    #text(28pt, weight: "bold", fill: ink)[#title]
+    #pdf-heading-text(size: 28pt, weight: "bold", fill: ink)[#title]
     #v(0.75cm)
     #block(width: 88%)[
-      #text(12pt, fill: muted)[#description]
+      #pdf-body-text(size: 12pt, fill: muted)[#description]
     ]
     #v(1.2cm)
     #box(
@@ -106,20 +107,20 @@
       #grid(
         columns: (3.1cm, 1fr),
         column-gutter: 1em,
-        text(8.5pt, fill: muted, weight: "semibold")[Tags],
+        pdf-ui-text(size: 8.5pt, weight: "semibold", fill: muted)[Tags],
         render-tags(tags),
       )
     ]
     #v(1fr)
     #block(width: 100%, inset: (top: 0.85em), stroke: (top: 0.55pt + rule))[
-      #text(8.3pt, fill: muted)[#notice]
+      #pdf-ui-text(size: 8.3pt, fill: muted)[#notice]
     ]
   ]
 
   context if query(heading).len() > 0 {
     pagebreak()
     v(1.2cm)
-    text(18pt, weight: "semibold", fill: ink)[Contents]
+    pdf-heading-text(size: 18pt, weight: "semibold", fill: ink)[Contents]
     v(0.7em)
     outline(title: none, depth: 2, indent: 1.5em)
   }
@@ -131,10 +132,10 @@
     numbering: "1",
     fill: white,
     header: align(right)[
-      #text(7.5pt, fill: muted)[#title]
+      #pdf-ui-text(size: 7.5pt, fill: muted)[#title]
     ],
     footer: context align(center)[
-      #text(7.5pt, fill: muted)[© #author · #counter(page).display("1")]
+      #pdf-ui-text(size: 7.5pt, fill: muted)[© #author · #counter(page).display("1")]
     ],
   )
   counter(page).update(1)

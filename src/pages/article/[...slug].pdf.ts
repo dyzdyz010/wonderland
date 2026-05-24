@@ -4,6 +4,7 @@ import { NodeCompiler } from "@myriaddreamin/typst-ts-node-compiler";
 import { mkdirSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import { SITE_AUTHOR } from "../../consts";
+import { getTypstCompilerOptions } from "../../utils/typst-fonts";
 
 export const prerender = true;
 
@@ -98,7 +99,7 @@ export async function GET({ props, params, site }: APIContext<{ post: BlogEntry 
     throw new Error(`[article-pdf] Missing post props for ${params.slug}`);
   }
 
-  const compiler = NodeCompiler.create({ workspace: projectRoot });
+  const compiler = NodeCompiler.create(getTypstCompilerOptions(projectRoot));
   const sourceUrl = getArticleUrl(site, post);
   const mainFilePath = writeGeneratedArticleSource(projectRoot, post, sourceUrl);
 

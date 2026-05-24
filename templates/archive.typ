@@ -1,5 +1,6 @@
 #import "@preview/shiroa:0.3.1": plain-text
 #import "target.typ": sys-is-html-target
+#import "pdf/typography.typ": *
 
 #let main(
   title: "Archive",
@@ -21,9 +22,9 @@
       numbering: none,
       number-align: center,
       margin: (top: 2.5cm, bottom: 2.5cm, left: 2.5cm, right: 2.5cm),
-      footer: align(center)[#text(7.5pt, fill: luma(120))[© #author]],
+      footer: align(center)[#pdf-ui-text(size: 7.5pt)[© #author]],
     )
-    set text(font: ("Libertinus Serif", "PingFang SC"), size: 10.5pt)
+    set text(font: pdf-body-fonts, size: 10.5pt)
     set heading(numbering: none)
     set par(justify: true)
 
@@ -31,22 +32,22 @@
     show heading.where(level: 1): it => {
       pagebreak(weak: true)
       v(4em)
-      align(center, text(24pt, weight: "bold", it.body))
+      align(center, pdf-heading-text(size: 24pt, weight: "bold")[#it.body])
       v(0.5em)
     }
 
     // Cover page
     align(center + horizon)[
-      #text(36pt, weight: "bold")[#title]
+      #pdf-heading-text(size: 36pt, weight: "bold")[#title]
       #v(2em)
-      #text(13pt, fill: luma(80))[#desc]
+      #pdf-body-text(size: 13pt, fill: luma(80))[#desc]
       #v(2em)
-      #text(9pt, fill: luma(120))[#copyright-notice]
+      #pdf-ui-text(size: 9pt)[#copyright-notice]
     ]
 
     // Table of contents
     pagebreak()
-    outline(title: [#text(18pt)[目录]], depth: 2, indent: 1.5em)
+    outline(title: [#pdf-heading-text(size: 18pt)[目录]], depth: 2, indent: 1.5em)
 
     // Switch to numbered pages for articles
     set page(numbering: "1")
@@ -56,7 +57,7 @@
     for article in articles {
       heading(level: 1)[#article.at("title")]
       align(center)[
-        #text(11pt, fill: luma(120))[#article.at("date")]
+        #pdf-ui-text(size: 11pt)[#article.at("date")]
       ]
       v(2em)
       {

@@ -28,6 +28,14 @@ Instead:
 - the PDF route writes a temporary Typst source file under `.astro/generated-archives/` during prerender;
 - `templates/archive.typ` remains the yearly PDF layout/template, not a source of archive entries.
 
+Archive PDFs use semantic PDF typography roles from `templates/pdf/typography.typ`:
+
+- heading-like material uses `pdf-heading-fonts` (`Noto Sans CJK SC` / `Noto Sans SC` fallbacks);
+- body-like article material uses `pdf-body-fonts` (`Noto Serif CJK SC` / `Noto Serif SC` fallbacks);
+- small UI/meta text uses the heading/sans role via `pdf-ui-text`.
+
+The PDF routes call `getTypstCompilerOptions()` from `src/utils/typst-fonts.ts`, which asserts that the required Noto CJK SC files exist under `assets/fonts/noto-cjk-sc/` and exposes that vendored directory to Typst. This keeps PDF generation deterministic and prevents builds from silently depending on fonts installed on the user's machine. Additional project-local font directories (`assets/fonts/` and `public/fonts/`) may still be exposed for future fonts, but the Noto PDF fonts are committed with the repository and tracked through Git LFS to keep normal Git history small.
+
 ## Single-article PDF pipeline
 
 Each article also gets a prerendered PDF route at `/article/<slug>.pdf`.
@@ -37,6 +45,7 @@ The route:
 - reads the same `blog` content collection entry as the HTML article page;
 - writes a temporary Typst wrapper under `.astro/generated-article-pdfs/` during prerender;
 - renders the original article source through `templates/article-pdf.typ`;
+- shares the same semantic PDF typography roles as archive PDFs;
 - preserves author, source URL, publication dates, tags, and a visible copyright notice in the PDF.
 
 This intentionally stays build-time/static. Cloudflare Workers serve the generated PDF files; they do not compile Typst dynamically at request time.

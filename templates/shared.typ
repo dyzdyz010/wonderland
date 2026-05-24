@@ -5,16 +5,19 @@
 #import "code/theme.typ": theme-frame
 #import "target.typ": sys-is-html-target
 #import "footnote.typ": web-footnote, render-footnotes
+#import "pdf/typography.typ": pdf-body-fonts, pdf-heading-fonts
 
 #let is-html-target = is-html-target()
 #let is-pdf-target = is-pdf-target()
 #let is-web-target = is-web-target() or sys-is-html-target
 
-#let text-fonts = (
+#let web-text-fonts = (
   "Libertinus Serif",
   // todo: exclude it if language is not Chinese.
   "PingFang SC",
 )
+#let text-fonts = if sys-is-html-target { web-text-fonts } else { pdf-body-fonts }
+#let heading-fonts = if sys-is-html-target { web-text-fonts } else { pdf-heading-fonts }
 
 // Sizes
 #let main-size = if sys-is-html-target {
@@ -41,6 +44,7 @@
   show link: set text(fill: dash-color)
 
   show heading: it => {
+    set text(font: heading-fonts)
     set text(size: heading-sizes.at(calc.min(it.level, heading-sizes.len() - 1)))
 
     block(

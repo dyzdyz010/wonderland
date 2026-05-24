@@ -4,6 +4,7 @@ import { NodeCompiler } from "@myriaddreamin/typst-ts-node-compiler";
 import { mkdirSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import { buildArchiveSummaries, type ArchiveSummary } from "../../utils/archives";
+import { getTypstCompilerOptions } from "../../utils/typst-fonts";
 
 export const prerender = true;
 
@@ -67,7 +68,7 @@ export async function GET({ props, params }: APIContext<{ archive: ArchiveSummar
     throw new Error(`[archive] Missing archive props for ${params.slug}`);
   }
 
-  const compiler = NodeCompiler.create({ workspace: projectRoot });
+  const compiler = NodeCompiler.create(getTypstCompilerOptions(projectRoot));
   const mainFilePath = writeGeneratedArchiveSource(projectRoot, archive);
 
   let pdfBuffer: Buffer;
