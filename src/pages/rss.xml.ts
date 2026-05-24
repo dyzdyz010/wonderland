@@ -2,6 +2,7 @@ import rss, { type RSSFeedItem } from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { APIContext } from "astro";
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 type Kind = "blog";
 type Item = CollectionEntry<Kind>;
@@ -25,8 +26,9 @@ export async function GET(context: APIContext) {
     fromCollection("blog", "article", "/"),
   ]);
   return rss({
-    title: "Wonderland",
-    description: "Yizhuo's Personal Blog",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    customData: `<author>${SITE_AUTHOR}</author>`,
     site: context.site,
     items: items.flat(),
   });

@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { NodeCompiler } from "@myriaddreamin/typst-ts-node-compiler";
 import { mkdirSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
+import { SITE_AUTHOR } from "../../consts";
 
 export const prerender = true;
 
@@ -47,7 +48,7 @@ function renderStringTuple(values: string[]): string {
 
 function renderArticlePdfSource(post: BlogEntry, sourceUrl: string): string {
   const description = post.data.description ?? "";
-  const author = post.data.author ?? "Myriad-Dreamin";
+  const author = SITE_AUTHOR;
   const date = formatDate(post.data.date);
   const updatedDate = post.data.updatedDate ? `"${formatDate(post.data.updatedDate)}"` : "none";
   const tags = renderStringTuple(post.data.tags ?? []);

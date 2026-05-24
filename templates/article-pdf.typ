@@ -40,7 +40,7 @@
   desc: [],
   date: "2024-01-01",
   updated_date: none,
-  author: "Myriad-Dreamin",
+  author: "dyzdyz010",
   source_url: "https://dyz.io/",
   tags: (),
   copyright_notice: none,

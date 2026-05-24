@@ -6,9 +6,9 @@ I'm dyzdyz010, a _systems architect_ and a _full-stack developer_.
 
 = About This Site
 
-This is my blog, using code from #link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant].
+This site is owned and maintained by dyzdyz010. It is built with code originally from #link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant].
 
-这是使用#link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant]代码构建的博客。
+本站归属与维护主体为 dyzdyz010，代码基础来自 #link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant]。
 
 = Notes
 

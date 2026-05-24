@@ -6,7 +6,7 @@ import "../styles/font.css";
 import interWoff2 from "@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url";
 import interItalicWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-italic.woff2?url";
 
-import { SITE_TITLE } from "../consts";
+import { SITE_AUTHOR, SITE_TITLE } from "../consts";
 import ThemeInit from "./ThemeInit.astro";
 
 interface Props {
@@ -40,6 +40,7 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
 <title>{title} | {SITE_TITLE}</title>
 <meta name="title" content={`${title} | ${SITE_TITLE}`} />
 <meta name="description" content={description} />
+<meta name="author" content={SITE_AUTHOR} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />

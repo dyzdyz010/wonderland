@@ -5,20 +5,23 @@
   title: "Archive",
   desc: [],
   date: "2025-01-01",
+  author: "dyzdyz010",
   tags: ("Archive",),
   articles: (),
   body,
 ) = {
   let description = if type(desc) == content { plain-text(desc) } else { desc }
-  [#metadata((title: title, description: description, date: date, tags: tags, count: articles.len())) <frontmatter>]
+  let copyright-notice = "© " + author + ". All rights reserved unless otherwise noted."
+  [#metadata((title: title, author: author, description: description, date: date, tags: tags, count: articles.len(), copyright: copyright-notice)) <frontmatter>]
 
   if not sys-is-html-target {
-    set document(title: title, date: none)
+    set document(title: title, author: author, date: none)
     set page(
       paper: "a4",
       numbering: none,
       number-align: center,
       margin: (top: 2.5cm, bottom: 2.5cm, left: 2.5cm, right: 2.5cm),
+      footer: align(center)[#text(7.5pt, fill: luma(120))[© #author]],
     )
     set text(font: ("Libertinus Serif", "PingFang SC"), size: 10.5pt)
     set heading(numbering: none)
@@ -37,6 +40,8 @@
       #text(36pt, weight: "bold")[#title]
       #v(2em)
       #text(13pt, fill: luma(80))[#desc]
+      #v(2em)
+      #text(9pt, fill: luma(120))[#copyright-notice]
     ]
 
     // Table of contents

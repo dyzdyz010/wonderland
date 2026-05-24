@@ -86,8 +86,13 @@ ul.tags {
 .annotation {
   color: var(--color-gray);
   display: flex;
+  align-items: center;
   gap: 0.5em;
   margin-bottom: 0.5em;
+}
+.annotation .date {
+  display: flex;
+  align-items: center;
 }
 .last-updated-on,
 .click-count,
