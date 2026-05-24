@@ -187,6 +187,15 @@
     html.elem("hr")
   }
 
+  show footnote.entry: entry => if sys-is-html-target {
+    entry
+  } else {
+    // Keep the native PDF footnote layout, but render the entry marker on
+    // the same baseline/size as the following footnote text.
+    show super: marker => marker.body
+    entry
+  }
+
   show footnote: it => context if sys-is-html-target {
     // Extract the footnote body and use our custom handler
     web-footnote(it.body)
