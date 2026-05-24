@@ -3,23 +3,37 @@ import { SITE_TITLE } from "../consts";
 import HeaderLink from "./HeaderLink.astro";
 import ThemeSwitch from "./ThemeSwitch.astro";
 import { Icon } from "astro-icon/components";
+import { t } from "../i18n/messages";
+import { LOCALE_NAMES, otherLocale, withLocale, type Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+  switchPath?: string;
+}
+
+const { locale, switchPath = "/" } = Astro.props;
+const m = t(locale);
+const nextLocale = otherLocale(locale);
 ---
 
 <header class="header mb-12">
   <nav>
     <h2 class="logo @lg:block @3xs:hidden">
-      <a href="/" class="hover:text-[var(--color-default-hover)]"
+      <a href={withLocale(locale, "/")} class="hover:text-[var(--color-default-hover)]"
         >{SITE_TITLE}</a
       >
     </h2>
     <div class="internal-links">
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/article">Posts</HeaderLink>
-      <HeaderLink href="/archive">Archive</HeaderLink>
-      <HeaderLink href="/tag">Tags</HeaderLink>
-      <HeaderLink href="/about">About</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/")}>{m.nav.home}</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/article")}>{m.nav.posts}</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/archive")}>{m.nav.archive}</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/tag")}>{m.nav.tags}</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/about")}>{m.nav.about}</HeaderLink>
     </div>
     <div class="social-links">
+      <HeaderLink href={withLocale(nextLocale, switchPath)} title={m.article.switchLanguage}>
+        {LOCALE_NAMES[nextLocale]}
+      </HeaderLink>
       <ThemeSwitch />
       <a
         href="https://github.com/dyzdyz010"

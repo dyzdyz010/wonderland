@@ -133,6 +133,10 @@
   kind: "post",
   lang: none,
   region: none,
+  i18nKey: none,
+  sourceLang: none,
+  translationStatus: none,
+  translationSourceHash: none,
   show-outline: true,
   body,
 ) = {
@@ -152,7 +156,7 @@
     it
   }
 
-  [#metadata((
+  let metadata-value = (
     title: plain-text(title),
     author: "dyzdyz010",
     description: plain-text(desc),
@@ -160,7 +164,13 @@
     tags: tags,
     lang: lang,
     region: region,
-  )) <frontmatter>]
+  )
+  metadata-value = if i18nKey != none { metadata-value + (i18nKey: i18nKey,) } else { metadata-value }
+  metadata-value = if sourceLang != none { metadata-value + (sourceLang: sourceLang,) } else { metadata-value }
+  metadata-value = if translationStatus != none { metadata-value + (translationStatus: translationStatus,) } else { metadata-value }
+  metadata-value = if translationSourceHash != none { metadata-value + (translationSourceHash: translationSourceHash,) } else { metadata-value }
+
+  [#metadata(metadata-value) <frontmatter>]
 
   context if show-outline and sys-is-html-target {
     if query(heading).len() == 0 {

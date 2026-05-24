@@ -9,6 +9,10 @@
     "astro": "astro",
     "content:check": "node scripts/check-content.mjs",
     "tags:check": "node scripts/check-tags.mjs",
+    "i18n:check": "node scripts/i18n/check.mjs --allow-missing",
+    "i18n:check:strict": "node scripts/i18n/check.mjs --strict",
+    "i18n:translate": "node scripts/i18n/translate.mjs",
+    "validate": "bun run content:check && bun run tags:check && bun run i18n:check",
     "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
   },
   "dependencies": {

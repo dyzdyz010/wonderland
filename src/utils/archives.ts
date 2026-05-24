@@ -1,4 +1,7 @@
 import type { CollectionEntry } from "astro:content";
+import { t } from "../i18n/messages";
+import type { Locale } from "../i18n/config";
+import { localizedEntrySlug, sortPostsOldestFirst } from "../i18n/content";
 
 export type BlogEntry = CollectionEntry<"blog">;
 
@@ -9,6 +12,7 @@ export interface ArchiveArticle {
 }
 
 export interface ArchiveSummary {
+  locale: Locale;
   year: string;
   title: string;
   description: string;
@@ -26,17 +30,12 @@ function getArticleTypstPath(post: BlogEntry): string {
   return `/${post.filePath ?? `content/article/${post.id}.typ`}`;
 }
 
-function compareArticles(a: BlogEntry, b: BlogEntry): number {
-  const dateCompare = a.data.date.valueOf() - b.data.date.valueOf();
-  if (dateCompare !== 0) return dateCompare;
-
-  return a.id.localeCompare(b.id, undefined, { sensitivity: "base" });
-}
-
-export function buildArchiveSummaries(posts: BlogEntry[]): ArchiveSummary[] {
+export function buildArchiveSummaries(posts: BlogEntry[], locale: Locale): ArchiveSummary[] {
+  const messages = t(locale);
   const postsByYear = new Map<string, BlogEntry[]>();
 
   for (const post of posts) {
+    if (post.data.lang !== locale) continue;
     const year = String(post.data.date.getFullYear());
     const group = postsByYear.get(year) ?? [];
     group.push(post);
@@ -46,14 +45,15 @@ export function buildArchiveSummaries(posts: BlogEntry[]): ArchiveSummary[] {
   return [...postsByYear.entries()]
     .sort(([a], [b]) => b.localeCompare(a))
     .map(([year, yearPosts]) => {
-      const sortedPosts = [...yearPosts].sort(compareArticles);
+      const sortedPosts = sortPostsOldestFirst(yearPosts);
       const latestDate = sortedPosts.at(-1)?.data.date ?? new Date(`${year}-01-01T00:00:00.000Z`);
       const latestDateString = formatDate(latestDate);
 
       return {
+        locale,
         year,
-        title: `Blog Archive ${year}`,
-        description: `${year} 年博客文章合集`,
+        title: locale === "zh" ? `${year} 博客归档` : `Blog Archive ${year}`,
+        description: locale === "zh" ? `${year} 年博客文章合集` : `${year} blog article collection`,
         date: latestDate,
         dateString: latestDateString,
         count: sortedPosts.length,
@@ -62,10 +62,10 @@ export function buildArchiveSummaries(posts: BlogEntry[]): ArchiveSummary[] {
           date: formatDate(post.data.date),
           path: getArticleTypstPath(post),
         })),
-      };
+      } satisfies ArchiveSummary;
     });
 }
 
-export function getArchiveByYear(posts: BlogEntry[], year: string): ArchiveSummary | undefined {
-  return buildArchiveSummaries(posts).find((archive) => archive.year === year);
+export function getArchiveByYear(posts: BlogEntry[], locale: Locale, year: string): ArchiveSummary | undefined {
+  return buildArchiveSummaries(posts, locale).find((archive) => archive.year === year);
 }

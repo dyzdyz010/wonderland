@@ -8,16 +8,20 @@ import interItalicWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-
 
 import { SITE_AUTHOR, SITE_TITLE } from "../consts";
 import ThemeInit from "./ThemeInit.astro";
+import { ogLocale, type AlternateLink } from "../i18n/seo";
+import type { Locale } from "../i18n/config";
 
 interface Props {
   title: string;
   description: string;
+  locale: Locale;
   image?: string;
+  alternates?: AlternateLink[];
 }
 
+const { title, description, locale, image = "/blog-heading.webp", alternates = [] } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
-const { title, description, image = "/blog-heading.webp" } = Astro.props;
+const alternateLocales = alternates.filter((alternate) => alternate.locale !== "x-default") as Array<AlternateLink & { locale: Locale }>;
 ---
 
 <!-- Global Metadata -->
@@ -28,13 +32,22 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
 <link
   rel="alternate"
   type="application/rss+xml"
-  title={SITE_TITLE}
-  href={new URL("rss.xml", Astro.site)}
+  title={`${SITE_TITLE} ${locale.toUpperCase()}`}
+  href={new URL(`/${locale}/rss.xml`, Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+  alternates.map((alternate) => (
+    <link
+      rel="alternate"
+      hreflang={alternate.locale}
+      href={new URL(alternate.href, Astro.site)}
+    />
+  ))
+}
 
 <!-- Primary Meta Tags -->
 <title>{title} | {SITE_TITLE}</title>
@@ -49,6 +62,12 @@ const { title, description, image = "/blog-heading.webp" } = Astro.props;
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
 <meta property="og:image:alt" content="Kamiya's Character Design" />
+<meta property="og:locale" content={ogLocale(locale)} />
+{
+  alternateLocales
+    .filter((alternate) => alternate.locale !== locale)
+    .map((alternate) => <meta property="og:locale:alternate" content={ogLocale(alternate.locale)} />)
+}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />

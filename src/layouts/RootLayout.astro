@@ -4,19 +4,29 @@ import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Bubble from "../components/Bubble.astro";
+import { HTML_LANG, type Locale } from "../i18n/config";
+import type { AlternateLink } from "../i18n/seo";
 
-const { title, description } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  alternates?: AlternateLink[];
+  switchPath?: string;
+}
+
+const { title, description = "", locale, alternates = [], switchPath = "/" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={HTML_LANG[locale]}>
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} locale={locale} alternates={alternates} />
   </head>
   <body>
     <Bubble />
     <main class="@container">
-      <Header />
+      <Header locale={locale} switchPath={switchPath} />
       <div class="@5xl:px-40 @lg:px-10 @3xs:p-2 @3xs:pt-0">
         <slot />
       </div>

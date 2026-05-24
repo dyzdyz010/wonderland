@@ -11,20 +11,30 @@ import BackToTop from "../components/BackToTop.astro";
 import Comments from "../components/comment/Comments.astro";
 import Card from "../components/Card.astro";
 import { Icon } from "astro-icon/components";
+import type { Locale } from "../i18n/config";
+import { otherLocale, withLocale } from "../i18n/config";
+import { t } from "../i18n/messages";
+import { localizedAlternates, type AlternateLink } from "../i18n/seo";
 
 interface IdExt {
   id: string;
 }
 
-type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false });
+type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false }) & {
+  locale: Locale;
+  alternates?: AlternateLink[];
+};
 
-const { id, title, description, date, updatedDate, tags, author, ...rest } =
-  Astro.props;
-const pdfHref = id ? `/article/${id}.pdf` : undefined;
-// console.log("post id", Astro.props);
+const { id, title, description, date, updatedDate, tags, locale, i18nKey, alternates, ...rest } = Astro.props;
+const m = t(locale);
+const articlePath = id ? `/article/${i18nKey}/` : "/";
+const pdfHref = id ? withLocale(locale, `/article/${i18nKey}.pdf`) : undefined;
+const switchPath = id ? `/article/${i18nKey}/` : "/";
+const pageAlternates = alternates ?? (id ? localizedAlternates(articlePath) : localizedAlternates("/"));
+const commentSlug = i18nKey ?? id;
 ---
 
-<RootLayout title={title} description={description}>
+<RootLayout title={title} description={description} locale={locale} alternates={pageAlternates} switchPath={switchPath}>
   <div class="flex flex-col items-stretch gap-8">
     <Card>
       <article id={id || ""}>
@@ -37,26 +47,35 @@ const pdfHref = id ? `/article/${id}.pdf` : undefined;
                   updatedDate && (
                     <>
                       <span class="last-updated-on">
-                        , Last updated on{" "}
+                        , {m.article.lastUpdated}{" "}
                         <FormattedDate date={updatedDate || date} />
                       </span>
                     </>
                   )
                 }
               </div>
-              {
-                pdfHref && (
-                  <a
-                    href={pdfHref}
-                    class="inline-flex items-center gap-1.5 self-center rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-medium leading-none text-[var(--color-gray)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    <Icon name="mdi:file-pdf-box" class="h-4 w-4" aria-hidden="true" />
-                    <span>Download PDF</span>
-                  </a>
-                )
-              }
+              <div class="inline-flex items-center gap-2">
+                <a
+                  href={withLocale(otherLocale(locale), switchPath)}
+                  class="inline-flex items-center gap-1.5 self-center rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-medium leading-none text-[var(--color-gray)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                >
+                  <Icon name="mdi:translate" class="h-4 w-4" aria-hidden="true" />
+                  <span>{m.article.switchLanguage}</span>
+                </a>
+                {
+                  pdfHref && (
+                    <a
+                      href={pdfHref}
+                      class="inline-flex items-center gap-1.5 self-center rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-medium leading-none text-[var(--color-gray)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <Icon name="mdi:file-pdf-box" class="h-4 w-4" aria-hidden="true" />
+                      <span>{m.article.downloadPdf}</span>
+                    </a>
+                  )
+                }
+              </div>
             </div>
             <h1>{title}</h1>
             <hr />
@@ -67,7 +86,7 @@ const pdfHref = id ? `/article/${id}.pdf` : undefined;
       </article>
     </Card>
     <Card>
-      <Comments server:defer postSlug={id} class="mt-2" />
+      <Comments server:defer postSlug={commentSlug} class="mt-2" />
     </Card>
   </div>
   <BackToTop />

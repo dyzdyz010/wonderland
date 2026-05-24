@@ -1,0 +1,22 @@
+---
+import { render, getCollection } from "astro:content";
+import BlogPost from "../../../layouts/BlogPost.astro";
+import { localizedEntrySlug } from "../../../i18n/content";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { locale: post.data.lang, slug: localizedEntrySlug(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BlogPost {...{ id: post.id, locale: post.data.lang }} {...post.data}>
+  <Content />
+</BlogPost>

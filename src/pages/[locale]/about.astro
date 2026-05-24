@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from "astro:content";
+import RootLayout from "../../layouts/RootLayout.astro";
+import { assertLocale } from "../../i18n/config";
+import { findLocalizedPage } from "../../i18n/content";
+import { localizedAlternates } from "../../i18n/seo";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [{ params: { locale: "zh" } }, { params: { locale: "en" } }];
+}
+
+const locale = assertLocale(Astro.params.locale);
+const page = findLocalizedPage(await getCollection("page"), locale, "about");
+if (!page) throw new Error(`[i18n] Missing about page for ${locale}`);
+const { Content } = await render(page);
+---
+
+<RootLayout title={page.data.title} description={page.data.description} locale={locale} alternates={localizedAlternates("/about")} switchPath="/about">
+  <Content />
+</RootLayout>

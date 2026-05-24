@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import RootLayout from "../../../layouts/RootLayout.astro";
+import Card from "../../../components/Card.astro";
+import FormattedDate from "../../../components/FormattedDate.astro";
+import { Icon } from "astro-icon/components";
+import { buildArchiveSummaries } from "../../../utils/archives";
+import { assertLocale, withLocale } from "../../../i18n/config";
+import { t } from "../../../i18n/messages";
+import { localizedAlternates } from "../../../i18n/seo";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [{ params: { locale: "zh" } }, { params: { locale: "en" } }];
+}
+
+const locale = assertLocale(Astro.params.locale);
+const m = t(locale);
+const archives = buildArchiveSummaries(await getCollection("blog"), locale);
+---
+
+<RootLayout title={m.pages.archiveTitle} description={m.pages.archiveDescription} locale={locale} alternates={localizedAlternates("/archive")} switchPath="/archive">
+  <h1>{m.pages.archiveTitle}</h1>
+  <p class="text-[var(--color-gray)] mb-8">{m.pages.archiveIntro}</p>
+  <div class="flex flex-col items-stretch gap-4">
+    {
+      archives.map((archive) => (
+        <Card>
+          <a
+            href={withLocale(locale, `/archive/${archive.year}.pdf`)}
+            class="group flex items-center justify-between gap-4 py-2"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="flex items-center gap-4 min-w-0">
+              <Icon
+                name="mdi:file-pdf-box"
+                class="w-8 h-8 shrink-0 text-[var(--color-accent)] group-hover:text-[var(--color-accent-hover)] transition-colors"
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <div class="font-semibold text-[var(--color-default)] group-hover:text-[var(--color-accent)] transition-colors truncate">
+                  {archive.title}
+                </div>
+                <div class="text-sm text-[var(--color-gray)] truncate mt-0.5">
+                  {archive.description}
+                  <span class="ml-2">({m.pages.archiveCount(archive.count)})</span>
+                </div>
+              </div>
+            </div>
+            <div class="shrink-0 text-sm text-[var(--color-gray)] font-mono">
+              <FormattedDate date={archive.date} />
+            </div>
+          </a>
+        </Card>
+      ))
+    }
+  </div>
+</RootLayout>
