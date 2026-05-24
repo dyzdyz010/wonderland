@@ -191,8 +191,9 @@
     entry
   } else {
     // Keep the native PDF footnote layout, but render the entry marker on
-    // the same baseline/size as the following footnote text.
-    show super: marker => marker.body
+    // the same baseline/size as the following footnote text, with enough
+    // breathing room before the note content.
+    show super: marker => [#marker.body#h(0.25em)]
     entry
   }
 
