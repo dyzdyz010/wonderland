@@ -171,21 +171,25 @@ async function translate(source, to, apiKey) {
     outputShape: { title: "translated title", desc: "translated description as Typst content without surrounding brackets", body: "translated Typst body only, no metadata imports" },
   });
 
+  const requestBody = {
+    model,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: system },
+      { role: "user", content: user },
+    ],
+  };
+  if (!model.startsWith("gpt-5")) {
+    requestBody.temperature = 0.2;
+  }
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
-      model,
-      temperature: 0.2,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-    }),
+    body: JSON.stringify(requestBody),
   });
 
   if (!response.ok) {
