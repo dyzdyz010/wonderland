@@ -132,7 +132,7 @@ bun run i18n:generate   # writes missing/stale machine translations
 bun run i18n:complete   # generate, then enforce strict i18n completeness
 ```
 
-The generation script writes committed `.typ` source files with `translationStatus: "machine"` and `translationSourceHash`, and it refuses to overwrite `translationStatus: "reviewed"` files unless forced. Normal `validate` still allows missing counterparts as warnings so structural work is not blocked by credentials; run `i18n:complete` when preparing a fully bilingual release.
+The generation script writes committed `.typ` source files with `translationStatus: "machine"` and `translationSourceHash`, and it refuses to overwrite `translationStatus: "reviewed"` files unless forced. Human-authored source files may omit `translationStatus`; Astro content data, the i18n checker, and the translation script default missing status to `source`, so new articles remain translatable even if the field is forgotten. Normal `validate` still allows missing counterparts as warnings so structural work is not blocked by credentials; run `i18n:complete` when preparing a fully bilingual release.
 
 ## Typst template model
 

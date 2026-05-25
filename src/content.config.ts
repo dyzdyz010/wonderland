@@ -1,6 +1,8 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+import { DEFAULT_TRANSLATION_STATUS } from "./i18n/translation";
+
 const localizedContentSchema = z.object({
   title: z.string(),
   author: z.string().optional(),
@@ -12,7 +14,7 @@ const localizedContentSchema = z.object({
   lang: z.enum(["zh", "en"]),
   i18nKey: z.string(),
   sourceLang: z.enum(["zh", "en"]).optional(),
-  translationStatus: z.enum(["source", "machine", "reviewed"]).optional(),
+  translationStatus: z.enum(["source", "machine", "reviewed"]).default(DEFAULT_TRANSLATION_STATUS),
   translationSourceHash: z.string().optional(),
 });
 

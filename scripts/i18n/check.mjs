@@ -8,6 +8,7 @@ const root = process.cwd();
 const articleRoot = resolve(root, "content/article");
 const pageRoot = resolve(root, "content/page");
 const locales = ["zh", "en"];
+const defaultTranslationStatus = "source";
 const args = new Set(process.argv.slice(2));
 const allowMissing = args.has("--allow-missing") && !args.has("--strict");
 const errors = [];
@@ -72,7 +73,7 @@ function parseContentFile(path, rootDir, kind) {
     lang: parseStringField(metadata, "lang"),
     i18nKey: parseStringField(metadata, "i18nKey"),
     sourceLang: parseStringField(metadata, "sourceLang"),
-    translationStatus: parseStringField(metadata, "translationStatus"),
+    translationStatus: parseStringField(metadata, "translationStatus") ?? defaultTranslationStatus,
     translationSourceHash: parseStringField(metadata, "translationSourceHash"),
     date: parseStringField(metadata, "date"),
     tags: parseTags(metadata),
@@ -94,9 +95,6 @@ function addChecks(items) {
       errors.push(`${item.rel}: missing i18nKey metadata`);
     } else if (item.i18nKey !== item.pathKey) {
       errors.push(`${item.rel}: i18nKey (${item.i18nKey}) must match path key (${item.pathKey})`);
-    }
-    if (!item.translationStatus) {
-      errors.push(`${item.rel}: missing translationStatus metadata`);
     }
     if (item.translationStatus === "source") {
       sources.set(`${item.kind}:${item.i18nKey}`, item);

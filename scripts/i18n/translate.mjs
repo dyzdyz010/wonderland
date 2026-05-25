@@ -9,6 +9,7 @@ loadDotEnv(resolve(root, ".env"));
 const articleRoot = resolve(root, "content/article");
 const pageRoot = resolve(root, "content/page");
 const locales = ["zh", "en"];
+const defaultTranslationStatus = "source";
 const model = process.env.OPENAI_TRANSLATION_MODEL || "gpt-5";
 const promptVersion = "wonderland-i18n-v1";
 
@@ -135,7 +136,7 @@ function parseFile(path, rootDir, kind) {
     tagsBlock: parseTagBlock(metadata),
     i18nKey: parseStringField(metadata, "i18nKey") ?? pathKey,
     sourceLang: parseStringField(metadata, "sourceLang") ?? lang,
-    translationStatus: parseStringField(metadata, "translationStatus") ?? "source",
+    translationStatus: parseStringField(metadata, "translationStatus") ?? defaultTranslationStatus,
   };
 }
 
