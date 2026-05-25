@@ -71,7 +71,7 @@ The checker verifies that article metadata is present and article tags are decla
 
 Yearly archive pages and PDFs are derived from article metadata during build. There is no hand-maintained `content/archive/YYYY.typ` article list: `/archive/` groups `getCollection("blog")` by year, and `/archive/YYYY.pdf` renders those same derived groups through `templates/archive.typ`.
 
-Single-article PDFs use the same build-time boundary: `/article/<slug>.pdf` is prerendered from `content/article/**/*.typ` through `templates/article-pdf.typ`. The template includes the article's author, source URL, publication dates, tags, and copyright notice on the cover page and page footer.
+Single-article PDFs use the same build-time boundary: `/article/<slug>.pdf` is generated from `content/article/**/*.typ` through `templates/article-pdf.typ`. PDF compilation is intentionally outside the Cloudflare Pages build. Run `bun run pdf:prepare` locally (or in a separate CI job with enough memory) to compile and publish a versioned PDF artifact to the `pdf-artifacts` GitHub Release; the normal site build downloads the matching artifact and expands the PDFs into `dist/` so the public URLs remain stable.
 
 ## Tag model
 
@@ -151,6 +151,18 @@ Important files:
 - `templates/code/*` — code block theme integration
 
 Third-party rendering dependencies such as shiroa should be version-aligned across templates. Mixing shiroa versions increases upgrade risk.
+
+## PDF artifact pipeline
+
+PDF compilation is intentionally not part of Cloudflare Pages' live Astro prerender step. The site still links to stable `.pdf` URLs, but those files are restored from a versioned artifact during `bun run build`.
+
+- `bun run pdf:version` prints the PDF input hash. The hash is based on article Typst sources, PDF templates, PDF scripts, and package lock/config inputs.
+- `bun run pdf:generate` compiles all article and archive PDFs locally into `.pdf-artifacts/<version>/` and packs `.pdf-artifacts/wonderland-pdf-<version>.tar.gz`.
+- `bun run pdf:publish` uploads that archive and manifest to the GitHub Release tag `pdf-artifacts`.
+- `bun run pdf:prepare` runs generation and publishing together.
+- `bun run build` runs `astro build` and then `scripts/pdf/fetch.mjs`, which downloads the matching artifact and expands it into `dist/`.
+
+If Cloudflare fails with a missing PDF artifact, run `bun run pdf:prepare` on a machine with Git LFS fonts pulled, then redeploy the same commit. Do not reintroduce Astro `.pdf.ts` routes for the full corpus; compiling all PDFs inside Cloudflare build can exceed platform time or memory limits.
 
 ## Comments model
 

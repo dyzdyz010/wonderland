@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/pdf/fetch.mjs",
+    "build:site": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "content:check": "node scripts/check-content.mjs",
@@ -14,6 +15,11 @@
     "i18n:translate": "node scripts/i18n/translate.mjs",
     "i18n:generate": "node scripts/i18n/translate.mjs --all --write",
     "i18n:complete": "bun run i18n:generate && bun run i18n:check:strict",
+    "pdf:version": "node scripts/pdf/version.mjs",
+    "pdf:generate": "node scripts/pdf/generate.mjs --pack",
+    "pdf:publish": "node scripts/pdf/publish.mjs",
+    "pdf:fetch": "node scripts/pdf/fetch.mjs",
+    "pdf:prepare": "bun run pdf:generate && bun run pdf:publish",
     "validate": "bun run content:check && bun run tags:check && bun run i18n:check",
     "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
   },
