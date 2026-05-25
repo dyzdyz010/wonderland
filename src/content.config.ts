@@ -14,6 +14,7 @@ const localizedContentSchema = z.object({
   lang: z.enum(["zh", "en"]),
   i18nKey: z.string(),
   sourceLang: z.enum(["zh", "en"]).optional(),
+  aiAuthored: z.boolean().default(false),
   translationStatus: z.enum(["source", "machine", "reviewed"]).default(DEFAULT_TRANSLATION_STATUS),
   translationSourceHash: z.string().optional(),
 });

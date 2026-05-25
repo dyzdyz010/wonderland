@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-5
 // source: content/article/en/meta/2026/bilingual-blog.typ
-// source_sha256: sha256:ec490396c942342fa5a9d6158a8d2a4ffa4bffeed8418709b4dd521051319075
+// source_sha256: sha256:4fe7f07d4c2d653f870b0224dcfc27099508e4ee4eec1097f3a4f997c9aa25f4
 
 #show: main.with(
   title: "博客现在会说两种语言",
@@ -21,7 +21,8 @@
   lang: "zh",
   i18nKey: "meta/2026/bilingual-blog",
   sourceLang: "en",
-  translationSourceHash: "sha256:ec490396c942342fa5a9d6158a8d2a4ffa4bffeed8418709b4dd521051319075",
+  aiAuthored: true,
+  translationSourceHash: "sha256:4fe7f07d4c2d653f870b0224dcfc27099508e4ee4eec1097f3a4f997c9aa25f4",
   translationStatus: "machine",
 )
 

@@ -13,6 +13,7 @@
   lang: "en",
   i18nKey: "meta/2026/bilingual-blog",
   sourceLang: "en",
+  aiAuthored: true,
 )
 
 Recently I finally added bilingual support to the blog.

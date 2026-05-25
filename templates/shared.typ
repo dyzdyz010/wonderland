@@ -137,6 +137,7 @@
   sourceLang: none,
   translationStatus: none,
   translationSourceHash: none,
+  aiAuthored: false,
   show-outline: true,
   body,
 ) = {
@@ -169,6 +170,7 @@
   metadata-value = if sourceLang != none { metadata-value + (sourceLang: sourceLang,) } else { metadata-value }
   metadata-value = if translationStatus != none { metadata-value + (translationStatus: translationStatus,) } else { metadata-value }
   metadata-value = if translationSourceHash != none { metadata-value + (translationSourceHash: translationSourceHash,) } else { metadata-value }
+  metadata-value = if aiAuthored { metadata-value + (aiAuthored: true,) } else { metadata-value }
 
   [#metadata(metadata-value) <frontmatter>]
 

@@ -50,6 +50,11 @@ function parseStringField(raw, name) {
   return new RegExp(`${name}\\s*:\\s*"([^"]+)"`).exec(raw)?.[1];
 }
 
+function parseBooleanField(raw, name) {
+  const value = new RegExp(`${name}\\s*:\\s*(true|false)`).exec(raw)?.[1];
+  return value === undefined ? undefined : value === "true";
+}
+
 function parseTags(raw) {
   const tagBlock = /tags\s*:\s*\(([^]*?)\),/m.exec(raw)?.[1] ?? "";
   return [...tagBlock.matchAll(/blog-tags\.([A-Za-z0-9-]+)/g)].map((match) => match[1]).sort();
@@ -73,6 +78,7 @@ function parseContentFile(path, rootDir, kind) {
     lang: parseStringField(metadata, "lang"),
     i18nKey: parseStringField(metadata, "i18nKey"),
     sourceLang: parseStringField(metadata, "sourceLang"),
+    aiAuthored: parseBooleanField(metadata, "aiAuthored") ?? false,
     translationStatus: parseStringField(metadata, "translationStatus") ?? defaultTranslationStatus,
     translationSourceHash: parseStringField(metadata, "translationSourceHash"),
     date: parseStringField(metadata, "date"),
@@ -129,6 +135,9 @@ function addChecks(items) {
       }
       if (item.tags.join(",") !== first.tags.join(",")) {
         errors.push(`${item.rel}: tags differ from ${first.rel}`);
+      }
+      if (item.aiAuthored !== first.aiAuthored) {
+        errors.push(`${item.rel}: aiAuthored (${item.aiAuthored}) differs from ${first.rel} (${first.aiAuthored})`);
       }
     }
   }

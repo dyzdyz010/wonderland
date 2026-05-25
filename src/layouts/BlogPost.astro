@@ -16,7 +16,7 @@ import type { Locale } from "../i18n/config";
 import { otherLocale, withLocale } from "../i18n/config";
 import { t } from "../i18n/messages";
 import { localizedAlternates, type AlternateLink } from "../i18n/seo";
-import { translationNoticeForStatus } from "../i18n/translation";
+import { articleNoticeBadges } from "../i18n/translation";
 
 interface IdExt {
   id: string;
@@ -27,14 +27,14 @@ type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false }) & {
   alternates?: AlternateLink[];
 };
 
-const { id, title, description, date, updatedDate, tags, locale, i18nKey, alternates, translationStatus, ...rest } = Astro.props;
+const { id, title, description, date, updatedDate, tags, locale, i18nKey, alternates, translationStatus, aiAuthored, ...rest } = Astro.props;
 const m = t(locale);
 const articlePath = id ? `/article/${i18nKey}/` : "/";
 const pdfHref = id ? withLocale(locale, `/article/${i18nKey}.pdf`) : undefined;
 const switchPath = id ? `/article/${i18nKey}/` : "/";
 const pageAlternates = alternates ?? (id ? localizedAlternates(articlePath) : localizedAlternates("/"));
 const commentSlug = i18nKey ?? id;
-const translationNotice = translationNoticeForStatus(translationStatus, locale);
+const articleNotices = articleNoticeBadges({ translationStatus, aiAuthored }, locale);
 ---
 
 <RootLayout title={title} description={description} locale={locale} alternates={pageAlternates} switchPath={switchPath}>
@@ -82,10 +82,14 @@ const translationNotice = translationNoticeForStatus(translationStatus, locale);
             </div>
             <h1>{title}</h1>
             {
-              translationNotice && (
-                <div class="mt-3 mb-6 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] px-3 py-1 text-xs font-medium text-[var(--color-gray)]" aria-label={translationNotice}>
-                  <Icon name="mdi:translate" class="h-4 w-4" aria-hidden="true" />
-                  <span>{translationNotice}</span>
+              articleNotices.length > 0 && (
+                <div class="mt-3 mb-6 flex flex-wrap items-center gap-2">
+                  {articleNotices.map((notice) => (
+                    <div class="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] px-3 py-1 text-xs font-medium text-[var(--color-gray)]" aria-label={notice.label}>
+                      <Icon name={notice.icon} class="h-4 w-4" aria-hidden="true" />
+                      <span>{notice.label}</span>
+                    </div>
+                  ))}
                 </div>
               )
             }

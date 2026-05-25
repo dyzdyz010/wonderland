@@ -1,0 +1,43 @@
+# AGENTS.md
+
+Instructions for AI agents working on this repository.
+
+## Content metadata
+
+Articles are Typst files under `content/article/<locale>/...` and emit frontmatter through `#show: main.with(...)`.
+
+- `translationStatus` describes translation provenance only:
+  - omit it or use `"source"` for the original source article;
+  - use `"machine"` for AI-generated translations;
+  - use `"reviewed"` for translations that have been manually checked and should not be overwritten casually.
+- `aiAuthored: true` is separate from translation status. Set it only when the article itself was substantially written/drafted by AI.
+- Do not set `aiAuthored: true` merely because a human-written article was translated by AI. Use `translationStatus: "machine"` for that case.
+- If an article is both AI-written and AI-translated, keep both signals: `aiAuthored: true` and `translationStatus: "machine"`.
+- `aiAuthored` defaults to `false`; omit it for normal human-authored posts.
+- Paired locale files with the same `i18nKey` should agree on `aiAuthored`. The translation generator carries `aiAuthored: true` into generated counterparts.
+
+Example:
+
+```typst
+#show: main.with(
+  title: "Example",
+  desc: [Example post.],
+  date: "2026-05-25",
+  tags: (blog-tags.blog,),
+  lang: "en",
+  i18nKey: "meta/2026/example",
+  sourceLang: "en",
+  aiAuthored: true,
+)
+```
+
+## Validation
+
+After changing content metadata, rendering, or i18n behavior, run:
+
+```bash
+bun run validate
+bun run i18n:check:strict
+bun test tests/translation-notice.test.ts
+bun run build
+```

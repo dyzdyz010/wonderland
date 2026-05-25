@@ -134,6 +134,8 @@ bun run i18n:complete   # generate, then enforce strict i18n completeness
 
 The generation script writes committed `.typ` source files with `translationStatus: "machine"` and `translationSourceHash`, and it refuses to overwrite `translationStatus: "reviewed"` files unless forced. Human-authored source files may omit `translationStatus`; Astro content data, the i18n checker, and the translation script default missing status to `source`, so new articles remain translatable even if the field is forgotten. Normal `validate` still allows missing counterparts as warnings so structural work is not blocked by credentials; run `i18n:complete` when preparing a fully bilingual release.
 
+AI writing disclosure is a separate content metadata field from translation status. Use `aiAuthored: true` in `#show: main.with(...)` only when the article itself was substantially drafted by AI. Do not use it merely because an article was translated by AI; machine translations are already represented by `translationStatus: "machine"`. If both are true, the article page shows both notices on the same badge row (`Translated By AI` / `由 AI 翻译` and `Written By AI` / `由 AI 撰写`). The field defaults to `false`; the i18n checker requires paired locale files for the same `i18nKey` to agree on `aiAuthored`, and the translation generator carries `aiAuthored: true` into generated counterparts.
+
 ## Typst template model
 
 Typst templates are part of the rendering pipeline, not just article snippets.
