@@ -1,0 +1,26 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import RenderedContent from "./RenderedContent.astro";
+
+type ContentEntry = CollectionEntry<"blog"> | CollectionEntry<"page">;
+
+type ContentFeatureVariant = "article" | "embed" | "excerpt";
+
+interface ContentFeatureOptions {
+  toc?: boolean;
+  headingLinks?: boolean;
+  footnotes?: boolean;
+}
+
+interface Props {
+  entry: ContentEntry;
+  variant?: ContentFeatureVariant;
+  features?: ContentFeatureOptions;
+  className?: string;
+}
+
+const { entry, variant = "embed", features, className } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<RenderedContent Content={Content} variant={variant} features={features} className={className} />

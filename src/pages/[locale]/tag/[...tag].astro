@@ -10,7 +10,7 @@ import {
   postHasTag,
 } from "../../../utils/tags";
 import { assertLocale } from "../../../i18n/config";
-import { localizedPosts, sortPostsNewestFirst } from "../../../i18n/content";
+import { postsForLocale, sortPostsNewestFirst } from "../../../i18n/content";
 import { t } from "../../../i18n/messages";
 import { localizedAlternates } from "../../../i18n/seo";
 
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 
   return ["zh", "en"].flatMap((localeValue) => {
     const locale = assertLocale(localeValue);
-    const tags = buildTagSummaries(localizedPosts(posts, locale));
+    const tags = buildTagSummaries(postsForLocale(posts, locale));
 
     return [
       { params: { locale, tag: undefined } },
@@ -32,7 +32,7 @@ export async function getStaticPaths() {
 
 const locale = assertLocale(Astro.params.locale);
 const m = t(locale);
-const allPosts = sortPostsNewestFirst(localizedPosts(await getCollection("blog"), locale));
+const allPosts = sortPostsNewestFirst(postsForLocale(await getCollection("blog"), locale));
 
 const rawParam = Astro.params.tag;
 const activeTagId = Array.isArray(rawParam)

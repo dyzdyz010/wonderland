@@ -4,7 +4,7 @@ import PostListByYear from "../../../components/post/PostListByYear.astro";
 import RootLayout from "../../../layouts/RootLayout.astro";
 import type { Page } from "astro";
 import { assertLocale, type Locale } from "../../../i18n/config";
-import { localizedPosts, sortPostsNewestFirst } from "../../../i18n/content";
+import { postsForLocale, sortPostsNewestFirst } from "../../../i18n/content";
 import { t } from "../../../i18n/messages";
 import { localizedAlternates } from "../../../i18n/seo";
 
@@ -16,7 +16,7 @@ const m = t(locale);
 export async function getStaticPaths({ paginate }: { paginate: any }) {
   const posts = await getCollection("blog");
   return ["zh", "en"].flatMap((locale) =>
-    paginate(sortPostsNewestFirst(localizedPosts(posts, assertLocale(locale))), {
+    paginate(sortPostsNewestFirst(postsForLocale(posts, assertLocale(locale))), {
       pageSize: 100,
       params: { locale },
       props: { locale },

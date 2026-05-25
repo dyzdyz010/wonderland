@@ -1,0 +1,57 @@
+---
+import "../../styles/content-features.css";
+
+type ContentFeatureVariant = "article" | "embed" | "excerpt";
+
+interface ContentFeatureOptions {
+  toc?: boolean;
+  headingLinks?: boolean;
+  footnotes?: boolean;
+}
+
+interface Props {
+  Content?: any;
+  variant?: ContentFeatureVariant;
+  features?: ContentFeatureOptions;
+  className?: string;
+}
+
+const {
+  Content,
+  variant = "article",
+  features: featureOverrides = {},
+  className = "",
+} = Astro.props;
+
+const defaultFeatures: Record<ContentFeatureVariant, Required<ContentFeatureOptions>> = {
+  article: {
+    toc: true,
+    headingLinks: true,
+    footnotes: true,
+  },
+  embed: {
+    toc: false,
+    headingLinks: false,
+    footnotes: false,
+  },
+  excerpt: {
+    toc: false,
+    headingLinks: false,
+    footnotes: false,
+  },
+};
+
+const features = {
+  ...defaultFeatures[variant],
+  ...featureOverrides,
+};
+---
+
+<div
+  class:list={["rendered-content", `rendered-content--${variant}`, className]}
+  data-toc={features.toc ? "on" : "off"}
+  data-heading-links={features.headingLinks ? "on" : "off"}
+  data-footnotes={features.footnotes ? "on" : "off"}
+>
+  {Content ? <Content /> : <slot />}
+</div>

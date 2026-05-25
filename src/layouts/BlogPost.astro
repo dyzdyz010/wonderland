@@ -10,11 +10,13 @@ import Tags from "../components/Tags.astro";
 import BackToTop from "../components/BackToTop.astro";
 import Comments from "../components/comment/Comments.astro";
 import Card from "../components/Card.astro";
+import RenderedContent from "../components/content/RenderedContent.astro";
 import { Icon } from "astro-icon/components";
 import type { Locale } from "../i18n/config";
 import { otherLocale, withLocale } from "../i18n/config";
 import { t } from "../i18n/messages";
 import { localizedAlternates, type AlternateLink } from "../i18n/seo";
+import { translationNoticeForStatus } from "../i18n/translation";
 
 interface IdExt {
   id: string;
@@ -25,13 +27,14 @@ type Props = CollectionEntry<"blog">["data"] & (IdExt | { id: false }) & {
   alternates?: AlternateLink[];
 };
 
-const { id, title, description, date, updatedDate, tags, locale, i18nKey, alternates, ...rest } = Astro.props;
+const { id, title, description, date, updatedDate, tags, locale, i18nKey, alternates, translationStatus, ...rest } = Astro.props;
 const m = t(locale);
 const articlePath = id ? `/article/${i18nKey}/` : "/";
 const pdfHref = id ? withLocale(locale, `/article/${i18nKey}.pdf`) : undefined;
 const switchPath = id ? `/article/${i18nKey}/` : "/";
 const pageAlternates = alternates ?? (id ? localizedAlternates(articlePath) : localizedAlternates("/"));
 const commentSlug = i18nKey ?? id;
+const translationNotice = translationNoticeForStatus(translationStatus, locale);
 ---
 
 <RootLayout title={title} description={description} locale={locale} alternates={pageAlternates} switchPath={switchPath}>
@@ -78,9 +81,19 @@ const commentSlug = i18nKey ?? id;
               </div>
             </div>
             <h1>{title}</h1>
+            {
+              translationNotice && (
+                <div class="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] px-3 py-1 text-xs font-medium text-[var(--color-gray)]" aria-label={translationNotice}>
+                  <Icon name="mdi:translate" class="h-4 w-4" aria-hidden="true" />
+                  <span>{translationNotice}</span>
+                </div>
+              )
+            }
             <hr />
           </section>
-          <slot />
+          <RenderedContent variant="article">
+            <slot />
+          </RenderedContent>
           <Tags tags={tags ?? []} class="mt-10" />
         </div>
       </article>

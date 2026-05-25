@@ -12,6 +12,8 @@
     "i18n:check": "node scripts/i18n/check.mjs --allow-missing",
     "i18n:check:strict": "node scripts/i18n/check.mjs --strict",
     "i18n:translate": "node scripts/i18n/translate.mjs",
+    "i18n:generate": "node scripts/i18n/translate.mjs --all --write",
+    "i18n:complete": "bun run i18n:generate && bun run i18n:check:strict",
     "validate": "bun run content:check && bun run tags:check && bun run i18n:check",
     "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
   },

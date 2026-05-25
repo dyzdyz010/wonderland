@@ -6,6 +6,7 @@ main = "dist/_worker.js/index.js"
 
 [assets]
 directory = "./dist"
+binding = "ASSETS"
 
 # [[d1_databases]]
 # binding = "DB"                  # 代码里用 env.DB 访问

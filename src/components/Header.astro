@@ -24,7 +24,7 @@ const nextLocale = otherLocale(locale);
       >
     </h2>
     <div class="internal-links">
-      <HeaderLink href={withLocale(locale, "/")}>{m.nav.home}</HeaderLink>
+      <HeaderLink href={withLocale(locale, "/")} activeMatch="exact">{m.nav.home}</HeaderLink>
       <HeaderLink href={withLocale(locale, "/article")}>{m.nav.posts}</HeaderLink>
       <HeaderLink href={withLocale(locale, "/archive")}>{m.nav.archive}</HeaderLink>
       <HeaderLink href={withLocale(locale, "/tag")}>{m.nav.tags}</HeaderLink>

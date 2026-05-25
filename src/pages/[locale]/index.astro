@@ -1,11 +1,8 @@
 ---
-import { getCollection, render } from "astro:content";
 import RootLayout from "../../layouts/RootLayout.astro";
+import HomePage from "../../components/HomePage.astro";
 import { SITE_TITLE } from "../../consts";
-import Card from "../../components/Card.astro";
-import PostList from "../../components/post/PostList.astro";
-import { assertLocale, type Locale } from "../../i18n/config";
-import { findLocalizedPage, localizedPosts, sortPostsNewestFirst } from "../../i18n/content";
+import { assertLocale } from "../../i18n/config";
 import { t } from "../../i18n/messages";
 import { localizedAlternates } from "../../i18n/seo";
 
@@ -17,23 +14,8 @@ export function getStaticPaths() {
 
 const locale = assertLocale(Astro.params.locale);
 const m = t(locale);
-const pages = await getCollection("page");
-const about = findLocalizedPage(pages, locale, "about");
-const { Content } = about ? await render(about) : { Content: undefined };
-const posts = sortPostsNewestFirst(localizedPosts(await getCollection("blog"), locale)).slice(0, 10);
 ---
 
 <RootLayout title={SITE_TITLE} description={m.siteDescription} locale={locale} alternates={localizedAlternates("/")} switchPath="/">
-  <section aria-label="Prelude" class="mb-10">
-    <h1 class="italic font-bold">{SITE_TITLE}</h1>
-    {Content && (
-      <Card>
-        <Content />
-      </Card>
-    )}
-  </section>
-  <section class="flex flex-col gap-4">
-    <h2>{m.pages.postsTitle}</h2>
-    <PostList posts={posts} />
-  </section>
+  <HomePage locale={locale} />
 </RootLayout>

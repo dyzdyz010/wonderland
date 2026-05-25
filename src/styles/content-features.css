@@ -1,0 +1,35 @@
+/*
+ * Rendered Typst content feature gates.
+ *
+ * Full article pages keep all article affordances enabled. Embedded surfaces
+ * (home/about cards, previews, related-content blocks) can reuse the same
+ * rendered content while disabling article-only chrome such as generated TOCs,
+ * heading hash links, and sidenote/footnote systems.
+ */
+
+.rendered-content[data-toc="off"] .toc,
+.rendered-content[data-toc="off"] .toc + hr {
+  display: none !important;
+}
+
+.rendered-content[data-heading-links="off"] .shiroa-heading-hash,
+.rendered-content[data-heading-links="off"] .typst-content-link.shiroa-heading-hash {
+  display: none !important;
+}
+
+.rendered-content[data-footnotes="off"] .footnote-ref,
+.rendered-content[data-footnotes="off"] .sidenote,
+.rendered-content[data-footnotes="off"] .footnotes-divider,
+.rendered-content[data-footnotes="off"] .footnotes {
+  display: none !important;
+}
+
+.rendered-content--embed > :first-child,
+.rendered-content--excerpt > :first-child {
+  margin-top: 0;
+}
+
+.rendered-content--embed > :last-child,
+.rendered-content--excerpt > :last-child {
+  margin-bottom: 0;
+}

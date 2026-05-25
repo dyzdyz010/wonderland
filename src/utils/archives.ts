@@ -1,7 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 import { t } from "../i18n/messages";
 import type { Locale } from "../i18n/config";
-import { localizedEntrySlug, sortPostsOldestFirst } from "../i18n/content";
+import { localizedEntrySlug, postsForLocale, sortPostsOldestFirst } from "../i18n/content";
 
 export type BlogEntry = CollectionEntry<"blog">;
 
@@ -34,8 +34,7 @@ export function buildArchiveSummaries(posts: BlogEntry[], locale: Locale): Archi
   const messages = t(locale);
   const postsByYear = new Map<string, BlogEntry[]>();
 
-  for (const post of posts) {
-    if (post.data.lang !== locale) continue;
+  for (const post of postsForLocale(posts, locale)) {
     const year = String(post.data.date.getFullYear());
     const group = postsByYear.get(year) ?? [];
     group.push(post);

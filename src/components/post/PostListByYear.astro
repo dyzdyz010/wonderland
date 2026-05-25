@@ -2,6 +2,8 @@
 import type { CollectionEntry } from "astro:content";
 import type { HTMLAttributes } from "astro/types";
 import Card from "../Card.astro";
+import { withLocale } from "../../i18n/config";
+import { localizedEntrySlug } from "../../i18n/content";
 
 type BlogEntry = CollectionEntry<"blog">;
 
@@ -46,7 +48,7 @@ const uniqueYears = [...new Set(years)];
             const date = `${month}-${day}`;
             return (
               <a
-                href={`/article/${post.id}`}
+                href={withLocale(post.data.lang, `/article/${localizedEntrySlug(post)}`)}
                 class="group flex items-center gap-3 py-3 min-h-10"
               >
                 <span class="text-secondary w-[44px] shrink-0 text-sm font-medium text-right font-mono">

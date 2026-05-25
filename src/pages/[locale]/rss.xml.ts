@@ -4,7 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import type { APIContext } from "astro";
 import { SITE_AUTHOR, SITE_TITLE } from "../../consts";
 import { assertLocale, withLocale } from "../../i18n/config";
-import { localizedEntrySlug, localizedPosts, sortPostsNewestFirst } from "../../i18n/content";
+import { localizedEntrySlug, postsForLocale, sortPostsNewestFirst } from "../../i18n/content";
 import { t } from "../../i18n/messages";
 
 type Kind = "blog";
@@ -23,7 +23,7 @@ export async function GET(context: APIContext) {
 
   const locale = assertLocale(context.params.locale);
   const m = t(locale);
-  const posts = sortPostsNewestFirst(localizedPosts(await getCollection("blog"), locale));
+  const posts = sortPostsNewestFirst(postsForLocale(await getCollection("blog"), locale));
 
   const items = posts.map(
     (item: Item): RSSFeedItem => ({
@@ -31,7 +31,7 @@ export async function GET(context: APIContext) {
       description: item.data.description,
       pubDate: item.data.date,
       categories: item.data.tags,
-      link: withLocale(locale, `/article/${localizedEntrySlug(item)}/`),
+      link: withLocale(item.data.lang, `/article/${localizedEntrySlug(item)}/`),
     }),
   );
 

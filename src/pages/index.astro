@@ -1,0 +1,17 @@
+---
+import RootLayout from "../layouts/RootLayout.astro";
+import HomePage from "../components/HomePage.astro";
+import { SITE_TITLE } from "../consts";
+import { DEFAULT_LOCALE } from "../i18n/config";
+import { t } from "../i18n/messages";
+import { localizedAlternates } from "../i18n/seo";
+
+export const prerender = true;
+
+const locale = DEFAULT_LOCALE;
+const m = t(locale);
+---
+
+<RootLayout title={SITE_TITLE} description={m.siteDescription} locale={locale} alternates={localizedAlternates("/")} switchPath="/">
+  <HomePage locale={locale} />
+</RootLayout>

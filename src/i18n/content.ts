@@ -16,6 +16,25 @@ export function localizedPosts(posts: BlogEntry[], locale: Locale): BlogEntry[] 
   return posts.filter((post) => post.data.lang === locale);
 }
 
+export function postsForLocale(posts: BlogEntry[], locale: Locale): BlogEntry[] {
+  const byKey = new Map<string, BlogEntry[]>();
+
+  for (const post of posts) {
+    const key = localizedEntrySlug(post);
+    const group = byKey.get(key) ?? [];
+    group.push(post);
+    byKey.set(key, group);
+  }
+
+  return Array.from(byKey.values()).map((group) => {
+    return (
+      group.find((post) => post.data.lang === locale) ??
+      group.find((post) => post.data.translationStatus === "source") ??
+      group[0]
+    );
+  });
+}
+
 export function localizedPages(pages: PageEntry[], locale: Locale): PageEntry[] {
   return pages.filter((page) => page.data.lang === locale);
 }
