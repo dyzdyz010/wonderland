@@ -6,6 +6,8 @@ export const messages = {
     nav: { home: "首页", posts: "文章", archive: "归档", tags: "标签", about: "关于" },
     pages: {
       postsTitle: "文章",
+      recentPostsTitle: "近期文章",
+      morePosts: "更多文章",
       postsDescription: "所有博客文章。",
       archiveTitle: "归档",
       archiveDescription: "文章归档 — 按年度整理的 PDF 合集",
@@ -26,6 +28,8 @@ export const messages = {
     nav: { home: "Home", posts: "Posts", archive: "Archive", tags: "Tags", about: "About" },
     pages: {
       postsTitle: "Posts",
+      recentPostsTitle: "Recent Posts",
+      morePosts: "More posts",
       postsDescription: "All blog posts.",
       archiveTitle: "Archive",
       archiveDescription: "Blog archives — yearly PDF collections",

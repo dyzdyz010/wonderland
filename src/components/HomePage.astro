@@ -4,7 +4,7 @@ import { SITE_TITLE } from "../consts";
 import Card from "./Card.astro";
 import PostList from "./post/PostList.astro";
 import ContentSurface from "./content/ContentSurface.astro";
-import { type Locale } from "../i18n/config";
+import { type Locale, withLocale } from "../i18n/config";
 import { findLocalizedPage, postsForLocale, sortPostsNewestFirst } from "../i18n/content";
 import { t } from "../i18n/messages";
 
@@ -28,6 +28,7 @@ const posts = sortPostsNewestFirst(postsForLocale(await getCollection("blog"), l
   )}
 </section>
 <section class="flex flex-col gap-4">
-  <h2>{m.pages.postsTitle}</h2>
+  <h2>{m.pages.recentPostsTitle}</h2>
   <PostList posts={posts} />
+  <a class="self-end text-sm text-[var(--color-gray)] hover:text-[var(--color-default-hover)]" href={withLocale(locale, "/article")}>{m.pages.morePosts}</a>
 </section>
