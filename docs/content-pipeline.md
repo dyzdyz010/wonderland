@@ -108,10 +108,23 @@ For now, plain Node scripts are preferable because they are:
 
 If the pipeline grows more complex later, the scripts can be refactored into shared library modules and exposed through both CLI commands and an Astro integration. That should come after the invariants stabilize, not before.
 
+## Runtime comments pipeline
+
+Comments are the only mutable runtime content pipeline. They are intentionally separated from article/PDF generation:
+
+```bash
+bun run db:migrate         # apply pending D1 migrations locally
+bun run db:migrate:remote  # apply pending D1 migrations to production D1
+bun run db:reset           # local destructive reset only, no seed
+bun run db:reset:seed      # local destructive reset plus seeds/comments.dev.sql
+```
+
+Comment migrations are forward-only and do not contain seed data. The reset script always uses `--local`; do not add a convenient remote reset command. Current comments use article `i18nKey` as the shared `thread_key` so `/zh/...` and `/en/...` translations share one discussion thread.
+
 ## Current decision
 
 - Keep `templates/enums.typ` as the single tag registry.
 - Derive yearly archive pages and PDFs from article metadata during build.
 - Keep validation logic in `scripts/` for now.
 - Treat check commands as candidates for a future aggregate `validate` command.
-- Do not proceed to the comments/D1 Phase 3 until requested.
+- Keep comments as a small Cloudflare-native D1 feature module; add moderation/admin/replies only as explicit future phases.

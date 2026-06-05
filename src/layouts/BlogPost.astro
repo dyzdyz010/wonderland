@@ -34,6 +34,7 @@ const pdfHref = id ? withLocale(locale, `/article/${i18nKey}.pdf`) : undefined;
 const switchPath = id ? `/article/${i18nKey}/` : "/";
 const pageAlternates = alternates ?? (id ? localizedAlternates(articlePath) : localizedAlternates("/"));
 const commentSlug = i18nKey ?? id;
+const commentReturnPath = id ? withLocale(locale, `/article/${i18nKey}/`) : "/";
 const articleNotices = articleNoticeBadges({ translationStatus, aiAuthored }, locale);
 ---
 
@@ -103,7 +104,7 @@ const articleNotices = articleNoticeBadges({ translationStatus, aiAuthored }, lo
       </article>
     </Card>
     <Card>
-      <Comments server:defer postSlug={commentSlug} class="mt-2" />
+      <Comments server:defer postSlug={commentSlug} returnPath={commentReturnPath} class="mt-2" />
     </Card>
   </div>
   <BackToTop />

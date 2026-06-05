@@ -2,7 +2,9 @@
 import CommentEdit from "./CommentEdit.astro";
 import CommentList from "./CommentList.astro";
 
-const { postSlug, class: className, ...props } = Astro.props;
+const { postSlug, returnPath, class: className, ...props } = Astro.props;
+const runtimeEnv = Astro.locals.runtime?.env ?? {};
+const turnstileSiteKey = typeof runtimeEnv.TURNSTILE_SITE_KEY === "string" ? runtimeEnv.TURNSTILE_SITE_KEY : "";
 
 export const prerender = false;
 ---
@@ -10,7 +12,7 @@ export const prerender = false;
 <div id="comments" class={`comments-container flex flex-col gap-4 ${className}`} {...props}>
   <h2>Comments</h2>
 
-  <CommentEdit postSlug={postSlug} />
+  <CommentEdit postSlug={postSlug} returnPath={returnPath} turnstileSiteKey={turnstileSiteKey} />
 
   <CommentList postSlug={postSlug} />
 </div>

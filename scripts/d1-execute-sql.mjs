@@ -80,7 +80,7 @@ console.log(`Executing ${sqlFile} on D1 database "${database}" (${mode})...`);
 // Passing SQL as an argv value avoids shell quoting issues and the --file path.
 const result = spawnSync(
   "wrangler",
-  ["d1", "execute", database, mode, "--command", sql],
+  ["d1", "execute", database, mode, `--command=${sql}`],
   {
     stdio: "inherit",
     shell: false,

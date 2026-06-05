@@ -171,18 +171,28 @@ Comments are the only intended mutable user-generated data.
 Current flow:
 
 ```text
-CommentEdit.astro -> /api/comments/[...postSlug].ts -> D1 comments table
-CommentList.astro <- D1 comments table
+BlogPost.astro passes article i18nKey as thread_key
+CommentEdit.astro -> /api/comments/[...postSlug].ts -> src/features/comments/* -> D1 comments table
+CommentList.astro <- src/features/comments/db.ts <- D1 comments table
 ```
+
+Comments are shared across translations by using the language-neutral article `i18nKey` as `thread_key`; locale-specific paths are only return URLs after form submission.
+
+Current product boundary:
+
+- v0 is flat comments, direct publish, basic validation, optional private email hash, honeypot, IP/user-agent hashing, and graceful D1 fallback.
+- `status` exists now and lists only `approved` comments, so future moderation can introduce `pending`, `spam`, and `deleted` without another data-model rethink.
+- `parent_id` remains a reserved column for future threaded replies; the current API rejects reply submissions until parent validation and tree rendering are implemented.
+- Turnstile server validation is enabled when `TURNSTILE_SECRET_KEY` is configured; the form renders the widget when `TURNSTILE_SITE_KEY` is configured.
 
 Migration/reset policy:
 
-- migrations should describe schema changes;
-- seeds should contain development sample data;
-- destructive resets are local-development operations;
-- remote destructive operations should not be exposed as convenient npm scripts.
-
-The current `migrations/0001_init.sql` is still a local reset script because it drops and recreates the comments table. Treat it as local-only until migrations and seeds are split.
+- migrations are forward-only and production-safe by default;
+- `migrations/0001_init.sql` creates the legacy-compatible base table and contains no destructive reset or seed data;
+- `migrations/0002_harden_comments.sql` adds `thread_key`, `status`, `email_hash`, `user_agent_hash`, `updated_at`, and indexes for existing D1 databases;
+- development seed data lives in `seeds/comments.dev.sql`;
+- destructive reset is local-only through `bun run db:reset` / `bun run db:reset:seed`;
+- remote schema changes should use `bun run db:migrate:remote`, not a reset script.
 
 ## Deployment model
 

@@ -21,7 +21,10 @@
     "pdf:fetch": "node scripts/pdf/fetch.mjs",
     "pdf:prepare": "bun run pdf:generate && bun run pdf:publish",
     "validate": "bun run content:check && bun run tags:check && bun run i18n:check",
-    "db:reset": "node scripts/d1-execute-sql.mjs wonderland --local ./migrations/0001_init.sql"
+    "db:reset": "node scripts/d1-reset-local.mjs",
+    "db:reset:seed": "node scripts/d1-reset-local.mjs --seed",
+    "db:migrate": "wrangler d1 migrations apply wonderland --local",
+    "db:migrate:remote": "wrangler d1 migrations apply wonderland --remote"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.6",

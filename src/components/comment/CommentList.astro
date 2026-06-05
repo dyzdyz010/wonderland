@@ -1,20 +1,28 @@
 ---
-import { drizzle } from "drizzle-orm/d1";
-import { eq, desc } from "drizzle-orm";
 import CommentItem from "./CommentItem.astro";
-import { commentsTable } from "../../tables/comment";
+import { listApprovedComments } from "../../features/comments/db";
 
 const { postSlug, class: className, ...props } = Astro.props;
 
-const db = drizzle(Astro.locals.runtime.env.DB);
+let comments = [];
+let unavailable = false;
 
-const comments = await db
-  .select()
-  .from(commentsTable)
-  .where(eq(commentsTable.post_slug, postSlug))
-  .orderBy(desc(commentsTable.created_at));
+try {
+  comments = await listApprovedComments(Astro.locals.runtime?.env ?? {}, postSlug);
+} catch (error) {
+  unavailable = true;
+  console.warn("Comments unavailable", error);
+}
 ---
 
-<div class="comments-list flex flex-col gap-4">
-  {comments.map((comment) => <CommentItem comment={comment} />)}
+<div class="comments-list flex flex-col gap-4" {...props}>
+  {
+    unavailable ? (
+      <p class="text-sm text-[var(--color-gray)]">Comments are temporarily unavailable.</p>
+    ) : comments.length > 0 ? (
+      comments.map((comment) => <CommentItem comment={comment} />)
+    ) : (
+      <p class="text-sm text-[var(--color-gray)]">No comments yet.</p>
+    )
+  }
 </div>

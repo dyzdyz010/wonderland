@@ -1,5 +1,5 @@
 ---
-const { postSlug, class: className, ...props } = Astro.props;
+const { postSlug, returnPath, turnstileSiteKey, class: className, ...props } = Astro.props;
 ---
 
 <div class={`comment-edit @container ${className}`} {...props}>
@@ -9,27 +9,37 @@ const { postSlug, class: className, ...props } = Astro.props;
     class="flex flex-col gap-4"
     action={`/api/comments/${postSlug}`}
   >
+    <input type="hidden" name="return_to" value={returnPath ?? `/article/${postSlug}/`} />
+    <div class="hidden" aria-hidden="true">
+      <label>
+        Leave this field empty
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
     <div
       class="meta flex flex-col md:flex-row justify-stretch items-stretch gap-4"
     >
       <input
         type="text"
         required
+        maxlength="80"
         name="author_name"
         placeholder="Name"
+        autocomplete="name"
         class="flex-1 px-2 py-1 bg-secondary w-full"
       />
       <input
         type="email"
-        required
         name="author_email"
-        placeholder="Email"
+        placeholder="Email (optional, private)"
+        autocomplete="email"
         class="flex-1 px-2 py-1 bg-secondary w-full"
       />
       <input
         type="url"
         name="author_url"
         placeholder="Website"
+        autocomplete="url"
         class="flex-1 px-2 py-1 bg-secondary w-full"
       />
     </div>
@@ -37,8 +47,20 @@ const { postSlug, class: className, ...props } = Astro.props;
     <textarea
       name="content"
       required
+      maxlength="5000"
       placeholder="Comment..."
       class="px-2 py-1 leading-8 bg-secondary"></textarea>
+    {
+      turnstileSiteKey && (
+        <>
+          <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+        </>
+      )
+    }
+    <p class="text-xs text-[var(--color-gray)]">
+      Email is optional and stored as a private hash, not displayed publicly.
+    </p>
     <div class="flex justify-end">
       <button type="submit" class="link">Submit</button>
     </div>
