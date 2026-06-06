@@ -53,11 +53,10 @@
     let current = footnote-state.get()
     let idx = current.len() + 1
     
-    // 将内容转换为纯文本（用于 HTML 渲染）
-    let content-text = plain-text(content)
-    
-    // 将脚注信息存入状态，供底部脚注区域使用
-    footnote-state.update(arr => arr + ((idx: idx, content: content-text),))
+    // 保留脚注的富文本内容（链接、强调等），供旁注和底部脚注区域使用。
+    // 早期这里使用 plain-text(content)，会把 #link(...) 的 href 丢掉；
+    // 消息来源类脚注需要可点击链接，所以必须保存原始 content。
+    footnote-state.update(arr => arr + ((idx: idx, content: content),))
 
     // 生成包装元素，同时包含脚注引用和旁注
     html.elem(
@@ -93,7 +92,7 @@
             // 旁注编号
             html.elem("span", attrs: (class: "sidenote-number"), str(idx))
             // 旁注内容
-            html.elem("span", attrs: (class: "sidenote-content"), content-text)
+            html.elem("span", attrs: (class: "sidenote-content"), content)
           },
         )
       },
