@@ -32,7 +32,7 @@ const MAX_THREAD_KEY = 200;
 const MAX_NAME = 80;
 const MAX_URL = 300;
 const MAX_COMMENT = 5000;
-const THREAD_KEY_RE = /^[A-Za-z0-9][A-Za-z0-9._/-]*$/;
+const THREAD_KEY_RE = /^[A-Za-z0-9][A-Za-z0-9._/()-]*$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function normalizeCommentThreadKey(raw: string | undefined | null): string {
@@ -206,7 +206,7 @@ export async function buildCommentInsert(options: BuildCommentInsertOptions): Pr
       author_name: validation.input.authorName,
       author_email: "",
       email_hash: emailHash,
-      author_url: validation.input.authorUrl,
+      author_url: validation.input.authorUrl ?? "",
       content: validation.input.content,
       status: "approved",
       parent_id: validation.input.parentId,
