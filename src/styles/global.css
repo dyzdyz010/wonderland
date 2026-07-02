@@ -2,18 +2,38 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @import "./variables.css";
 @import "./typography.css";
-
 html.dark .theme-dark {
   display: none;
 }
+
 html:not(.dark) .theme-light {
   display: none;
 }
 
 .theme-light,
-.theme-dark {
-  @apply cursor-pointer hover:text-[var(--color-accent)];
-  /* @apply transition-colors duration-100; */
+.theme-dark,
+.theme-preset-switch {
+  @apply cursor-pointer hover:text-[var(--color-accent)] transition-colors duration-100;
+}
+
+.theme-preset-switch {
+  @apply inline-flex items-center justify-center border-0 bg-transparent p-0 text-[var(--color-default)];
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+html {
+  background-color: var(--color-bg);
 }
 
 body {
@@ -27,7 +47,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: justify;
-  @apply bg-[var(--color-bg)];
+  background-color: transparent;
   @apply text-[var(--color-default)];
   background-size: 100% 600px;
   word-wrap: break-word;
@@ -91,5 +111,5 @@ hr {
 }
 
 .bg-secondary {
-  background-color: color-mix(in oklab, #7b888e 10%, transparent);
+  background-color: color-mix(in oklab, var(--color-gray) 10%, transparent);
 }

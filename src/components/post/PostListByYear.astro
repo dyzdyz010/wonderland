@@ -4,6 +4,7 @@ import type { HTMLAttributes } from "astro/types";
 import Card from "../Card.astro";
 import { withLocale } from "../../i18n/config";
 import { localizedEntrySlug } from "../../i18n/content";
+import { normalizeTags } from "../../utils/tags";
 
 type BlogEntry = CollectionEntry<"blog">;
 
@@ -37,6 +38,7 @@ const uniqueYears = [...new Set(years)];
             </div>
           </div>
           {postsInYear.map((post) => {
+            const tags = normalizeTags(post.data.tags ?? []);
             const month =
               post.data.date.getMonth() + 1 < 10
                 ? `0${post.data.date.getMonth() + 1}`
@@ -49,9 +51,9 @@ const uniqueYears = [...new Set(years)];
             return (
               <a
                 href={withLocale(post.data.lang, `/article/${localizedEntrySlug(post)}`)}
-                class="group flex items-center gap-3 py-3 min-h-10"
+                class="group flex min-h-10 items-center gap-3 py-3 text-[var(--color-default)] no-underline! transition-all hover:no-underline!"
               >
-                <span class="text-secondary w-[44px] shrink-0 text-sm font-medium text-right font-mono">
+                <span class="w-[44px] shrink-0 text-right font-mono text-sm font-medium text-[var(--color-gray)]">
                   {date}
                 </span>
                 <div class="relative flex h-2 w-2 items-center justify-center">
@@ -70,9 +72,16 @@ const uniqueYears = [...new Set(years)];
                     />
                   </svg>
                 </div>
-                <div class="flex-1 truncate text-sm font-medium transition-all group-hover:text-brand group-hover:translate-x-2">
+                <div class="min-w-0 flex-1 truncate text-sm font-medium text-[var(--color-default)] transition-all duration-300 group-hover:translate-x-2 group-hover:text-[var(--color-accent)]">
                   {post.data.title}
                 </div>
+                {tags.length > 0 && (
+                  <div class="ml-auto hidden max-w-[42%] shrink-0 flex-wrap items-center justify-end gap-2 text-sm text-[var(--color-gray)] lg:flex">
+                    {tags.map((tag) => (
+                      <span class="whitespace-nowrap">#{tag.label}</span>
+                    ))}
+                  </div>
+                )}
               </a>
             );
           })}

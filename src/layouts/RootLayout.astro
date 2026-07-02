@@ -25,13 +25,15 @@ const { title, description = "", locale, alternates = [], switchPath = "/" } = A
   </head>
   <body>
     <Bubble />
-    <main class="@container">
+    <main class="@container relative z-10">
       <Header locale={locale} switchPath={switchPath} />
       <div class="@5xl:px-40 @lg:px-10 @3xs:p-2 @3xs:pt-0">
         <slot />
       </div>
     </main>
-    <Footer />
+    <div class="relative z-10">
+      <Footer />
+    </div>
   </body>
 </html>
 

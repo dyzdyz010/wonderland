@@ -2,13 +2,14 @@
 /**
  * Blurred Floating Circles Background
  * - Circles spawn with blue-noise-ish spacing
- * - Movement = Perlin/Simplex flow field + soft separation
+ * - Movement = Simplex flow field + soft separation
  * - Coverage control: low-occupancy attraction prevents big empty holes
  * - Constrained to bottom band (e.g. 55%–100% height)
  */
 interface Props {
     count?: number;
     colors?: string[];
+    darkColors?: string[];
     minRadius?: number;
     maxRadius?: number;
     bottomBandStart?: number;
@@ -44,11 +45,12 @@ const {
     .bubble-container {
         position: fixed;
         inset: 0;
-        z-index: -1;
+        z-index: 0;
         overflow: hidden;
-        filter: blur(50px);
+        filter: blur(var(--bubble-container-blur, 50px));
         opacity: 0;
         animation: fadeIn 1s ease forwards;
+        pointer-events: none;
     }
 
     @keyframes fadeIn {
@@ -80,62 +82,94 @@ const {
         startDelayMs,
     }}
 >
-    // ============== Noise2D Implementation (Simplex-like) ==============
-    function makeNoise2D(seed = Math.random() * 10000) {
-        // Simple permutation table
-        const perm = new Uint8Array(512);
-        const grad = [
-            [1, 1],
-            [-1, 1],
-            [1, -1],
-            [-1, -1],
-            [1, 0],
-            [-1, 0],
-            [0, 1],
-            [0, -1],
-        ];
+    // ============== Noise2D Implementation ==============
+    // Mirrors YYsuni/2025-blog-public's trimmed 2D Simplex helper.
+    function makeNoise2D(random = Math.random) {
+        const p = new Uint8Array(256);
+        for (let i = 0; i < 256; i++) p[i] = (random() * 256) | 0;
 
-        // Initialize permutation with seed
-        const random = () => {
-            seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-            return seed / 0x7fffffff;
-        };
-
-        for (let i = 0; i < 256; i++) perm[i] = i;
-        for (let i = 255; i > 0; i--) {
-            const j = Math.floor(random() * (i + 1));
-            [perm[i], perm[j]] = [perm[j], perm[i]];
+        function grad2(hash, x, y) {
+            const h = hash & 7;
+            const u = h < 4 ? x : y;
+            const v = h < 4 ? y : x;
+            return (h & 1 ? -u : u) + (h & 2 ? -2 * v : 2 * v);
         }
-        for (let i = 0; i < 256; i++) perm[i + 256] = perm[i];
 
-        return function noise2D(x, y) {
-            const X = Math.floor(x) & 255;
-            const Y = Math.floor(y) & 255;
-            x -= Math.floor(x);
-            y -= Math.floor(y);
+        const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+        const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
 
-            const fade = (t) => t * t * t * (t * (t * 6 - 15) + 10);
-            const lerp = (a, b, t) => a + t * (b - a);
-            const dot = (g, x, y) => g[0] * x + g[1] * y;
+        return function noise2D(xin, yin) {
+            let n0 = 0;
+            let n1 = 0;
+            let n2 = 0;
+            const s = (xin + yin) * F2;
+            const i = Math.floor(xin + s);
+            const j = Math.floor(yin + s);
+            const t = (i + j) * G2;
+            const X0 = i - t;
+            const Y0 = j - t;
+            const x0 = xin - X0;
+            const y0 = yin - Y0;
 
-            const u = fade(x);
-            const v = fade(y);
+            const i1 = x0 > y0 ? 1 : 0;
+            const j1 = x0 > y0 ? 0 : 1;
 
-            const aa = perm[perm[X] + Y] % 8;
-            const ab = perm[perm[X] + Y + 1] % 8;
-            const ba = perm[perm[X + 1] + Y] % 8;
-            const bb = perm[perm[X + 1] + Y + 1] % 8;
+            const x1 = x0 - i1 + G2;
+            const y1 = y0 - j1 + G2;
+            const x2 = x0 - 1 + 2 * G2;
+            const y2 = y0 - 1 + 2 * G2;
 
-            return lerp(
-                lerp(dot(grad[aa], x, y), dot(grad[ba], x - 1, y), u),
-                lerp(dot(grad[ab], x, y - 1), dot(grad[bb], x - 1, y - 1), u),
-                v,
-            );
+            const ii = i & 255;
+            const jj = j & 255;
+
+            const t0 = 0.5 - x0 * x0 - y0 * y0;
+            if (t0 >= 0) {
+                const gi0 = p[ii + p[jj]];
+                const t0_4 = t0 * t0 * t0 * t0;
+                n0 = t0_4 * grad2(gi0, x0, y0);
+            }
+
+            const t1 = 0.5 - x1 * x1 - y1 * y1;
+            if (t1 >= 0) {
+                const gi1 = p[ii + i1 + p[jj + j1]];
+                const t1_4 = t1 * t1 * t1 * t1;
+                n1 = t1_4 * grad2(gi1, x1, y1);
+            }
+
+            const t2 = 0.5 - x2 * x2 - y2 * y2;
+            if (t2 >= 0) {
+                const gi2 = p[ii + 1 + p[jj + 1]];
+                const t2_4 = t2 * t2 * t2 * t2;
+                n2 = t2_4 * grad2(gi2, x2, y2);
+            }
+
+            return 40 * (n0 + n1 + n2);
         };
     }
 
     function rand(min, max) {
         return Math.random() * (max - min) + min;
+    }
+
+    function readBubblePalette() {
+        const styles = getComputedStyle(document.documentElement);
+        const cssPalette = Array.from({ length: count }, (_, index) =>
+            styles.getPropertyValue(`--bubble-color-${index + 1}`).trim(),
+        ).filter(Boolean);
+
+        if (cssPalette.length > 0) return cssPalette;
+
+        return document.documentElement.classList.contains("dark")
+            ? darkColors
+            : colors;
+    }
+
+    function readCssNumber(name, fallback) {
+        const value = getComputedStyle(document.documentElement)
+            .getPropertyValue(name)
+            .trim();
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
     }
 
     // ============== Main Animation Logic ==============
@@ -359,12 +393,12 @@ const {
     }
 
     function draw() {
-        const isDark = document.documentElement.classList.contains("dark");
-        const palette = isDark ? darkColors : colors;
-        const alpha = isDark ? 0.5 : 0.8;
+        const palette = readBubblePalette();
+        const alpha = readCssNumber("--bubble-alpha", 0.8);
+        const blurScale = readCssNumber("--bubble-blur-scale", 1);
         for (const b of bubbles) {
             ctx.save();
-            ctx.filter = `blur(${b.blur}px)`;
+            ctx.filter = `blur(${b.blur * blurScale}px)`;
             ctx.globalAlpha = alpha;
             ctx.beginPath();
             ctx.fillStyle = palette[b.colorIndex % palette.length];
@@ -428,9 +462,16 @@ const {
 
     draw();
 
+    const redrawForThemeChange = () => {
+        ctx.clearRect(0, 0, width, height);
+        draw();
+    };
+    document.addEventListener("wonderland:theme-change", redrawForThemeChange);
+
     // Cleanup on page navigation (for SPA)
     document.addEventListener("astro:before-swap", () => {
         cancelAnimationFrame(animRef);
+        document.removeEventListener("wonderland:theme-change", redrawForThemeChange);
         ro.disconnect();
         if (resizeTimer !== null) window.clearTimeout(resizeTimer);
     });

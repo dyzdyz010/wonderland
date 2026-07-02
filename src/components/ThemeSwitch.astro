@@ -2,21 +2,101 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<Icon name="mdi:white-balance-sunny" title="Light" class="w-6 h-6 theme-switch theme-light" />
-<Icon name="mdi:moon-waning-crescent" title="Dark" class="w-6 h-6 theme-switch theme-dark" />
+<Icon
+  name="mdi:white-balance-sunny"
+  title="Switch to light mode"
+  class="w-6 h-6 theme-switch theme-light"
+/>
+<Icon
+  name="mdi:moon-waning-crescent"
+  title="Switch to dark mode"
+  class="w-6 h-6 theme-switch theme-dark"
+/>
+<button
+  type="button"
+  class="theme-preset-switch"
+  title="Switch color theme"
+  aria-label="Switch color theme"
+  data-theme-preset-switch
+>
+  <Icon name="mdi:palette" class="w-6 h-6" aria-hidden="true" />
+  <span class="sr-only" data-theme-preset-label>Sunset</span>
+</button>
 
 <script>
-  const buttons = document.querySelectorAll(".theme-switch");
-  if (buttons) {
-    buttons.forEach((button) => {
+  const COLOR_PRESETS = ["sunset", "ocean"];
+  const DEFAULT_COLOR_PRESET = "sunset";
+  const PRESET_LABELS = {
+    sunset: "Sunset",
+    ocean: "Ocean",
+  };
+
+  const isValidColorPreset = (value: string | null): value is string =>
+    value !== null && COLOR_PRESETS.includes(value);
+
+  const getCurrentColorPreset = () => {
+    const current = document.documentElement.dataset.colorPreset ?? localStorage.getItem("colorPreset");
+    return isValidColorPreset(current) ? current : DEFAULT_COLOR_PRESET;
+  };
+
+  const applyColorPreset = (colorPreset: string) => {
+    const safePreset = isValidColorPreset(colorPreset) ? colorPreset : DEFAULT_COLOR_PRESET;
+    document.documentElement.dataset.colorPreset = safePreset;
+    localStorage.setItem("colorPreset", safePreset);
+
+    document.querySelectorAll<HTMLElement>("[data-theme-preset-label]").forEach((label) => {
+      label.textContent = PRESET_LABELS[safePreset];
+    });
+
+    document.dispatchEvent(
+      new CustomEvent("wonderland:theme-change", {
+        detail: { colorPreset: safePreset },
+      }),
+    );
+  };
+
+  const applyAppearance = (appearance: "light" | "dark") => {
+    document.documentElement.classList.toggle("dark", appearance === "dark");
+    localStorage.setItem("appearance", appearance);
+    // Keep the old key in sync so existing visitors do not get surprising behavior.
+    localStorage.setItem("theme", appearance);
+
+    document.dispatchEvent(
+      new CustomEvent("wonderland:theme-change", {
+        detail: { appearance },
+      }),
+    );
+  };
+
+  const bindThemeSwitches = () => {
+    document.querySelectorAll<HTMLElement>(".theme-switch").forEach((button) => {
+      if (button.dataset.themeSwitchBound === "true") return;
+      button.dataset.themeSwitchBound = "true";
+
       button.addEventListener("click", () => {
-        document.documentElement.classList.toggle("dark");
-        //   save theme to local storage
-        localStorage.setItem(
-          "theme",
-          document.documentElement.classList.contains("dark") ? "dark" : "light"
-        );
+        applyAppearance(document.documentElement.classList.contains("dark") ? "light" : "dark");
       });
     });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-preset-switch]").forEach((button) => {
+      if (button.dataset.themePresetSwitchBound === "true") return;
+      button.dataset.themePresetSwitchBound = "true";
+
+      button.addEventListener("click", () => {
+        const current = getCurrentColorPreset();
+        const nextIndex = (COLOR_PRESETS.indexOf(current) + 1) % COLOR_PRESETS.length;
+        applyColorPreset(COLOR_PRESETS[nextIndex]);
+      });
+    });
+
+    applyColorPreset(getCurrentColorPreset());
+  };
+
+  bindThemeSwitches();
+
+  const themeWindow = window as typeof window & { __wonderlandThemeSwitchPageLoadBound?: boolean };
+  if (!themeWindow.__wonderlandThemeSwitchPageLoadBound) {
+    themeWindow.__wonderlandThemeSwitchPageLoadBound = true;
+    document.addEventListener("astro:page-load", bindThemeSwitches);
   }
 </script>

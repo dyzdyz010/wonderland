@@ -3,31 +3,53 @@
 ---
 
 <script is:inline>
-  const checkCss = () => {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+  const COLOR_PRESETS = ["sunset", "ocean"];
+  const DEFAULT_COLOR_PRESET = "sunset";
+
+  const isValidColorPreset = (value) => COLOR_PRESETS.includes(value);
+
+  const prefersDark = () =>
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const applyAppearance = (appearance) => {
+    const resolvedAppearance = appearance === "light" || appearance === "dark"
+      ? appearance
+      : prefersDark()
+        ? "dark"
+        : "light";
+
+    document.documentElement.classList.toggle("dark", resolvedAppearance === "dark");
   };
 
-  // Check for saved theme preference or default to dark theme
-  if (typeof localStorage !== "undefined") {
-    const userSetTheme = localStorage.getItem("theme");
-    // console.log(userSetTheme);
-    if (userSetTheme) {
-      if (userSetTheme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    } else {
-      checkCss();
+  const applyColorPreset = (colorPreset) => {
+    document.documentElement.dataset.colorPreset = isValidColorPreset(colorPreset)
+      ? colorPreset
+      : DEFAULT_COLOR_PRESET;
+  };
+
+  const readStoredAppearance = () => {
+    const appearance = localStorage.getItem("appearance");
+    if (appearance === "light" || appearance === "dark" || appearance === "system") {
+      return appearance;
     }
+
+    // Backward compatibility with the old ThemeSwitch key.
+    const legacyTheme = localStorage.getItem("theme");
+    if (legacyTheme === "light" || legacyTheme === "dark") {
+      localStorage.setItem("appearance", legacyTheme);
+      return legacyTheme;
+    }
+
+    return "system";
+  };
+
+  if (typeof localStorage !== "undefined") {
+    const colorPreset = localStorage.getItem("colorPreset");
+    applyColorPreset(colorPreset);
+    applyAppearance(readStoredAppearance());
   } else {
-    checkCss();
+    applyColorPreset(DEFAULT_COLOR_PRESET);
+    applyAppearance("system");
   }
 </script>
