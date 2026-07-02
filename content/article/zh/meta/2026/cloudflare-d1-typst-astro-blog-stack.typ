@@ -22,13 +22,13 @@
 
 这篇文章不是从零搭一个 Astro 博客的教程。更准确地说，它是 Wonderland 这个仓库的结构说明和复制部署指南：如果你喜欢这套形态，最省事的方式不是重新敲一遍依赖，而是复制这个仓库，改掉站点身份、Cloudflare 绑定、D1 数据库和 PDF artifact 配置，然后按项目已有脚本验证和部署。
 
-下面的配置和命令都来自本站当前仓库；代码片段是为了说明而删减过的核心形状，不是完整文件逐字复制。
+下面的配置和命令都来自本站当前仓库；代码片段是为了说明而删减过的核心形状，不是完整文件逐字复制。#footnote[如果你要照着部署，请以仓库里的实际文件为准；文章里的片段会刻意省略无关字段，避免把说明文字变成一份容易过期的复制清单。]
 
 = 这套站点从哪里来
 
 Wonderland 不是一个完全从空目录长出来的项目。站点的代码基础来自 #link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant]，我当时复制了 Tylant 项目的基础代码，然后逐步改造成现在这套个人博客。
 
-这也是为什么 Typst 在这个仓库里不是一个“附加小功能”。它从一开始就参与了内容模型和模板体系：文章源文件是 `.typ`，模板放在 `templates/`，Astro 通过 `astro-typst` 在构建时把 Typst 内容渲染成 HTML，PDF 则通过单独脚本生成并发布为 artifact。
+这也是为什么 Typst 在这个仓库里不是一个“附加小功能”。它从一开始就参与了内容模型和模板体系：文章源文件是 `.typ`，模板放在 `templates/`，Astro 通过 `astro-typst` 在构建时把 Typst 内容渲染成 HTML，PDF 则通过单独脚本生成并发布为 artifact。#footnote[这里的 artifact 指按 PDF 输入 hash 打包并上传到 GitHub Release 的 tarball。Cloudflare 构建阶段只负责下载和解包它，而不是现场编译所有 PDF。]
 
 = 技术栈分工
 
@@ -130,7 +130,7 @@ database_name = "wonderland"
 database_id = "替换成你自己的 D1 database_id"
 ```
 
-其中 `[assets]` 很重要。Cloudflare adapter 生成的 Worker 会通过 `env.ASSETS.fetch(...)` 处理静态资源和兜底请求；如果没有绑定，部署后可能不是内容错了，而是 Worker 根本拿不到静态资源。
+其中 `[assets]` 很重要。#footnote[这是 Cloudflare Workers + Static Assets 路线里的关键边界：Worker 代码负责运行时逻辑，但静态页面、CSS、图片和 PDF 仍然要通过 assets binding 暴露给 Worker。]Cloudflare adapter 生成的 Worker 会通过 `env.ASSETS.fetch(...)` 处理静态资源和兜底请求；如果没有绑定，部署后可能不是内容错了，而是 Worker 根本拿不到静态资源。
 
 == D1：只保存动态状态
 
@@ -182,7 +182,7 @@ git lfs pull
 bun install
 ```
 
-`git lfs pull` 不能省。PDF 生成依赖 `assets/fonts/noto-cjk-sc/` 下的 Noto CJK 字体；如果只拿到 Git LFS 指针文件，`pdf:generate` 会明确报错。
+`git lfs pull` 不能省。#footnote[Git LFS 指针文件本身也是文本文件，看起来像“文件存在”，但里面只有对象 ID 和大小信息，不是真正的字体数据。PDF 编译器需要的是实际 `.otf` / `.ttf` 字体文件。]PDF 生成依赖 `assets/fonts/noto-cjk-sc/` 下的 Noto CJK 字体；如果只拿到 Git LFS 指针文件，`pdf:generate` 会明确报错。
 
 == 2. 修改站点身份
 
@@ -255,7 +255,7 @@ Turnstile 是可选增强。本站逻辑是：
 - 有 `TURNSTILE_SITE_KEY` 时，前端渲染 Turnstile widget；
 - 有 `TURNSTILE_SECRET_KEY` 时，服务端验证 `cf-turnstile-response`。
 
-生产环境要么两个都配，要么两个都不配。只配 secret 会导致前端没有 token、提交失败；只配 site key 则只是显示组件，服务端不会验证。
+生产环境要么两个都配，要么两个都不配。#footnote[`TURNSTILE_SITE_KEY` 面向浏览器，用来渲染 widget；`TURNSTILE_SECRET_KEY` 只给服务端，用来向 Cloudflare 校验用户提交的 token。两者缺一边都会让“看起来配了 Turnstile”的状态变得不完整。]只配 secret 会导致前端没有 token、提交失败；只配 site key 则只是显示组件，服务端不会验证。
 
 secret 可以这样配：
 
@@ -325,7 +325,7 @@ bun run pdf:publish
 
 `pdf:publish` 使用 GitHub CLI 的 `gh release`，所以执行它的机器需要登录 GitHub，并且对目标仓库有 release 上传权限。
 
-这里有一个很重要的前置条件：只要文章、PDF 模板、PDF 脚本或依赖锁文件变化，PDF version hash 就可能变化。`bun run build` 里的 `pdf:fetch` 会去找当前 hash 对应的 tarball；如果 GitHub Release 里还没有这个 artifact，它会报 404。此时不是 Astro 或 Cloudflare 配置错了，而是需要先生成并发布 PDF artifact。
+这里有一个很重要的前置条件：只要文章、PDF 模板、PDF 脚本或依赖锁文件变化，PDF version hash 就可能变化。#footnote[这个 hash 是故意设计成“输入变了，artifact 名字也变”。好处是 Cloudflare 不会误用旧 PDF；代价是每次影响 PDF 输入的修改都要先发布新 artifact。]`bun run build` 里的 `pdf:fetch` 会去找当前 hash 对应的 tarball；如果 GitHub Release 里还没有这个 artifact，它会报 404。此时不是 Astro 或 Cloudflare 配置错了，而是需要先生成并发布 PDF artifact。
 
 = 部署到 Cloudflare
 
@@ -363,7 +363,7 @@ bunx wrangler deploy
 - 随机打开一篇文章 PDF 和一个归档 PDF；
 - D1 远程迁移是否已经应用到生产数据库。
 
-尤其要注意评论。Astro 的主文章 HTML 可以是 200，但 server island 里的评论区仍然可能因为 D1 绑定、迁移或 Turnstile 配置错误而失败。所以评论区要单独看。
+尤其要注意评论。Astro 的主文章 HTML 可以是 200，但 server island 里的评论区仍然可能因为 D1 绑定、迁移或 Turnstile 配置错误而失败。所以评论区要单独看。#footnote[如果要自动化检查，最好直接抓取文章 HTML 里的 `/_server-islands/Comments?...` 预加载 URL，再请求这个 island 响应，而不是只看主页面 HTTP 200。]
 
 = 容易踩坑的地方
 
