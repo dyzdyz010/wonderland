@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1.typ
-// source_sha256: sha256:8a42e15fdeb4a8bb8a07df4a9d26c8751b1598f0c42d1017301788463edba23a
+// source_sha256: sha256:1f75fad1e57df7b1cda81738725069d76e5d787d93411d18e6ed2c2661c9b177
 
 #show: main.with(
   title: "MMORPG Game Server from Scratch (12) - Scene Server (10) - Character Process Restructuring (1)",
@@ -24,7 +24,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1",
   sourceLang: "zh",
-  translationSourceHash: "sha256:8a42e15fdeb4a8bb8a07df4a9d26c8751b1598f0c42d1017301788463edba23a",
+  translationSourceHash: "sha256:1f75fad1e57df7b1cda81738725069d76e5d787d93411d18e6ed2c2661c9b177",
   translationStatus: "machine",
 )
 
@@ -38,7 +38,7 @@ This section mainly discusses how to restructure character-related functionaliti
 
 Our characters possess various attributes that need to be called in real-time on the server, such as position, attack power, defense power, etc. The mathematical calculations for these attributes need to be as efficient as possible, so I plan to place them in `Rust NIF` to leverage `Rust`'s computational performance, as `Elixir` is relatively less efficient for such calculations.
 
-In #link("/article/mmo-server-from-scratch/2022/20221016-mmo-server-from-scratch(5)-scene-server-aoi-supervision-tree\#heading-0")[MMORPG Game Server from Scratch (4) - Scene Server (2) - AOI - Supervision Tree - Juejin (juejin.cn)] we mentioned that data in `NIF` can exist as references in `Elixir`, so in the `Elixir` code, we only need to let the player character process hold a reference to various state data. After all, almost all calculations exist in the `NIF` space, so it doesn't matter if `Elixir` doesn't hold the actual data.
+In #link("/en/article/mmo-server-from-scratch/2022/20221016-mmo-server-from-scratch(5)-scene-server-aoi-supervision-tree\#heading-0")[MMORPG Game Server from Scratch (4) - Scene Server (2) - AOI - Supervision Tree - Juejin (juejin.cn)] we mentioned that data in `NIF` can exist as references in `Elixir`, so in the `Elixir` code, we only need to let the player character process hold a reference to various state data. After all, almost all calculations exist in the `NIF` space, so it doesn't matter if `Elixir` doesn't hold the actual data.
 
 = Timed Tasks
 

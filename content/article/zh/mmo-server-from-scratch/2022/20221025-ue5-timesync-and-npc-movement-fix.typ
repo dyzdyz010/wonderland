@@ -19,7 +19,7 @@
 
 == 对时
 
-联动：#link("/article/mmo-server-from-scratch/2022/20221024-mmo-server-from-scratch(5)-scene-server-timesync")[从零开始的MMORPG游戏服务器(5) - Scene Server(3) - 对时 - 掘金 (juejin.cn)]
+联动：#link("/zh/article/mmo-server-from-scratch/2022/20221024-mmo-server-from-scratch(5)-scene-server-timesync")[从零开始的MMORPG游戏服务器(5) - Scene Server(3) - 对时 - 掘金 (juejin.cn)]
 
 服务器端的对时逻辑在上面的文章中已经写好，本节说明客户端的实现方式。
 

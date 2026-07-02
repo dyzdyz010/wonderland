@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221128-mmo-server-from-scratch(14)-scene-server-player-process-reorg-2.typ
-// source_sha256: sha256:b535ea907d5e978c15fbde138baac677f35ec6e2774d366ecf3c62997e0896f4
+// source_sha256: sha256:71cfeb95d2b9590aa983890f4182efc7e8fe678d80aee585c18cd0522c17ad87
 
 #show: main.with(
   title: "MMORPG Game Server from Scratch (14) - Scene Server (11) - Character Process Reorganization (2)",
@@ -24,7 +24,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221128-mmo-server-from-scratch(14)-scene-server-player-process-reorg-2",
   sourceLang: "zh",
-  translationSourceHash: "sha256:b535ea907d5e978c15fbde138baac677f35ec6e2774d366ecf3c62997e0896f4",
+  translationSourceHash: "sha256:71cfeb95d2b9590aa983890f4182efc7e8fe678d80aee585c18cd0522c17ad87",
   translationStatus: "machine",
 )
 
@@ -34,7 +34,7 @@
 
 In the previous section, I explained why I chose Rustler as part of the architecture. This section details how to move character movement calculations into `Rust NIF`.
 
-In #link("/article/mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1")[MMORPG Game Server from Scratch (12) - Scene Server (10) - Character Process Reorganization (1) - Juejin (juejin.cn)], I have already shown everyone how to execute timed tasks, and movement calculations are precisely a type of task that needs to be executed on a schedule.
+In #link("/en/article/mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1")[MMORPG Game Server from Scratch (12) - Scene Server (10) - Character Process Reorganization (1) - Juejin (juejin.cn)], I have already shown everyone how to execute timed tasks, and movement calculations are precisely a type of task that needs to be executed on a schedule.
 
 = Execution Process
 

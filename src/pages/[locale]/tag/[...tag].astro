@@ -9,7 +9,7 @@ import {
   getTagDefinitionById,
   postHasTag,
 } from "../../../utils/tags";
-import { assertLocale } from "../../../i18n/config";
+import { assertLocale, withLocale } from "../../../i18n/config";
 import { postsForLocale, sortPostsNewestFirst } from "../../../i18n/content";
 import { t } from "../../../i18n/messages";
 import { localizedAlternates } from "../../../i18n/seo";
@@ -85,7 +85,9 @@ const switchPath = activeTagId ? `/tag/${activeTagId}` : "/tag";
       tags={tagSummaries}
       showAll
       activeTag={activeTagId}
+      allLabel={m.pages.tagAll}
       allCount={allPosts.length}
+      basePath={withLocale(locale, "/tag")}
     />
 
     {

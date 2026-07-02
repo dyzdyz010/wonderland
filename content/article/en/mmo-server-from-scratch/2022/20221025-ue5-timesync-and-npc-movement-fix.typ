@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221025-ue5-timesync-and-npc-movement-fix.typ
-// source_sha256: sha256:1795094364cc5da52e194c125ee6123f9e95fd0cfaab4ff5d422500342252d7f
+// source_sha256: sha256:3b8501eb694067b01ef5a675373f96f44e2f44ffc7c4ba31060cdd40722691e5
 
 #show: main.with(
   title: "UE5 Client Time Synchronization Implementation & Non-Player Character Movement Issue Resolution",
@@ -22,13 +22,13 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221025-ue5-timesync-and-npc-movement-fix",
   sourceLang: "zh",
-  translationSourceHash: "sha256:1795094364cc5da52e194c125ee6123f9e95fd0cfaab4ff5d422500342252d7f",
+  translationSourceHash: "sha256:3b8501eb694067b01ef5a675373f96f44e2f44ffc7c4ba31060cdd40722691e5",
   translationStatus: "machine",
 )
 
 == Time Synchronization
 
-Linkage: #link("/article/mmo-server-from-scratch/2022/20221024-mmo-server-from-scratch(5)-scene-server-timesync")[MMORPG Game Server from Scratch (5) - Scene Server (3) - Time Synchronization - Juejin (juejin.cn)]
+Linkage: #link("/en/article/mmo-server-from-scratch/2022/20221024-mmo-server-from-scratch(5)-scene-server-timesync")[MMORPG Game Server from Scratch (5) - Scene Server (3) - Time Synchronization - Juejin (juejin.cn)]
 
 The time synchronization logic on the server side has been described in the article above. This section explains the implementation on the client side.
 

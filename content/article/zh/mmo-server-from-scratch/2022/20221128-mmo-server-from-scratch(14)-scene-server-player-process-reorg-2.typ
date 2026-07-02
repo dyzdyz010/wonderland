@@ -25,7 +25,7 @@
 
 上节我说明了自己选择Rustler作为架构一部分的原因，本节详细介绍如何将角色的移动计算搬到 `Rust NIF` 中。
 
-在#link("/article/mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1")[从零开始的MMORPG游戏服务器(12) - Scene Server(10) - 角色进程重整(1) - 掘金 (juejin.cn)]中我已经向大家展示了定时任务的执行方式，而移动计算恰恰就是一种需要定时执行的任务。
+在#link("/zh/article/mmo-server-from-scratch/2022/20221126-mmo-server-from-scratch(12)-scene-server-player-process-reorg-1")[从零开始的MMORPG游戏服务器(12) - Scene Server(10) - 角色进程重整(1) - 掘金 (juejin.cn)]中我已经向大家展示了定时任务的执行方式，而移动计算恰恰就是一种需要定时执行的任务。
 
 = 执行流程
 

@@ -25,7 +25,7 @@
   本系列代码仓库：#link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-#link("/article/mmo-server-from-scratch/2022/20221130-mmo-server-from-scratch(16)-scene-server-movement-error-notes")[上节]说了我想要能够让服务端的玩家移动数据变得直观，那么 `Web` 就是我第一个想到的方式。所以从本节开始我将建立一个以 `Phoenix` 框架为基础的 `Web` 服务器，将数据通过图形的方式展示在网页上。
+#link("/zh/article/mmo-server-from-scratch/2022/20221130-mmo-server-from-scratch(16)-scene-server-movement-error-notes")[上节]说了我想要能够让服务端的玩家移动数据变得直观，那么 `Web` 就是我第一个想到的方式。所以从本节开始我将建立一个以 `Phoenix` 框架为基础的 `Web` 服务器，将数据通过图形的方式展示在网页上。
 
 建立项目很简单：
 

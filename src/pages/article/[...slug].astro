@@ -1,0 +1,11 @@
+---
+import { DEFAULT_LOCALE, withLocale } from "../../i18n/config";
+
+export const prerender = false;
+
+const rawSlug = Astro.params.slug;
+const articlePath = Array.isArray(rawSlug) ? rawSlug.join("/") : rawSlug;
+const targetPath = articlePath ? `/article/${articlePath}` : "/article";
+
+return Astro.redirect(`${withLocale(DEFAULT_LOCALE, targetPath)}${Astro.url.search}`, 301);
+---

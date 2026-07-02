@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221122-mmo-server-from-scratch(8)-scene-server-movement-sync-2-enter-scene-client.typ
-// source_sha256: sha256:b9ddfef42ccc31c4d1458ef0023a2bb89395f5983b16a846f0b434ecec20e37e
+// source_sha256: sha256:c8541bf60bb49432d18e6406963f259957810107104d1de5721f6c8676e3b9fa
 
 #show: main.with(
   title: "MMORPG Game Server from Scratch (8) - Scene Server (6) - Movement Sync (2) - Player Entering Scene - Client Side",
@@ -23,7 +23,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221122-mmo-server-from-scratch(8)-scene-server-movement-sync-2-enter-scene-client",
   sourceLang: "zh",
-  translationSourceHash: "sha256:b9ddfef42ccc31c4d1458ef0023a2bb89395f5983b16a846f0b434ecec20e37e",
+  translationSourceHash: "sha256:c8541bf60bb49432d18e6406963f259957810107104d1de5721f6c8676e3b9fa",
   translationStatus: "machine",
 )
 
@@ -31,7 +31,7 @@
   Code repository for this series: #link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-Today we will discuss how the client handles when a player enters the `AOI` range. In the previous section - #link("/article/mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server\#heading-2")[MMORPG Game Server from Scratch (6) - Scene Server (4) - Movement Sync (1) - Player Entering Scene - Server Side - Juejin (juejin.cn)] - the server's response to a player entering the range is immediate, and when other players send an enter message to oneself, the process will immediately return to the server. Later, we may consider designing a scheduled task to return multiple data items at once, which is a potential optimization direction to note.
+Today we will discuss how the client handles when a player enters the `AOI` range. In the previous section - #link("/en/article/mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server\#heading-2")[MMORPG Game Server from Scratch (6) - Scene Server (4) - Movement Sync (1) - Player Entering Scene - Server Side - Juejin (juejin.cn)] - the server's response to a player entering the range is immediate, and when other players send an enter message to oneself, the process will immediately return to the server. Later, we may consider designing a scheduled task to return multiple data items at once, which is a potential optimization direction to note.
 
 == Function Analysis
 

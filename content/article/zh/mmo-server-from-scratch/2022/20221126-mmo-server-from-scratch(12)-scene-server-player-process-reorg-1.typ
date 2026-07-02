@@ -29,7 +29,7 @@
 
 我们的角色具备多种属性，这些属性需要在服务器中被实时调用，如位置、攻击力防御力等。这些属性的数学计算需要尽可能效率高，因此我打算把他们置于 `Rust NIF` 内，以获得 `Rust` 的计算性能，相比较而言 `Elixir` 对此类计算的效率相对较低。
 
-在#link("/article/mmo-server-from-scratch/2022/20221016-mmo-server-from-scratch(5)-scene-server-aoi-supervision-tree#heading-0")[从零开始的MMORPG游戏服务器(4) - Scene Server(2) - AOI - 监督树 - 掘金 (juejin.cn)]中我们提到过，`NIF` 中的数据可以在 `Elixir` 中以引用的形式存在，因此在 `Elixir` 代码中，我们只需要让玩家角色进程保存一个各类状态数据的引用即可，反正几乎所有的计算都存在于 `NIF` 空间，`Elixir` 中就算不持有真正的数据也没有什么问题。
+在#link("/zh/article/mmo-server-from-scratch/2022/20221016-mmo-server-from-scratch(5)-scene-server-aoi-supervision-tree#heading-0")[从零开始的MMORPG游戏服务器(4) - Scene Server(2) - AOI - 监督树 - 掘金 (juejin.cn)]中我们提到过，`NIF` 中的数据可以在 `Elixir` 中以引用的形式存在，因此在 `Elixir` 代码中，我们只需要让玩家角色进程保存一个各类状态数据的引用即可，反正几乎所有的计算都存在于 `NIF` 空间，`Elixir` 中就算不持有真正的数据也没有什么问题。
 
 = 定时任务
 

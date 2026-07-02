@@ -22,7 +22,7 @@
   本系列代码仓库：#link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-今天探讨一下当有玩家进入 `AOI` 范围时客户端如何处理。在上一节—— #link("/article/mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server#heading-2")[从零开始的MMORPG游戏服务器(6) - Scene Server(4) - 移动同步(1) - 玩家进入场景 - 服务器部分 - 掘金 (juejin.cn)] 中，服务器对于玩家进入范围的响应是即时的，当别的玩家向自己发送进入消息时，自己的进程会立即向服务器返回。后期可能考虑设计定时任务，一次性返回多项数据，一个潜在的优化方向记录一下。
+今天探讨一下当有玩家进入 `AOI` 范围时客户端如何处理。在上一节—— #link("/zh/article/mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server#heading-2")[从零开始的MMORPG游戏服务器(6) - Scene Server(4) - 移动同步(1) - 玩家进入场景 - 服务器部分 - 掘金 (juejin.cn)] 中，服务器对于玩家进入范围的响应是即时的，当别的玩家向自己发送进入消息时，自己的进程会立即向服务器返回。后期可能考虑设计定时任务，一次性返回多项数据，一个潜在的优化方向记录一下。
 
 == 功能解析
 

@@ -99,7 +99,7 @@ const articleNotices = articleNoticeBadges({ translationStatus, aiAuthored }, lo
           <RenderedContent variant="article">
             <slot />
           </RenderedContent>
-          <Tags tags={tags ?? []} class="mt-10" />
+          <Tags tags={tags ?? []} basePath={withLocale(locale, "/tag")} class="mt-10" />
         </div>
       </article>
     </Card>

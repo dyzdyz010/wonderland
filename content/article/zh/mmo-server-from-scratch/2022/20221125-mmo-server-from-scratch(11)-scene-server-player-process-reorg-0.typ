@@ -23,7 +23,7 @@
   本系列代码仓库：#link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-本篇主要探讨一下 `PlayerCharacter` 相关进程的数据存储和逻辑结构调整。在前面 #link("/article/mmo-server-from-scratch/2022/20221123-mmo-server-from-scratch(9)-scene-server-movement-sync-3-player-movement-server")[从零开始的MMORPG游戏服务器(9) - Scene Server(7) - 移动同步(3) - 玩家移动 - 服务器部分 - 掘金 (juejin.cn)] 中我提到过，到目前为止的 `PlayerCharacter` 和 `AoiItem` 的代码结构不是很清晰，分工不明确，不利于后续开发。因此，我又重新思考了进程的职责定位，以及数据的存储位置，包括一些逻辑应该由哪个进程来执行等问题。
+本篇主要探讨一下 `PlayerCharacter` 相关进程的数据存储和逻辑结构调整。在前面 #link("/zh/article/mmo-server-from-scratch/2022/20221123-mmo-server-from-scratch(9)-scene-server-movement-sync-3-player-movement-server")[从零开始的MMORPG游戏服务器(9) - Scene Server(7) - 移动同步(3) - 玩家移动 - 服务器部分 - 掘金 (juejin.cn)] 中我提到过，到目前为止的 `PlayerCharacter` 和 `AoiItem` 的代码结构不是很清晰，分工不明确，不利于后续开发。因此，我又重新思考了进程的职责定位，以及数据的存储位置，包括一些逻辑应该由哪个进程来执行等问题。
 
 = 进程职责分配
 

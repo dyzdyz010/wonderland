@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221201-mmo-server-from-scratch(17)-visualize-server-tailwind-phoenix.typ
-// source_sha256: sha256:037aa20867061074cfdbcf64e35f120ce70a93dd38bb150fd0f1ab6926ce238f
+// source_sha256: sha256:a04327b5c08c149bf9ed4bbd93b304f76d0afaa1f796f0bf880836e59790ab8c
 
 #show: main.with(
   title: "MMORPG Game Server from Scratch (17) - Visualize Server (0) - Integrating Tailwind with Phoenix",
@@ -26,7 +26,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221201-mmo-server-from-scratch(17)-visualize-server-tailwind-phoenix",
   sourceLang: "zh",
-  translationSourceHash: "sha256:037aa20867061074cfdbcf64e35f120ce70a93dd38bb150fd0f1ab6926ce238f",
+  translationSourceHash: "sha256:a04327b5c08c149bf9ed4bbd93b304f76d0afaa1f796f0bf880836e59790ab8c",
   translationStatus: "machine",
 )
 
@@ -34,7 +34,7 @@
   Code repository for this series: #link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-#link("/article/mmo-server-from-scratch/2022/20221130-mmo-server-from-scratch(16)-scene-server-movement-error-notes")[In the last section] I mentioned that I wanted to make the server-side player movement data intuitive, and `Web` was the first method that came to mind. So starting from this section, I will build a Web server based on the `Phoenix` framework to display data graphically on the webpage.
+#link("/en/article/mmo-server-from-scratch/2022/20221130-mmo-server-from-scratch(16)-scene-server-movement-error-notes")[In the last section] I mentioned that I wanted to make the server-side player movement data intuitive, and `Web` was the first method that came to mind. So starting from this section, I will build a Web server based on the `Phoenix` framework to display data graphically on the webpage.
 
 Creating the project is simple:
 

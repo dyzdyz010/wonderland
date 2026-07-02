@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server.typ
-// source_sha256: sha256:0843ce8725b34289fd270246a44df81574b6df0b56b305fb818ee33a320e759a
+// source_sha256: sha256:ff7d69ebdc9c6af314063cc75982a3f5001805430ef3381d6c3cbefe88db3597
 
 #show: main.with(
   title: "Starting from Zero: MMORPG Game Server (7) - Scene Server (5) - Movement Synchronization (1) - Player Entering Scene - Server Part",
@@ -23,7 +23,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221028-mmo-server-from-scratch(7)-scene-server-movement-sync-1-enter-scene-server",
   sourceLang: "zh",
-  translationSourceHash: "sha256:0843ce8725b34289fd270246a44df81574b6df0b56b305fb818ee33a320e759a",
+  translationSourceHash: "sha256:ff7d69ebdc9c6af314063cc75982a3f5001805430ef3381d6c3cbefe88db3597",
   translationStatus: "machine",
 )
 
@@ -41,7 +41,7 @@ In addition to sending and receiving messages, it is also necessary to decide wh
 
 Then I came up with another method where each process only *actively* sends messages to other player processes and *passively* receives messages from other player processes, avoiding actively pulling information from other player processes. Due to the high concurrency and communication through message sending and receiving, pulling information could lead to a situation where both sides have sent messages and are waiting for responses, resulting in a deadlock.
 
-In the previous article #link("/article/mmo-server-from-scratch/2022/20221026-mmo-server-from-scratch(6)-scene-server-movement-sync-0")[Starting from Zero: MMORPG Game Server (6) - Scene Server (4) - Movement Synchronization (0) - Juejin (juejin.cn)], I mentioned that a scheduled task was designed in the `aoi_item` process to periodically query the set of other players within a certain radius based on its own coordinates from the `coordinate_system` module. I found that I could make use of this process. I can leverage the list of nearby players stored in the process; when the scheduled task is triggered and a new player list is obtained, I can compare it with the old list to get two lists: the `entering scene` list and the `leaving scene` list. Assuming that everyone's `AOI` range is consistent, having these two lists allows me to know my status with respect to other players because when I can see another person, that person can also see me. This way, I can transform `collecting information about other players` into `sending my own information to other players`.
+In the previous article #link("/en/article/mmo-server-from-scratch/2022/20221026-mmo-server-from-scratch(6)-scene-server-movement-sync-0")[Starting from Zero: MMORPG Game Server (6) - Scene Server (4) - Movement Synchronization (0) - Juejin (juejin.cn)], I mentioned that a scheduled task was designed in the `aoi_item` process to periodically query the set of other players within a certain radius based on its own coordinates from the `coordinate_system` module. I found that I could make use of this process. I can leverage the list of nearby players stored in the process; when the scheduled task is triggered and a new player list is obtained, I can compare it with the old list to get two lists: the `entering scene` list and the `leaving scene` list. Assuming that everyone's `AOI` range is consistent, having these two lists allows me to know my status with respect to other players because when I can see another person, that person can also see me. This way, I can transform `collecting information about other players` into `sending my own information to other players`.
 
 Therefore, when a new player enters the map, they only need to notify the server to create the relevant process, and the task of broadcasting the status is handed over to the scheduled task. If the time interval is set small enough, the impact on the client experience can be almost negligible.
 

@@ -5,7 +5,7 @@
 // prompt_version: wonderland-i18n-v1
 // model: gpt-4o-mini
 // source: content/article/zh/mmo-server-from-scratch/2022/20221125-mmo-server-from-scratch(11)-scene-server-player-process-reorg-0.typ
-// source_sha256: sha256:c786179d4890fd602f0de999c022f402faf99be1017fee86fb978dc2d151407c
+// source_sha256: sha256:5143623f81009b65bdf1e53c9e14f0e63bb447d455c1fad261852b15f0d7234e
 
 #show: main.with(
   title: "Starting from Zero: MMORPG Game Server (11) - Scene Server (9) - Character Process Reorganization (0)",
@@ -24,7 +24,7 @@
   lang: "en",
   i18nKey: "mmo-server-from-scratch/2022/20221125-mmo-server-from-scratch(11)-scene-server-player-process-reorg-0",
   sourceLang: "zh",
-  translationSourceHash: "sha256:c786179d4890fd602f0de999c022f402faf99be1017fee86fb978dc2d151407c",
+  translationSourceHash: "sha256:5143623f81009b65bdf1e53c9e14f0e63bb447d455c1fad261852b15f0d7234e",
   translationStatus: "machine",
 )
 
@@ -32,7 +32,7 @@
   This series code repository: #link("https://github.com/dyzdyz010/ex_mmo_cluster")[Stargazers · dyzdyz010/ex\_mmo\_cluster (github.com)]
 ]
 
-This article mainly discusses the data storage and logical structure adjustments related to the `PlayerCharacter` process. In the previous article #link("/article/mmo-server-from-scratch/2022/20221123-mmo-server-from-scratch(9)-scene-server-movement-sync-3-player-movement-server")[Starting from Zero: MMORPG Game Server (9) - Scene Server (7) - Movement Sync (3) - Player Movement - Server Part - Juejin (juejin.cn)], I mentioned that the current code structure of `PlayerCharacter` and `AoiItem` is not very clear, with unclear responsibilities, which is not conducive to subsequent development. Therefore, I rethought the responsibilities of the processes, the storage locations of the data, and which process should execute certain logic.
+This article mainly discusses the data storage and logical structure adjustments related to the `PlayerCharacter` process. In the previous article #link("/en/article/mmo-server-from-scratch/2022/20221123-mmo-server-from-scratch(9)-scene-server-movement-sync-3-player-movement-server")[Starting from Zero: MMORPG Game Server (9) - Scene Server (7) - Movement Sync (3) - Player Movement - Server Part - Juejin (juejin.cn)], I mentioned that the current code structure of `PlayerCharacter` and `AoiItem` is not very clear, with unclear responsibilities, which is not conducive to subsequent development. Therefore, I rethought the responsibilities of the processes, the storage locations of the data, and which process should execute certain logic.
 
 = Process Responsibility Allocation
 

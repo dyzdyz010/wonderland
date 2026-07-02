@@ -19,6 +19,6 @@ const href = withLocale(post.data.lang, `/article/${post.data.i18nKey}`);
       <FormattedDate date={post.data.date} />
     </span>
   </a>
-  <Tags tags={post.data.tags} />
+  <Tags tags={post.data.tags} basePath={withLocale(post.data.lang, "/tag")} />
   {post.data.description && <p>{post.data.description}</p>}
 </div>
