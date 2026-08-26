@@ -18,7 +18,3 @@ I'm dyzdyz010, a _systems architect_ and a _full-stack developer_.
 = About This Site
 
 This site is owned and maintained by dyzdyz010. It is built with code originally from #link("https://github.com/Myriad-Dreamin/tylant")[Myriad-Dreamin/tylant].
-
-= Notes
-
-*Important Notice*: This site is migrating from #link("https://duyizhuo.com")[My Previous Blog], and the content has not been fully migrated yet.
