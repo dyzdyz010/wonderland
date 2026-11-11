@@ -2,7 +2,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
-import { createHash } from "node:crypto";
+import { contentHash, localeAndKeyFromRelativePath, toPosixPath } from "./lib.mjs";
 
 const root = process.cwd();
 const articleRoot = resolve(root, "content/article");
@@ -27,11 +27,7 @@ function walkFiles(dir, suffix) {
 }
 
 function rel(path) {
-  return relative(root, path);
-}
-
-function sha256(text) {
-  return `sha256:${createHash("sha256").update(text).digest("hex")}`;
+  return toPosixPath(relative(root, path));
 }
 
 function metadataBlock(raw) {
@@ -63,15 +59,13 @@ function parseTags(raw) {
 function parseContentFile(path, rootDir, kind) {
   const raw = readFileSync(path, "utf8");
   const metadata = metadataBlock(raw);
-  const relativeToKind = relative(rootDir, path).replaceAll("\\\\", "/");
-  const [pathLocale, ...rest] = relativeToKind.split("/");
-  const pathKey = rest.join("/").replace(/\.typ$/, "");
+  const { pathLocale, pathKey } = localeAndKeyFromRelativePath(relative(rootDir, path));
   return {
     kind,
     path,
     rel: rel(path),
     raw,
-    hash: sha256(raw),
+    hash: contentHash(raw),
     pathLocale,
     pathKey,
     title: parseStringField(metadata, "title"),
