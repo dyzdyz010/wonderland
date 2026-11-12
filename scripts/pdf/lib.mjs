@@ -286,7 +286,8 @@ export function writeFileEnsured(path, content) {
 function hashFileInto(hash, path) {
   const rel = relative(root, path).replaceAll("\\", "/");
   hash.update(`file:${rel}\n`);
-  hash.update(readFileSync(path));
+  // Hash LF-normalized text so Windows (CRLF) checkouts and Linux CI agree on the version.
+  hash.update(readFileSync(path, "utf8").replaceAll("\r\n", "\n"));
   hash.update("\n");
 }
 
